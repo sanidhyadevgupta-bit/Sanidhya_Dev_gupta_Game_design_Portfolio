@@ -41,6 +41,12 @@ window.CAW = (function () {
     });
   }
 
+  // The nav's real height, for full-screen sections and anchor offsets (CSS --nav-h).
+  const navEl = document.querySelector(".nav");
+  const setNavH = () => { if (navEl) document.documentElement.style.setProperty("--nav-h", navEl.offsetHeight + "px"); };
+  setNavH();
+  window.addEventListener("resize", setNavH, { passive: true });
+
   // Call once the page has rendered its content.
   function wire() {
     // links from config
