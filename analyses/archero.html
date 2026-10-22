@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Archero: Carnival of Arrows · catsarewhat</title>
+  <meta name="description" content="A live-ops event for Archero designed to win back one-time payers, with a playable prototype.">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="../img/brand/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../img/brand/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Rubik+Dirt&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="../css/site.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="nav__brand" href="../index.html" aria-label="catsarewhat home"><img src="../img/brand/logo-small.webp" alt="catsarewhat" width="168" height="84"></a>
+    <nav class="nav__links" aria-label="Sections"><a href="../index.html#shelf">Games</a><a href="../index.html#extras">Side quests</a><a href="../index.html#about">About</a></nav>
+  </header>
+
+  <main class="article">
+    <a class="article__back" href="../index.html#analyses">← All analyses</a>
+    <h1 class="rn"><span>carnival</span> <span class="hot">of</span> <span>arrows</span></h1>
+    <p class="article__game">Archero · Habby · live-ops event design</p>
+    <p class="article__dek">A weekly event designed to get one in four lapsed one-time payers to buy a second time, without raising the energy cap or selling them a bigger version of their first purchase.</p>
+    <div class="hero__cta">
+      <a class="btn btn--stamp" href="archero/carnival-prototype.html" target="_blank" rel="noopener">▶ Play the prototype ↗</a>
+      <a class="btn btn--paper" href="archero/reliquary-prototype.html" target="_blank" rel="noopener">Alternate theme: the Reliquary ↗</a>
+    </div>
+
+    <section class="part">
+      <h2><span>01</span>What it is</h2>
+      <p>Archero is a top-down roguelite: your hero fires on their own, you only move, and every level-up you draft one of three abilities. Around that sits a deep free-to-play meta (talents, gear, heroes, pets) and a calendar of timed events. This was a Design Management 2 exercise at NID: first take an existing event apart, then design a new one to a real business brief.</p>
+    </section>
+
+    <section class="part">
+      <h2><span>02</span>The teardown: Ancient Maze</h2>
+      <p>Before designing anything, my group (with Sagar and Navneet) took apart Archero's Ancient Maze event, which arrived in update 2.5. It's a 100-room gauntlet that strips your gear stats and gates entry behind energy.</p>
+      <div class="twocol">
+        <div><h3>Pinch: where you feel forced to spend</h3><p>A 15-energy entry is 75% of the base cap of 20. The 100-gem refresh appears at the near-miss moment, after a long run fails late.</p></div>
+        <div><h3>Pull: what makes you want to</h3><p>Hero shards are scarce everywhere else, a 6-day shop refresh creates a deadline, and the rare orange portal works like a slot machine.</p></div>
+      </div>
+      <p><strong>Gaps we found:</strong> no social or co-op layer, no record of past runs, and no way in for casual players who can't commit to a full 100-room session.</p>
+    </section>
+
+    <section class="part">
+      <h2><span>03</span>The brief</h2>
+      <div class="table-wrap"><table>
+        <tbody>
+          <tr><th>Goal</th><td>1 in 4 one-time payers buys again within 3 weeks: about 1,000 of 4,005 players</td></tr>
+          <tr><th>Segment</th><td>One-time payers who spent under $5 and stopped: 62% of all payers, ARPPU $11.60</td></tr>
+          <tr><th>Guardrails</th><td>Payer conversion stays at or above 1.9%; rewarded ads per DAU must not fall further</td></tr>
+          <tr><th>Constraint</th><td>No global energy-cap raise; the second purchase can't be a bigger version of the first</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="part">
+      <h2><span>04</span>The design</h2>
+      <p>A recurring 7-day event that runs three times across the KPI window, built from two connected systems:</p>
+      <ul class="diagram" aria-label="Carnival of Arrows loop">
+        <li>7 daily challenges</li><li class="arrow">→</li><li>All 7 done = 1 arrow</li><li class="arrow">→</li>
+        <li>Shoot the balloon board</li><li class="arrow">→</li><li>Reward tier revealed</li><li class="arrow">→</li><li>Tracker fills, pity at 7</li>
+      </ul>
+      <ul>
+        <li><strong>The daily checklist.</strong> Seven challenges, fresh every day. Each one can be played, rerolled for gold (150, 200, 250…) or skipped for 80 gems. Only a full 7/7 earns that day's arrow. Missing a day costs nothing but that arrow.</li>
+        <li><strong>The carnival board.</strong> Nine balloons in a fixed dartboard: a small bullseye weighted toward epic and grand rewards, and bigger, easier rings weighted toward common ones. Aiming is a real risk-and-reward choice, and a pity system guarantees the grand prize within 7 shots.</li>
+        <li><strong>Reward ladder.</strong> Common (gear fragments), Rare (upgrade stone), Epic (a skin), Grand (a permanent stat upgrade and a title).</li>
+        <li><strong>The monetisation hook.</strong> Gems skip the last challenge of the day, or buy arrows outright (1 for 50, 5 for 235). Both sit exactly at the daily gate. That meets the brief: it's a new reason to buy, not a bigger first purchase.</li>
+      </ul>
+    </section>
+
+    <section class="part">
+      <h2><span>05</span>What I'd steal and what I'd change</h2>
+      <div class="twocol">
+        <div><h3>Steal</h3><p>A purchase placed at a moment the player chose to reach (6 of 7 done), not at a moment of loss. And a pity timer stated up front, so the odds feel fair.</p></div>
+        <div><h3>Still open</h3><p>The gem and gold prices are placeholders to check against Archero's live economy. I also need to decide whether ring-weighted odds should stay, or whether odds should be the same everywhere on the board.</p></div>
+      </div>
+    </section>
+
+    <section class="part">
+      <h2><span>06</span>Where it shows up in my games</h2>
+      <p>Archero's loop (auto-fire, move to survive, draft one of three) is the same family as <a href="../games/terminus.html">TERMINUS</a>. The teardown sharpened one rule I kept there: progress should never depend on paying or on punishing a bad run. In TERMINUS a death still keeps 75% of your scrap.</p>
+    </section>
+
+    <p class="sources">Design Management 2, Semester 3, NID. The prototype is a working HTML/JS mock of the event page with real economy state. Archero is Habby's; this is a student design exercise, not affiliated with Habby.</p>
+  </main>
+
+  <footer class="foot mono">
+    <img src="../img/brand/logo-small.webp" alt="catsarewhat" width="168" height="84" loading="lazy">
+    <p>© Sanidhya Dev Gupta · catsarewhat</p>
+    <a href="../index.html">Back to the portfolio ↑</a>
+  </footer>
+  <script src="../js/motion.js"></script>
+</body>
+</html>

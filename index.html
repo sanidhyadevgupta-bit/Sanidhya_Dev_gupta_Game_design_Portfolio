@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>catsarewhat · Sanidhya Dev Gupta</title>
+  <meta name="description" content="Games for gamers, made by a gamer. Game designer Sanidhya Dev Gupta (catsarewhat), Master's in Game Design, NID Bengaluru.">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#121010">
+  <link rel="icon" href="img/brand/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
+  <meta property="og:title" content="catsarewhat · Sanidhya Dev Gupta">
+  <meta property="og:description" content="Games for gamers, made by a gamer.">
+  <meta property="og:image" content="img/brand/logo.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Rubik+Dirt&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600&family=Rozha+One&display=swap">
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body id="top">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <a class="nav__brand" href="#top" aria-label="catsarewhat, back to top">
+      <img src="img/brand/logo-small.webp" alt="catsarewhat" width="168" height="84">
+    </a>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
+    <nav class="nav__links" id="nav-links" aria-label="Sections">
+      <a href="#shelf">Games</a>
+      <a href="#building">Now building</a>
+      <a href="#extras">Side quests</a>
+      <a href="#about">About</a>
+    </nav>
+    <a class="btn btn--stamp nav__itch" data-link="itch" href="#" target="_blank" rel="noopener">itch.io ↗</a>
+  </header>
+
+  <main id="main">
+    <!-- 1. Banner -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__copy">
+        <img class="hero__logo" src="img/brand/logo.webp" alt="" width="1100" height="550">
+        <h1 class="hero__name" id="hero-title">
+          <span class="rn"><span>Sanidhya</span> <span class="hot">Dev</span> <span>Gupta</span></span>
+        </h1>
+        <p class="hero__tag">Games for gamers, <em>made by a gamer.</em></p>
+        <p class="hero__meta mono">Game designer · Master's in Game Design, NID Bengaluru</p>
+        <div class="hero__cta">
+          <a class="btn btn--stamp" href="#shelf">▶ Play my games</a>
+          <a class="btn btn--paper" href="#shelf">Look under the hood</a>
+        </div>
+        <a class="building" href="#dobara"><span class="star" aria-hidden="true">★</span> Now building: <strong>DOBARA</strong></a>
+      </div>
+      <div class="hero__stack" aria-hidden="true" id="hero-stack"></div>
+    </section>
+
+    <!-- 2. The shelf: a grid of the five games; each card opens that game's page -->
+    <section class="section" id="shelf" aria-labelledby="shelf-title">
+      <div class="section__head">
+        <h2 class="rn" id="shelf-title"><span>The</span> <span class="hot">shelf</span></h2>
+        <p class="section__sub">Five games, all playable in your browser. Open one to look under the hood: screenshots, the design in five cards, and the full game design document.</p>
+      </div>
+      <div class="shelf" id="shelf-grid" aria-label="Featured games"></div>
+    </section>
+
+    <!-- 3. Now building -->
+    <section class="section" id="building" aria-labelledby="building-title">
+      <div class="section__head">
+        <h2 class="rn" id="building-title"><span>Now</span> <span class="hot">building</span></h2>
+      </div>
+      <article class="dobara" id="dobara" aria-labelledby="dobara-title">
+        <button class="dobara__poster" data-gallery="dobara" data-index="0" aria-label="View the Dobara poster full size">
+          <img src="img/dobara/poster-t.webp" alt="Dobara poster: a hooded, masked figure checks a hand-wound watch above a night-time Bengaluru of temples, towers and tanker trucks" loading="lazy" width="480" height="720">
+        </button>
+        <div>
+          <p class="tape mono">Now building · NID Design Project 02</p>
+          <h3 id="dobara-title" class="dobara__title"><span class="dobara__sun" aria-hidden="true"></span><span class="dobara__word">DOBARA</span></h3>
+          <p class="dobara__pitch">Bengaluru, 2038. A con artist walks out of prison with a cracked brass watch that can bend time, and goes after the man who shot his partner.</p>
+          <p>A third-person stealth-action game with no gadgets, only a watch. Every special move comes from it, and each of its four powers works on one kind of thing:</p>
+          <ul class="dobara__powers" aria-label="The Watch's four powers">
+            <li style="--p:#c9d1d6"><b>Possibility</b>reads the place</li>
+            <li style="--p:#f0a92c"><b>Rewind</b>restores one object</li>
+            <li style="--p:#6f8ff0"><b>Slow</b>acts on the world</li>
+            <li style="--p:#d9804a"><b>Fast Forward</b>acts on him alone</li>
+          </ul>
+          <p>Plans have to fit inside the Watch's Charge. The stealth is the plan; the fight is what happens when it breaks. The vertical slice is Mission 12, "The Man Who Shot Her": about 17 minutes of stealth, puzzles, a first fight and a boss in a Peenya tanker yard.</p>
+          <a class="btn dobara__gdd" href="gdd/dobara.html?v=1">Read the GDD →</a>
+          <p class="mono small">In development · Unity 6 · built so far: all four powers, stealth AI, cameras, takedowns and freeflow combat.</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- 4. Extras -->
+    <section class="section" id="extras" aria-labelledby="extras-title">
+      <div class="section__head">
+        <h2 class="rn" id="extras-title"><span>Side</span> <span class="hot">quests</span></h2>
+        <p class="section__sub">Teardowns of games I love, plus my art and 3D renders.</p>
+      </div>
+
+      <h3 class="subhead mono" id="analyses">Game analyses</h3>
+      <div class="grid3" id="analysis-grid"></div>
+
+      <div class="subhead-row">
+        <h3 class="subhead mono" id="art">Artwork</h3>
+        <div class="scroller-btns" data-for="art-grid">
+          <button class="iconbtn" data-dir="-1" aria-label="Scroll the artwork left">←</button>
+          <button class="iconbtn" data-dir="1" aria-label="Scroll the artwork right">→</button>
+        </div>
+      </div>
+      <div class="row art-row" id="art-grid" tabindex="0" aria-label="Artwork"></div>
+
+      <h3 class="subhead mono" id="renders">3D renders</h3>
+      <div class="grid3" id="render-grid"></div>
+    </section>
+
+    <!-- 5. About -->
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="section__head">
+        <h2 class="rn" id="about-title"><span>Character</span> <span class="hot">sheet</span></h2>
+      </div>
+      <div class="sheet paper">
+        <img class="sheet__cat" src="img/brand/cat.webp" alt="" width="512" height="320">
+        <div class="sheet__id">
+          <button class="sheet__portrait" data-gallery="portrait" data-index="0" aria-label="View portrait full size">
+            <img src="img/brand/portrait-t.webp" alt="Portrait of Sanidhya Dev Gupta in halftone red and black" width="480" height="638" loading="lazy">
+          </button>
+          <dl class="sheet__fields mono">
+            <div><dt>Name</dt><dd>Sanidhya Dev Gupta</dd></div>
+            <div><dt>Class</dt><dd>Game designer</dd></div>
+            <div><dt>Guild</dt><dd>NID Bengaluru · Master's in Game Design</dd></div>
+            <div><dt>Studio</dt><dd>catsarewhat</dd></div>
+            <div><dt>Mains</dt><dd>RPGs and looter shooters · Destiny 2, 9,000+ hours</dd></div>
+          </dl>
+        </div>
+        <div class="sheet__lore">
+          <h3 class="mono label">Lore</h3>
+          <p class="lead">I've been a player far longer than I've been a designer, and that's the lens I design through. Every decision starts with one question: <strong>does this respect the person holding the controller?</strong> Their time, their skill, and their reason for picking the game up at all.</p>
+          <p>In practice that means a run that goes badly still moves you forward, builds give you real choices, the core action has to feel good before anything goes on top, and I check what players actually do: interviews, telemetry, playtests.</p>
+        </div>
+        <div class="sheet__stats">
+          <h3 class="mono label">Stats</h3>
+          <ul class="statgrid">
+            <li><b>7</b><span>games shipped</span></li>
+            <li><b>8</b><span>design documents</span></li>
+            <li><b>3</b><span>engines: Unity, Unreal, three.js</span></li>
+            <li><b>3</b><span>semesters at NID</span></li>
+          </ul>
+        </div>
+        <div class="sheet__skills">
+          <h3 class="mono label">Abilities</h3>
+          <ul class="chips">
+            <li>Systems design</li><li>Game feel</li><li>Level design</li><li>Narrative</li><li>Player research</li>
+            <li>Live-ops events</li><li>Telemetry and balancing</li><li>Unity / C#</li><li>three.js / JavaScript</li>
+            <li>Python tools</li><li>Procedural audio</li><li>p5.js</li><li>Aseprite</li><li>Unreal Engine</li>
+          </ul>
+        </div>
+        <div class="sheet__origin">
+          <h3 class="mono label">Backstory</h3>
+          <ol class="origin">
+            <li><span class="origin__kind">School</span><b>Birla Vidya Mandir</b><span>Nainital</span></li>
+            <li><span class="origin__kind">Bachelor's · 2019–2023</span><b>B.Tech, CSE</b><span>Computer Science and Engineering, Manipal University Jaipur</span></li>
+            <li><span class="origin__kind">Internship</span><b>Akums Pharma</b><span></span></li>
+            <li><span class="origin__kind">Internship</span><b>Genus Power Ltd</b><span></span></li>
+            <li class="is-now"><span class="origin__kind">Now</span><b>Master's in Game Design</b><span>NID Bengaluru</span></li>
+          </ol>
+        </div>
+        <div class="sheet__quests">
+          <h3 class="mono label">Quest log</h3>
+          <ol class="quests">
+            <li><b>NID Sem 1</b> p5.js sketches and game poems, Synergy Pong, and Get Out, an asymmetric board game.</li>
+            <li><b>NID Sem 2</b> RAT-RACE (Jury 02), Kancha Todh (Design Project 01), and three level-design pieces: Laser Triangle Dodge, Operation Silent Archive, Fire-Fight.</li>
+            <li><b>NID Sem 3</b> Dobara (Design Project 02, in progress), the Kshetra puzzle-platformer GDD, and an Archero live-ops event.</li>
+            <li><b>Independent</b> TERMINUS, Bombay Calling, Beat Runner, Pocket Raja, and Akhbaar Wala for the Dainik Bhaskar Game Jam.</li>
+          </ol>
+        </div>
+        <div class="sheet__contact">
+          <button class="btn btn--stamp" type="button" data-copy-email>Copy email</button>
+          <a class="btn btn--paper" data-link="linkedin" href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a class="btn btn--paper" data-link="itch" href="#" target="_blank" rel="noopener">itch.io ↗</a>          <p class="sheet__email mono" data-email></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot mono">
+    <img src="img/brand/logo-small.webp" alt="catsarewhat" width="168" height="84" loading="lazy">
+    <p>© Sanidhya Dev Gupta · catsarewhat · Games for gamers, made by a gamer.</p>
+    <a href="#top">Back to top ↑</a>
+  </footer>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Image viewer">
+    <button class="iconbtn lightbox__close" data-close aria-label="Close">✕</button>
+    <button class="iconbtn lightbox__nav" data-step="-1" aria-label="Previous image">←</button>
+    <figure><img alt=""><figcaption class="mono"></figcaption></figure>
+    <button class="iconbtn lightbox__nav" data-step="1" aria-label="Next image">→</button>
+  </dialog>
+
+  <noscript><p class="noscript">This page builds its game list with JavaScript. Turn it on to see the projects.</p></noscript>
+
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/motion.js"></script>
+</body>
+</html>

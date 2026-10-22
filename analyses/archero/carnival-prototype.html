@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archero — Carnival of Arrows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#14102B;
+  --night-2:#1E1840;
+  --night-3:#2A2154;
+  --tent:#E23E57;
+  --gold:#FFC93C;
+  --cream:#FFF4E0;
+  --teal:#2EC4B6;
+  --common:#A8B5C4;
+  --rare:#4A9DE8;
+  --epic:#A855F7;
+  --grand:#FFC93C;
+  --ink:#0C0920;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:'Fredoka',system-ui,sans-serif;
+  background:
+    radial-gradient(ellipse at 50% 0%, #241C4A 0%, #0B0818 60%),
+    #0B0818;
+  display:flex;align-items:center;justify-content:center;
+  padding:16px;color:var(--cream);
+}
+
+/* ---------- phone frame ---------- */
+.phone{
+  width:390px;height:844px;max-height:calc(100vh - 32px);
+  background:var(--night);
+  border-radius:34px;overflow:hidden;position:relative;
+  box-shadow:0 0 0 8px #0a0714, 0 30px 80px rgba(0,0,0,.7);
+  display:flex;flex-direction:column;
+}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden}
+.screen[hidden]{display:none}
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+
+/* ---------- shared chrome ---------- */
+.hud{
+  display:flex;gap:6px;padding:12px 12px 8px;align-items:center;
+  background:linear-gradient(180deg,rgba(11,8,24,.9),transparent);
+  position:relative;z-index:5;
+}
+.cur{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(8,6,20,.72);border:1.5px solid rgba(255,201,60,.22);
+  border-radius:999px;padding:4px 10px 4px 4px;font-size:12.5px;font-weight:600;
+  letter-spacing:.2px;
+}
+.cur i{
+  width:19px;height:19px;border-radius:50%;display:grid;place-items:center;
+  font-style:normal;font-size:11px;flex:none;
+}
+.i-gold{background:linear-gradient(160deg,#FFD86B,#D89B18);color:#5A3A00}
+.i-gem{background:linear-gradient(160deg,#7DE3F5,#2E9BD6);color:#06344B}
+.i-energy{background:linear-gradient(160deg,#9CFF7A,#3FA33C);color:#123B08}
+.cur.flash{animation:curflash .5s ease}
+@keyframes curflash{
+  0%{transform:scale(1)}35%{transform:scale(1.18);border-color:var(--gold)}100%{transform:scale(1)}
+}
+
+/* ---------- HOME SCREEN ---------- */
+.home-art{
+  flex:1;position:relative;min-height:0;
+  background:
+    radial-gradient(circle at 50% 78%, rgba(226,62,87,.30), transparent 55%),
+    radial-gradient(circle at 20% 20%, rgba(46,196,182,.16), transparent 50%),
+    linear-gradient(180deg,#1E1840,#120E2C);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:0 14px 10px;
+}
+.chapter{
+  position:absolute;top:8px;left:14px;right:14px;
+  background:rgba(8,6,20,.6);border-radius:14px;padding:10px 12px;
+  border:1px solid rgba(255,255,255,.07);
+}
+.chapter h3{font-size:13px;font-weight:600;letter-spacing:.3px}
+.chapter p{font-size:11px;opacity:.6;margin-top:1px;font-weight:400}
+.chbar{height:5px;background:rgba(255,255,255,.12);border-radius:3px;margin-top:8px;overflow:hidden}
+.chbar span{display:block;height:100%;width:62%;background:linear-gradient(90deg,var(--teal),#7DE3F5);border-radius:3px}
+
+.hero{
+  align-self:center;margin-bottom:auto;margin-top:auto;
+  width:150px;height:190px;position:relative;
+}
+.hero .body{
+  position:absolute;left:50%;bottom:14px;transform:translateX(-50%);
+  width:74px;height:104px;border-radius:38px 38px 20px 20px;
+  background:linear-gradient(170deg,#4B6BD8,#26307A);
+  box-shadow:inset 0 -12px 22px rgba(0,0,0,.45), 0 12px 30px rgba(75,107,216,.35);
+}
+.hero .head{
+  position:absolute;left:50%;bottom:96px;transform:translateX(-50%);
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(170deg,#FFDCA8,#E0A96D);
+  box-shadow:inset 0 -8px 14px rgba(0,0,0,.25);
+}
+.hero .hood{
+  position:absolute;left:50%;bottom:120px;transform:translateX(-50%);
+  width:64px;height:34px;border-radius:32px 32px 6px 6px;
+  background:linear-gradient(170deg,#6B8BF0,#2E3A8E);
+}
+.hero .bow{
+  position:absolute;right:6px;bottom:34px;width:14px;height:84px;
+  border-radius:50%;border:4px solid var(--gold);border-left-color:transparent;
+  transform:rotate(-8deg);
+}
+.hero .glow{
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:130px;height:26px;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(255,201,60,.35),transparent 70%);
+}
+
+/* event banner on home */
+.evt-banner{
+  position:relative;border-radius:18px;overflow:hidden;cursor:pointer;
+  border:2px solid var(--gold);
+  background:linear-gradient(115deg,#5A1436 0%,#8E1D3F 45%,#C22B4A 100%);
+  padding:12px 14px;display:flex;align-items:center;gap:12px;
+  box-shadow:0 8px 26px rgba(226,62,87,.4);
+  animation:bannerPulse 2.6s ease-in-out infinite;
+}
+@keyframes bannerPulse{
+  0%,100%{box-shadow:0 8px 26px rgba(226,62,87,.35)}
+  50%{box-shadow:0 8px 34px rgba(255,201,60,.55)}
+}
+.evt-banner::before{
+  content:"";position:absolute;inset:0;opacity:.16;
+  background:repeating-linear-gradient(115deg,#fff 0 14px,transparent 14px 28px);
+}
+.evt-banner .tag{
+  position:absolute;top:0;right:0;background:var(--gold);color:var(--ink);
+  font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:0 0 0 10px;letter-spacing:.4px;
+}
+.evt-icon{
+  width:46px;height:46px;flex:none;border-radius:12px;position:relative;z-index:1;
+  background:rgba(10,7,20,.42);display:grid;place-items:center;font-size:24px;
+  border:1.5px solid rgba(255,201,60,.5);
+}
+.evt-banner .txt{position:relative;z-index:1;flex:1;min-width:0}
+.evt-banner .txt b{font-family:'Bungee';font-size:14px;letter-spacing:.4px;display:block;line-height:1.2}
+.evt-banner .txt span{font-size:11px;opacity:.9;font-weight:400}
+
+.nav{
+  display:flex;background:linear-gradient(180deg,#1A1438,#0F0B24);
+  border-top:1px solid rgba(255,255,255,.07);padding:7px 4px 10px;
+}
+.nav button{
+  flex:1;background:none;border:0;color:rgba(255,244,224,.45);
+  font-family:inherit;font-size:9.5px;font-weight:500;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;
+  position:relative;
+}
+.nav button em{font-size:19px;font-style:normal;line-height:1}
+.nav button.on{color:var(--gold)}
+.nav .dot{
+  position:absolute;top:1px;right:26%;width:8px;height:8px;border-radius:50%;
+  background:var(--tent);border:1.5px solid #1A1438;
+}
+
+/* ---------- EVENT SCREEN ---------- */
+.ev-head{
+  padding:10px 12px 12px;position:relative;
+  background:linear-gradient(180deg,#4A0F2C,#2A1140 78%,transparent);
+}
+.ev-head::before{
+  content:"";position:absolute;inset:0 0 auto;height:12px;
+  background:repeating-linear-gradient(90deg,var(--tent) 0 26px,var(--cream) 26px 52px);
+  opacity:.85;
+  -webkit-mask:linear-gradient(180deg,#000 40%,transparent);
+  mask:linear-gradient(180deg,#000 40%,transparent);
+}
+.ev-top{display:flex;align-items:center;gap:10px;margin-top:14px}
+.back{
+  width:30px;height:30px;flex:none;border-radius:9px;border:1px solid rgba(255,255,255,.15);
+  background:rgba(8,6,20,.5);color:var(--cream);font-size:15px;cursor:pointer;font-family:inherit;
+}
+.wordmark{font-family:'Bungee';font-size:16px;letter-spacing:.5px;line-height:1;flex:1}
+.wordmark small{display:block;font-family:'Fredoka';font-size:10px;font-weight:400;opacity:.65;letter-spacing:.2px;margin-top:3px}
+.timer{
+  font-size:10.5px;font-weight:600;background:rgba(8,6,20,.6);border:1px solid rgba(255,201,60,.3);
+  padding:5px 9px;border-radius:9px;text-align:center;line-height:1.25;flex:none;
+}
+.timer b{color:var(--gold);display:block;font-size:12px}
+
+/* prize tracker */
+.tracker{display:flex;gap:6px;padding:0 12px 10px}
+.tier{
+  flex:1;border-radius:11px;padding:7px 5px;text-align:center;
+  background:rgba(8,6,20,.55);border:1.5px solid rgba(255,255,255,.09);
+  position:relative;transition:.25s;
+}
+.tier b{display:block;font-size:15px;line-height:1.1}
+.tier span{font-size:8.5px;font-weight:600;letter-spacing:.3px;opacity:.7;display:block;margin-top:2px}
+.tier.got{background:rgba(255,255,255,.05)}
+.tier.got::after{
+  content:"✓";position:absolute;top:-6px;right:-4px;width:17px;height:17px;border-radius:50%;
+  background:var(--teal);color:#04302C;font-size:10px;font-weight:700;display:grid;place-items:center;
+  border:2px solid var(--night);
+}
+.tier[data-t="common"].got{border-color:var(--common)}
+.tier[data-t="rare"].got{border-color:var(--rare)}
+.tier[data-t="epic"].got{border-color:var(--epic)}
+.tier[data-t="grand"].got{border-color:var(--grand);box-shadow:0 0 16px rgba(255,201,60,.4)}
+
+/* arrows + pity */
+.meter{
+  margin:0 12px 10px;border-radius:14px;padding:10px 12px;
+  background:linear-gradient(135deg,rgba(42,33,84,.95),rgba(26,20,56,.95));
+  border:1px solid rgba(255,255,255,.09);
+}
+.meter-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.arrows-have{display:flex;align-items:center;gap:7px}
+.arrows-have .n{font-size:24px;font-weight:700;line-height:1;color:var(--gold)}
+.arrows-have .l{font-size:10.5px;opacity:.7;line-height:1.25;font-weight:400}
+.arrows-have .l b{display:block;font-weight:600;opacity:1;font-size:11.5px}
+.buy-sm{
+  background:linear-gradient(160deg,#FFD86B,#E8A81C);color:var(--ink);border:0;
+  font-family:inherit;font-weight:700;font-size:11.5px;padding:8px 13px;border-radius:10px;cursor:pointer;
+  box-shadow:0 4px 0 #A87407;transition:.1s;
+}
+.buy-sm:active{transform:translateY(3px);box-shadow:0 1px 0 #A87407}
+.pity{margin-top:9px}
+.pity-l{display:flex;justify-content:space-between;font-size:10px;font-weight:500;opacity:.8;margin-bottom:4px}
+.pity-l b{color:var(--gold);opacity:1}
+.pity-bar{height:7px;background:rgba(0,0,0,.4);border-radius:4px;overflow:hidden}
+.pity-bar span{display:block;height:100%;background:linear-gradient(90deg,#E8A81C,var(--gold));border-radius:4px;transition:width .4s}
+.meter.hot{border-color:var(--gold);box-shadow:0 0 22px rgba(255,201,60,.3)}
+
+/* dartboard */
+.field-wrap{padding:2px 12px 0;position:relative}
+.field{
+  width:100%;aspect-ratio:1;position:relative;border-radius:20px;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255,201,60,.10), transparent 60%),
+    linear-gradient(180deg,#2A1140,#180E30);
+  border:1px solid rgba(255,255,255,.08);overflow:hidden;cursor:crosshair;
+}
+.ring{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  border-radius:50%;border:1.5px dashed rgba(255,244,224,.13);pointer-events:none;
+}
+.balloon{
+  position:absolute;transform:translate(-50%,-50%);border-radius:50% 50% 46% 46%;
+  display:grid;place-items:center;font-size:11px;font-weight:700;color:rgba(0,0,0,.5);
+  transition:transform .18s, opacity .18s;pointer-events:none;
+}
+.balloon::after{
+  content:"";position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);
+  border-left:4px solid transparent;border-right:4px solid transparent;
+  border-top:7px solid currentColor;opacity:.55;
+}
+.balloon .shine{
+  position:absolute;top:18%;left:24%;width:26%;height:20%;border-radius:50%;
+  background:rgba(255,255,255,.45);
+}
+.balloon.b-common{background:linear-gradient(160deg,#CBD5E1,#8494A8);color:#8494A8}
+.balloon.b-rare{background:linear-gradient(160deg,#7DBEF5,#2C7BC4);color:#2C7BC4}
+.balloon.b-epic{background:linear-gradient(160deg,#C88BFF,#8B33DE);color:#8B33DE}
+.balloon.b-grand{
+  background:linear-gradient(160deg,#FFE9A0,#E8A81C);color:#E8A81C;
+  box-shadow:0 0 20px rgba(255,201,60,.65);
+  animation:grandPulse 1.8s ease-in-out infinite;
+}
+@keyframes grandPulse{0%,100%{box-shadow:0 0 16px rgba(255,201,60,.5)}50%{box-shadow:0 0 30px rgba(255,201,60,.9)}}
+.balloon.pop{transform:translate(-50%,-50%) scale(1.7);opacity:0}
+.balloon.spawn{animation:spawnIn .35s cubic-bezier(.3,1.5,.5,1)}
+@keyframes spawnIn{from{transform:translate(-50%,-50%) scale(0)}to{transform:translate(-50%,-50%) scale(1)}}
+
+.arrow-fly{
+  position:absolute;width:3px;height:26px;background:linear-gradient(180deg,var(--cream),var(--gold));
+  border-radius:2px;transform-origin:50% 100%;pointer-events:none;z-index:4;
+}
+.arrow-fly::before{
+  content:"";position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+  border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:8px solid var(--cream);
+}
+.burst{
+  position:absolute;width:8px;height:8px;border-radius:50%;pointer-events:none;z-index:3;
+}
+.miss-mark{
+  position:absolute;transform:translate(-50%,-50%);font-size:10px;font-weight:600;
+  color:rgba(255,244,224,.55);pointer-events:none;z-index:4;animation:missUp .9s ease forwards;
+}
+@keyframes missUp{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.7)}
+  25%{opacity:1;transform:translate(-50%,-90%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-160%) scale(1)}
+}
+.field-hint{
+  position:absolute;bottom:8px;left:0;right:0;text-align:center;
+  font-size:10px;opacity:.5;font-weight:400;pointer-events:none;
+}
+.odds-btn{
+  position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;
+  background:rgba(8,6,20,.7);border:1px solid rgba(255,255,255,.2);color:var(--cream);
+  font-size:11px;font-family:inherit;cursor:pointer;z-index:5;
+}
+
+/* skin progress */
+.skin{
+  margin:10px 12px 0;border-radius:14px;padding:10px 12px;display:flex;gap:11px;align-items:center;
+  background:linear-gradient(120deg,rgba(168,85,247,.20),rgba(42,33,84,.9));
+  border:1px solid rgba(168,85,247,.35);
+}
+.skin-thumb{
+  width:42px;height:42px;flex:none;border-radius:11px;display:grid;place-items:center;font-size:21px;
+  background:linear-gradient(160deg,#C88BFF,#7B2BD1);
+}
+.skin-info{flex:1;min-width:0}
+.skin-info b{font-size:12.5px;display:block}
+.skin-info p{font-size:10px;opacity:.7;font-weight:400;margin-top:1px}
+.shards{display:flex;gap:3px;margin-top:6px}
+.shard{flex:1;height:6px;border-radius:3px;background:rgba(0,0,0,.4)}
+.shard.on{background:linear-gradient(90deg,#C88BFF,#8B33DE);box-shadow:0 0 7px rgba(168,85,247,.7)}
+
+/* section */
+.sec{margin:16px 12px 0}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
+.sec-h h4{font-size:13px;font-weight:600;letter-spacing:.2px}
+.sec-h em{font-size:10.5px;font-style:normal;opacity:.65;font-weight:400}
+
+/* token bar */
+.tokbar{
+  border-radius:12px;padding:9px 11px;margin-bottom:9px;
+  background:rgba(46,196,182,.10);border:1px solid rgba(46,196,182,.3);
+  display:flex;align-items:center;gap:10px;
+}
+.tokbar .tn{font-size:18px;font-weight:700;color:var(--teal);line-height:1}
+.tokbar .tx{flex:1;font-size:10.5px;font-weight:400;opacity:.85;line-height:1.35}
+.tokbar .tx b{font-weight:600;opacity:1}
+.tokbar button{
+  background:rgba(46,196,182,.9);color:#04302C;border:0;font-family:inherit;font-weight:700;
+  font-size:11px;padding:7px 11px;border-radius:9px;cursor:pointer;flex:none;
+}
+.tokbar button:disabled{opacity:.35;cursor:not-allowed}
+
+/* challenges */
+.chal{
+  display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:11px;margin-bottom:6px;
+  background:rgba(8,6,20,.45);border:1px solid rgba(255,255,255,.07);
+}
+.chk{
+  width:19px;height:19px;flex:none;border-radius:6px;border:2px solid rgba(255,255,255,.22);
+  display:grid;place-items:center;font-size:11px;color:var(--ink);font-weight:700;
+}
+.chal.done .chk{background:var(--teal);border-color:var(--teal)}
+.chal.done .cname{opacity:.45;text-decoration:line-through}
+.cname{flex:1;font-size:11.5px;font-weight:400;line-height:1.3}
+.chal-act{display:flex;gap:5px;flex:none}
+.mini{
+  border:0;font-family:inherit;font-size:9.5px;font-weight:600;padding:5px 8px;border-radius:8px;
+  cursor:pointer;display:flex;align-items:center;gap:3px;
+}
+.mini.do{background:rgba(255,255,255,.14);color:var(--cream)}
+.mini.roll{background:rgba(255,216,107,.18);color:#FFD86B}
+.mini.skip{background:rgba(125,227,245,.18);color:#7DE3F5}
+.mini:disabled{opacity:.3;cursor:not-allowed}
+
+/* store */
+.store{display:flex;flex-direction:column;gap:8px;padding-bottom:20px}
+.sku{
+  display:flex;align-items:center;gap:11px;padding:11px;border-radius:14px;cursor:pointer;
+  background:linear-gradient(135deg,rgba(42,33,84,.95),rgba(26,20,56,.95));
+  border:1px solid rgba(255,255,255,.1);position:relative;transition:.15s;
+}
+.sku:active{transform:scale(.985)}
+.sku-ic{
+  width:44px;height:44px;flex:none;border-radius:12px;display:grid;place-items:center;font-size:21px;
+  background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.12);
+}
+.sku-b{flex:1;min-width:0}
+.sku-b b{font-size:12.5px;display:block;line-height:1.25}
+.sku-b p{font-size:10px;opacity:.68;font-weight:400;margin-top:2px;line-height:1.35}
+.sku-p{
+  flex:none;background:linear-gradient(160deg,#FFD86B,#E8A81C);color:var(--ink);
+  font-weight:700;font-size:11.5px;padding:8px 12px;border-radius:10px;white-space:nowrap;
+  box-shadow:0 3px 0 #A87407;
+}
+.sku-p.cash{background:linear-gradient(160deg,#7DE3F5,#2E9BD6);box-shadow:0 3px 0 #1A6E9E;color:#03293D}
+.sku .flag{
+  position:absolute;top:-7px;left:11px;font-size:8.5px;font-weight:700;letter-spacing:.3px;
+  padding:2px 7px;border-radius:5px;background:var(--tent);color:#fff;
+}
+.sku.best{border-color:var(--gold);box-shadow:0 0 18px rgba(255,201,60,.22)}
+.sku.best .flag{background:var(--gold);color:var(--ink)}
+.unit{font-size:9px;opacity:.55;font-weight:400;display:block;text-align:right;margin-top:3px}
+
+/* ---------- modals ---------- */
+.veil{
+  position:absolute;inset:0;background:rgba(6,4,14,.82);z-index:40;
+  display:flex;align-items:center;justify-content:center;padding:22px;
+  backdrop-filter:blur(3px);animation:fade .2s ease;
+}
+.veil[hidden]{display:none}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.card{
+  width:100%;border-radius:22px;padding:20px;text-align:center;position:relative;
+  background:linear-gradient(180deg,#2E2358,#1A1338);
+  border:1.5px solid rgba(255,201,60,.35);
+  box-shadow:0 24px 60px rgba(0,0,0,.6);
+  animation:pop .3s cubic-bezier(.2,1.4,.4,1);
+}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.card h2{font-family:'Bungee';font-size:19px;line-height:1.2;letter-spacing:.4px}
+.card h3{font-size:16px;font-weight:600;margin-bottom:4px}
+.card p{font-size:12px;font-weight:400;opacity:.8;line-height:1.5;margin-top:8px}
+.card .close{
+  position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;
+  background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.15);color:var(--cream);
+  font-family:inherit;font-size:13px;cursor:pointer;
+}
+.btn{
+  width:100%;border:0;font-family:inherit;font-weight:700;font-size:14px;
+  padding:13px;border-radius:13px;cursor:pointer;margin-top:14px;
+  background:linear-gradient(160deg,#FFD86B,#E8A81C);color:var(--ink);
+  box-shadow:0 5px 0 #A87407;transition:.1s;
+}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #A87407}
+.btn.ghost{background:none;border:1.5px solid rgba(255,255,255,.2);color:rgba(255,244,224,.75);
+  box-shadow:none;font-size:12.5px;padding:10px;margin-top:8px}
+.btn.ghost:active{transform:none}
+.btn.teal{background:linear-gradient(160deg,#7DE3F5,#2E9BD6);color:#03293D;box-shadow:0 5px 0 #1A6E9E}
+.btn.teal:active{box-shadow:0 1px 0 #1A6E9E}
+
+/* event popup */
+.popup-art{
+  height:118px;margin:-20px -20px 14px;border-radius:22px 22px 0 0;position:relative;overflow:hidden;
+  background:linear-gradient(115deg,#5A1436,#8E1D3F 50%,#C22B4A);
+  display:grid;place-items:center;
+}
+.popup-art::before{
+  content:"";position:absolute;inset:0;opacity:.14;
+  background:repeating-linear-gradient(115deg,#fff 0 18px,transparent 18px 36px);
+}
+.popup-art .bunting{
+  position:absolute;top:0;left:0;right:0;height:14px;
+  background:repeating-linear-gradient(90deg,var(--gold) 0 18px,var(--cream) 18px 36px);
+  -webkit-mask:linear-gradient(180deg,#000 30%,transparent);mask:linear-gradient(180deg,#000 30%,transparent);
+}
+.popup-art .em{font-size:52px;position:relative;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5))}
+
+.freebie{
+  background:rgba(255,201,60,.13);border:1.5px dashed rgba(255,201,60,.5);
+  border-radius:14px;padding:12px;margin-top:14px;
+}
+.freebie .big{font-family:'Bungee';font-size:26px;color:var(--gold);line-height:1}
+.freebie .sm{font-size:11px;font-weight:400;opacity:.85;margin-top:4px}
+
+/* reward reveal */
+.reveal-orb{
+  width:104px;height:104px;border-radius:50%;margin:4px auto 0;display:grid;place-items:center;
+  font-size:46px;position:relative;animation:orbIn .45s cubic-bezier(.2,1.5,.4,1);
+}
+@keyframes orbIn{from{transform:scale(0) rotate(-25deg)}to{transform:scale(1) rotate(0)}}
+.reveal-orb::before{
+  content:"";position:absolute;inset:-14px;border-radius:50%;opacity:.35;
+  background:radial-gradient(circle,currentColor,transparent 68%);
+}
+.tier-name{
+  display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;
+  padding:4px 12px;border-radius:999px;margin-top:12px;
+}
+.ray{
+  position:absolute;top:50%;left:50%;width:2px;height:120px;transform-origin:50% 0;
+  background:linear-gradient(180deg,currentColor,transparent);opacity:.4;
+}
+
+/* toast */
+.toast{
+  position:absolute;left:16px;right:16px;bottom:22px;z-index:60;
+  background:linear-gradient(135deg,#2E2358,#1A1338);
+  border:1px solid var(--teal);border-radius:14px;padding:12px 14px;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 12px 32px rgba(0,0,0,.55);
+  animation:toastIn .3s cubic-bezier(.2,1.3,.4,1);
+}
+.toast[hidden]{display:none}
+@keyframes toastIn{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+.toast .ti{font-size:22px;flex:none}
+.toast .tb{flex:1;font-size:11.5px;font-weight:400;line-height:1.4}
+.toast .tb b{display:block;font-weight:600;font-size:12.5px;margin-bottom:1px}
+
+/* odds table */
+.odds-tbl{width:100%;font-size:11px;font-weight:400;margin-top:12px;border-collapse:collapse;text-align:left}
+.odds-tbl th{font-weight:600;font-size:10px;opacity:.6;padding:5px 4px;border-bottom:1px solid rgba(255,255,255,.12)}
+.odds-tbl td{padding:6px 4px;border-bottom:1px solid rgba(255,255,255,.06)}
+.odds-tbl td:first-child{font-weight:600}
+.dis{font-size:10px;opacity:.55;font-weight:400;line-height:1.5;margin-top:10px;text-align:left}
+
+.day-strip{
+  display:flex;gap:4px;margin:0 12px 10px;
+}
+.day-pip{
+  flex:1;height:24px;border-radius:7px;display:grid;place-items:center;
+  font-size:9.5px;font-weight:600;background:rgba(8,6,20,.5);
+  border:1px solid rgba(255,255,255,.08);opacity:.5;
+}
+.day-pip.past{opacity:.75;background:rgba(46,196,182,.15);border-color:rgba(46,196,182,.35)}
+.day-pip.now{opacity:1;background:var(--gold);color:var(--ink);border-color:var(--gold)}
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ============ HOME ============ -->
+  <section class="screen" id="scr-home">
+    <div class="hud">
+      <div class="cur" id="c-gold"><i class="i-gold">◆</i><span>12,400</span></div>
+      <div class="cur" id="c-gem"><i class="i-gem">◈</i><span>320</span></div>
+      <div class="cur" id="c-energy"><i class="i-energy">⚡</i><span>18/20</span></div>
+    </div>
+
+    <div class="home-art">
+      <div class="chapter">
+        <h3>Chapter 7 — Cavern of Echoes</h3>
+        <p>Wave 24 of 50</p>
+        <div class="chbar"><span></span></div>
+      </div>
+
+      <div class="hero">
+        <div class="glow"></div>
+        <div class="body"></div>
+        <div class="head"></div>
+        <div class="hood"></div>
+        <div class="bow"></div>
+      </div>
+
+      <div class="evt-banner" id="open-event">
+        <span class="tag">6d 04h left</span>
+        <div class="evt-icon">🎪</div>
+        <div class="txt">
+          <b>Carnival of Arrows</b>
+          <span id="banner-sub">3 free arrows waiting</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button><em>🛡</em>Equip</button>
+      <button><em>🌿</em>Talent</button>
+      <button class="on"><em>⚔️</em>Battle</button>
+      <button><em>🛒</em>Shop</button>
+      <button id="nav-event"><em>🎪</em>Event<span class="dot"></span></button>
+    </nav>
+  </section>
+
+  <!-- ============ EVENT ============ -->
+  <section class="screen" id="scr-event" hidden>
+    <div class="ev-head">
+      <div class="ev-top">
+        <button class="back" id="go-home">‹</button>
+        <div class="wordmark">Carnival<small>of Arrows · Week 1</small></div>
+        <div class="timer">Ends in<b>6d 04h</b></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div class="day-strip" id="day-strip"></div>
+
+      <div class="tracker" id="tracker">
+        <div class="tier" data-t="common"><b>🔩</b><span>COMMON</span></div>
+        <div class="tier" data-t="rare"><b>💠</b><span>RARE</span></div>
+        <div class="tier" data-t="epic"><b>🎭</b><span>EPIC</span></div>
+        <div class="tier" data-t="grand"><b>👑</b><span>GRAND</span></div>
+      </div>
+
+      <div class="meter" id="meter">
+        <div class="meter-row">
+          <div class="arrows-have">
+            <span class="n" id="arrow-n">0</span>
+            <span class="l"><b>Arrows</b>Tap the field to fire</span>
+          </div>
+          <button class="buy-sm" id="quick-buy">Get arrows</button>
+        </div>
+        <div class="pity">
+          <div class="pity-l"><span>Grand prize guarantee</span><b id="pity-txt">7 shots away</b></div>
+          <div class="pity-bar"><span id="pity-fill" style="width:0%"></span></div>
+        </div>
+      </div>
+
+      <div class="field-wrap">
+        <div class="field" id="field">
+          <button class="odds-btn" id="odds-btn">i</button>
+          <div class="ring" style="width:56%;height:56%"></div>
+          <div class="ring" style="width:80%;height:80%"></div>
+          <div class="ring" style="width:26%;height:26%"></div>
+          <div class="field-hint" id="hint">Aim carefully — a miss still costs an arrow</div>
+        </div>
+      </div>
+
+      <div class="skin">
+        <div class="skin-thumb">🎭</div>
+        <div class="skin-info">
+          <b>Ember Ronin — Legendary Skin</b>
+          <p><span id="shard-n">0</span> of 5 shards collected</p>
+          <div class="shards" id="shards"></div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-h"><h4>Today's challenges</h4><em id="chal-count">0 / 7 done</em></div>
+        <div class="tokbar">
+          <span class="tn" id="tok-n">0</span>
+          <span class="tx"><b>Carnival tokens</b>5 tokens trade for 1 arrow</span>
+          <button id="trade-btn" disabled>Trade</button>
+        </div>
+        <div id="chal-list"></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-h"><h4>Carnival stall</h4><em>Restocks weekly</em></div>
+        <div class="store">
+          <div class="sku" data-sku="single">
+            <div class="sku-ic">🏹</div>
+            <div class="sku-b"><b>Single arrow</b><p>One more shot at the board</p></div>
+            <div><div class="sku-p">50 ◈</div><span class="unit">50 ◈ each</span></div>
+          </div>
+
+          <div class="sku" data-sku="bundle">
+            <span class="flag">SAVE 10%</span>
+            <div class="sku-ic">🎯</div>
+            <div class="sku-b"><b>Quiver of 4</b><p>Four arrows in one purchase</p></div>
+            <div><div class="sku-p">180 ◈</div><span class="unit">45 ◈ each</span></div>
+          </div>
+
+          <div class="sku best" data-sku="pass">
+            <span class="flag">BEST VALUE</span>
+            <div class="sku-ic">🎟️</div>
+            <div class="sku-b"><b>Carnival Pass</b><p>10 arrows now + double tokens all week</p></div>
+            <div><div class="sku-p cash">₹169</div><span class="unit">≈17 ◈ each</span></div>
+          </div>
+
+          <div class="sku" data-sku="lock">
+            <div class="sku-ic">🎯</div>
+            <div class="sku-b"><b>Bullseye Lock</b><p>Your next shot hits the centre, whatever you tap</p></div>
+            <div><div class="sku-p cash">₹89</div><span class="unit">one shot</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ MODALS ============ -->
+  <div class="veil" id="veil" hidden><div class="card" id="card"></div></div>
+  <div class="toast" id="toast" hidden></div>
+
+</div>
+
+<script>
+/* ============================================================
+   ECONOMY & STATE
+   ============================================================ */
+const TIERS = {
+  common:{name:'Common', color:'#A8B5C4', icon:'🔩', label:'Gear Fragment ×3'},
+  rare:  {name:'Rare',   color:'#4A9DE8', icon:'💠', label:'Upgrade Stone ×1'},
+  epic:  {name:'Epic',   color:'#A855F7', icon:'🎭', label:'Ember Ronin Shard ×1'},
+  grand: {name:'Grand',  color:'#FFC93C', icon:'👑', label:'Permanent +5% ATK · Title "Carnival Champion"'}
+};
+
+/* Disclosed odds — shown to the player in the (i) panel. */
+const ZONE_ODDS = {
+  bull:  [['grand',30],['epic',60],['rare',10]],
+  inner: [['epic',10],['rare',20],['common',70]],
+  outer: [['rare',10],['common',90]]
+};
+
+const PITY_MAX = 7;          // grand guaranteed on the 7th shot
+const TOKENS_PER_ARROW = 5;
+const SHARDS_NEEDED = 5;
+
+const S = {
+  gold: 12400,
+  gems: 320,
+  energy: 18,
+  day: 1,
+  arrows: 0,
+  tokens: 0,
+  shards: 0,
+  shots: 0,
+  pity: 0,
+  claimed: {common:false, rare:false, epic:false, grand:false},
+  pass: false,
+  lock: false,           // Bullseye Lock armed
+  welcomeShots: 0,       // disclosed: first 3 shots guaranteed rare+
+  grantedToday: false,
+  rerollCost: 150,
+  challenges: [],
+  seenPopup: false
+};
+
+const CHALLENGE_POOL = [
+  'Clear 3 rooms in any chapter',
+  'Defeat 40 enemies',
+  'Use 2 abilities in one run',
+  'Clear a room without taking damage',
+  'Collect 5 coin piles',
+  'Defeat 1 elite enemy',
+  'Reach wave 10 in Chapter 2',
+  'Upgrade any gear once',
+  'Deal 5,000 total damage',
+  'Complete a run without reviving',
+  'Open 2 treasure chests',
+  'Land 15 critical hits',
+  'Spend 3 energy',
+  'Watch the carnival board once'
+];
+
+/* ============================================================
+   DARTBOARD GEOMETRY  (percentages of field size)
+   ============================================================ */
+function buildSlots(){
+  const slots = [];
+  slots.push({id:0, zone:'bull', x:50, y:50, r:6.6});
+  const innerR = 21, outerR = 37.5;
+  [[0,-1],[1,0],[0,1],[-1,0]].forEach(([dx,dy],i)=>{
+    slots.push({id:i+1, zone:'inner', x:50+dx*innerR, y:50+dy*innerR, r:8.4});
+  });
+  const d = Math.SQRT1_2;
+  [[d,-d],[d,d],[-d,d],[-d,-d]].forEach(([dx,dy],i)=>{
+    slots.push({id:i+5, zone:'outer', x:50+dx*outerR, y:50+dy*outerR, r:10});
+  });
+  return slots;
+}
+const SLOTS = buildSlots();
+
+/* Balloon skin per slot — advertises the zone's best tier, so an
+   unpopped gold bullseye sits on the board as a standing hook. */
+function slotSkin(zone){
+  return zone==='bull' ? 'grand' : zone==='inner' ? 'epic' : 'common';
+}
+
+/* ============================================================
+   DOM
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const field = $('#field');
+const veil  = $('#veil');
+const card  = $('#card');
+const toastEl = $('#toast');
+let toastTimer = null;
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function fmt(n){ return n.toLocaleString('en-IN'); }
+
+function renderHUD(){
+  $('#c-gold span').textContent = fmt(S.gold);
+  $('#c-gem span').textContent  = fmt(S.gems);
+  $('#c-energy span').textContent = S.energy + '/20';
+}
+function flash(sel){
+  const el = $(sel); el.classList.remove('flash');
+  void el.offsetWidth; el.classList.add('flash');
+}
+
+function renderDays(){
+  const strip = $('#day-strip');
+  strip.innerHTML = '';
+  for(let d=1; d<=7; d++){
+    const p = document.createElement('div');
+    p.className = 'day-pip' + (d < S.day ? ' past' : d === S.day ? ' now' : '');
+    p.textContent = 'D' + d;
+    strip.appendChild(p);
+  }
+}
+
+function renderMeter(){
+  $('#arrow-n').textContent = S.arrows;
+  const left = Math.max(0, PITY_MAX - S.pity);
+  $('#pity-txt').textContent = S.claimed.grand
+    ? 'Claimed ✓'
+    : left === 1 ? '1 shot away!' : left + ' shots away';
+  $('#pity-fill').style.width = (S.pity / PITY_MAX * 100) + '%';
+  $('#meter').classList.toggle('hot', !S.claimed.grand && left <= 2);
+  $('#banner-sub').textContent = S.arrows > 0
+    ? S.arrows + ' arrow' + (S.arrows>1?'s':'') + ' ready'
+    : 'Out of arrows — stall is open';
+}
+
+function renderTracker(){
+  document.querySelectorAll('.tier').forEach(el=>{
+    el.classList.toggle('got', S.claimed[el.dataset.t]);
+  });
+}
+
+function renderShards(){
+  $('#shard-n').textContent = S.shards;
+  const wrap = $('#shards'); wrap.innerHTML = '';
+  for(let i=0;i<SHARDS_NEEDED;i++){
+    const s = document.createElement('div');
+    s.className = 'shard' + (i < S.shards ? ' on' : '');
+    wrap.appendChild(s);
+  }
+}
+
+function renderTokens(){
+  $('#tok-n').textContent = S.tokens;
+  $('#trade-btn').disabled = S.tokens < TOKENS_PER_ARROW;
+}
+
+function renderChallenges(){
+  const list = $('#chal-list');
+  list.innerHTML = '';
+  S.challenges.forEach((c, i)=>{
+    const row = document.createElement('div');
+    row.className = 'chal' + (c.done ? ' done' : '');
+    row.innerHTML = `
+      <div class="chk">${c.done ? '✓' : ''}</div>
+      <div class="cname">${c.text}</div>
+      <div class="chal-act"></div>`;
+    const acts = row.querySelector('.chal-act');
+    if(!c.done){
+      const doBtn = mk('button','mini do','Do');
+      doBtn.onclick = ()=> completeChallenge(i, false);
+      const rollBtn = mk('button','mini roll','↻ ' + S.rerollCost);
+      rollBtn.onclick = ()=> rerollChallenge(i);
+      const skipBtn = mk('button','mini skip','⏭ 80');
+      skipBtn.onclick = ()=> skipChallenge(i);
+      acts.append(doBtn, rollBtn, skipBtn);
+    }
+    list.appendChild(row);
+  });
+  const done = S.challenges.filter(c=>c.done).length;
+  $('#chal-count').textContent = done + ' / 7 done';
+}
+function mk(tag, cls, txt){
+  const e = document.createElement(tag); e.className = cls; e.textContent = txt; return e;
+}
+
+function renderBalloons(){
+  field.querySelectorAll('.balloon').forEach(b=>b.remove());
+  SLOTS.forEach(s=>{
+    const b = document.createElement('div');
+    const skin = slotSkin(s.zone);
+    b.className = 'balloon b-' + skin + ' spawn';
+    b.dataset.slot = s.id;
+    b.style.cssText =
+      `left:${s.x}%;top:${s.y}%;width:${s.r*2}%;height:${s.r*2.25}%;`;
+    b.innerHTML = '<div class="shine"></div>';
+    field.appendChild(b);
+  });
+}
+
+function renderAll(){
+  renderHUD(); renderDays(); renderMeter(); renderTracker();
+  renderShards(); renderTokens(); renderChallenges();
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+function toast(icon, title, body){
+  clearTimeout(toastTimer);
+  toastEl.innerHTML = `<div class="ti">${icon}</div><div class="tb"><b>${title}</b>${body}</div>`;
+  toastEl.hidden = false;
+  toastTimer = setTimeout(()=> toastEl.hidden = true, 2600);
+}
+
+/* ============================================================
+   MODAL HELPERS
+   ============================================================ */
+function openModal(html, onMount){
+  card.innerHTML = html;
+  veil.hidden = false;
+  const close = card.querySelector('.close');
+  if(close) close.onclick = closeModal;
+  if(onMount) onMount(card);
+}
+function closeModal(){ veil.hidden = true; card.innerHTML = ''; }
+veil.addEventListener('click', e=>{ if(e.target === veil) closeModal(); });
+
+/* ============================================================
+   CHALLENGES
+   ============================================================ */
+function dealChallenges(){
+  const pool = [...CHALLENGE_POOL].sort(()=> Math.random()-0.5);
+  S.challenges = pool.slice(0,7).map(t=>({text:t, done:false}));
+  S.rerollCost = 150;
+}
+
+function awardTokens(n){
+  const mult = S.pass ? 2 : 1;
+  S.tokens += n * mult;
+  renderTokens();
+  return n * mult;
+}
+
+function completeChallenge(i, silent){
+  if(S.challenges[i].done) return;
+  S.challenges[i].done = true;
+  const done = S.challenges.filter(c=>c.done).length;
+  // 3 done = 1 token, 5 done = 1 token, 7 done = 2 bonus tokens (4 total/day)
+  let gained = 0;
+  if(done === 3) gained = awardTokens(1);
+  if(done === 5) gained = awardTokens(1);
+  if(done === 7) gained = awardTokens(2);
+  renderChallenges();
+  if(!silent){
+    if(gained) toast('🎟️','+' + gained + ' tokens', done + '/7 challenges done' + (S.pass ? ' · Pass doubling active' : ''));
+    else toast('✓','Challenge complete', 'Next token at ' + nextTokenAt(done) + '/7');
+  }
+  if(done === 7) setTimeout(dayCompletePrompt, 700);
+}
+function nextTokenAt(done){
+  return done < 3 ? 3 : done < 5 ? 5 : 7;
+}
+
+function rerollChallenge(i){
+  if(S.gold < S.rerollCost){
+    toast('◆','Not enough gold','You need ' + fmt(S.rerollCost) + ' gold to reroll');
+    return;
+  }
+  S.gold -= S.rerollCost;
+  S.rerollCost += 50;
+  const used = S.challenges.map(c=>c.text);
+  const fresh = CHALLENGE_POOL.filter(t=> !used.includes(t));
+  S.challenges[i] = {
+    text: fresh.length ? fresh[Math.floor(Math.random()*fresh.length)] : CHALLENGE_POOL[0],
+    done:false
+  };
+  renderHUD(); flash('#c-gold'); renderChallenges();
+  toast('↻','Challenge rerolled','Next reroll costs ' + fmt(S.rerollCost) + ' gold');
+}
+
+function skipChallenge(i){
+  if(S.gems < 80){ notEnoughGems(80); return; }
+  S.gems -= 80;
+  renderHUD(); flash('#c-gem');
+  completeChallenge(i, true);
+  toast('⏭','Challenge skipped','80 gems spent');
+}
+
+function dayCompletePrompt(){
+  openModal(`
+    <button class="close">✕</button>
+    <div style="font-size:40px">🎟️</div>
+    <h3 style="margin-top:8px">Day ${S.day} cleared</h3>
+    <p>All 7 challenges done. You banked <b>${S.pass?4:2} tokens</b> today.<br>
+       You have <b>${S.tokens} tokens</b> — ${TOKENS_PER_ARROW} trade for one arrow.</p>
+    <button class="btn" id="m-next">Start day ${Math.min(7,S.day+1)} →</button>
+    <button class="btn ghost" id="m-stay">Stay on the board</button>
+  `, c=>{
+    c.querySelector('#m-next').onclick = ()=>{ closeModal(); nextDay(); };
+    c.querySelector('#m-stay').onclick = closeModal;
+  });
+}
+
+function nextDay(){
+  if(S.day >= 7){
+    toast('🎪','Week complete','The carnival resets on Monday — shards carry over');
+    return;
+  }
+  S.day++;
+  dealChallenges();
+  renderAll();
+  toast('☀️','Day ' + S.day + ' begins','A fresh set of 7 challenges is up');
+}
+
+/* ============================================================
+   TOKEN TRADE
+   ============================================================ */
+$('#trade-btn').onclick = ()=>{
+  if(S.tokens < TOKENS_PER_ARROW) return;
+  S.tokens -= TOKENS_PER_ARROW;
+  S.arrows += 1;
+  renderTokens(); renderMeter();
+  toast('🏹','+1 arrow','Traded ' + TOKENS_PER_ARROW + ' carnival tokens');
+};
+
+/* ============================================================
+   PURCHASES
+   ============================================================ */
+const SKUS = {
+  single:{ name:'Single arrow',  arrows:1,  gems:50,  icon:'🏹',
+           desc:'One more shot at the board.' },
+  bundle:{ name:'Quiver of 4',   arrows:4,  gems:180, icon:'🎯',
+           desc:'Four arrows — 45 gems each instead of 50.' },
+  pass:  { name:'Carnival Pass', arrows:10, cash:'₹169', icon:'🎟️',
+           desc:'10 arrows straight away, plus every challenge pays double tokens for the rest of the week.' },
+  lock:  { name:'Bullseye Lock', arrows:0,  cash:'₹89',  icon:'🎯',
+           desc:'Your next shot lands dead centre no matter where you tap. Centre odds: 30% Grand, 60% Epic, 10% Rare.' }
+};
+
+document.querySelectorAll('.sku').forEach(el=>{
+  el.onclick = ()=> confirmPurchase(el.dataset.sku);
+});
+$('#quick-buy').onclick = ()=> arrowUpsell();
+
+function confirmPurchase(key){
+  const s = SKUS[key];
+  const price = s.cash ? s.cash : s.gems + ' ◈';
+  const owned = key==='pass' && S.pass;
+  openModal(`
+    <button class="close">✕</button>
+    <div style="font-size:40px">${s.icon}</div>
+    <h3 style="margin-top:8px">${s.name}</h3>
+    <p>${s.desc}</p>
+    ${owned ? '<p style="color:#2EC4B6">You already own the Carnival Pass.</p>' : `
+    <button class="btn ${s.cash?'teal':''}" id="m-buy">Buy for ${price}</button>`}
+    <button class="btn ghost" id="m-no">Not now</button>
+  `, c=>{
+    c.querySelector('#m-no').onclick = closeModal;
+    const b = c.querySelector('#m-buy');
+    if(b) b.onclick = ()=> doPurchase(key);
+  });
+}
+
+function doPurchase(key){
+  const s = SKUS[key];
+  if(s.gems){
+    if(S.gems < s.gems){ closeModal(); notEnoughGems(s.gems); return; }
+    S.gems -= s.gems;
+    flash('#c-gem');
+  }
+  if(key === 'pass'){ S.pass = true; }
+  if(key === 'lock'){ S.lock = true; }
+  S.arrows += s.arrows;
+  renderHUD(); renderMeter();
+  closeModal();
+
+  if(key === 'lock'){
+    toast('🎯','Bullseye Lock armed','Your next shot is locked to the centre');
+  } else if(key === 'pass'){
+    toast('🎟️','Carnival Pass active','+10 arrows · tokens now double all week');
+  } else {
+    toast('🏹','+' + s.arrows + ' arrow' + (s.arrows>1?'s':''), 'Purchase complete');
+  }
+}
+
+function notEnoughGems(need){
+  openModal(`
+    <button class="close">✕</button>
+    <div style="font-size:40px">◈</div>
+    <h3 style="margin-top:8px">Not enough gems</h3>
+    <p>You need <b>${need - S.gems} more gems</b> for this. You have ${S.gems}.</p>
+    <button class="btn teal" id="m-top">Top up 500 gems · ₹399</button>
+    <button class="btn ghost" id="m-no">Not now</button>
+  `, c=>{
+    c.querySelector('#m-no').onclick = closeModal;
+    c.querySelector('#m-top').onclick = ()=>{
+      S.gems += 500; renderHUD(); flash('#c-gem'); closeModal();
+      toast('◈','+500 gems','Top-up complete');
+    };
+  });
+}
+
+/* Contextual upsell — fires when the player is out of arrows. */
+function arrowUpsell(){
+  const left = Math.max(0, PITY_MAX - S.pity);
+  const hot = !S.claimed.grand && left <= 2;
+  openModal(`
+    <button class="close">✕</button>
+    ${hot ? `<div class="freebie" style="margin-top:0;border-color:#FFC93C">
+        <div class="big">${left}</div>
+        <div class="sm">shot${left>1?'s':''} from your guaranteed Grand Prize</div>
+      </div>` : `<div style="font-size:40px">🏹</div>`}
+    <h3 style="margin-top:12px">${hot ? 'So close.' : 'Out of arrows'}</h3>
+    <p>${hot
+      ? 'The guarantee does not reset. Take the shot now, or come back tomorrow for one free arrow.'
+      : 'Earn more through challenges, or pick up arrows at the stall.'}</p>
+    <button class="btn" id="u-pass">Carnival Pass · ₹169 <span style="font-weight:400;font-size:11px">(10 arrows)</span></button>
+    <button class="btn ghost" id="u-one">Single arrow · 50 ◈</button>
+    <button class="btn ghost" id="u-no">Wait for tomorrow</button>
+  `, c=>{
+    c.querySelector('#u-no').onclick = closeModal;
+    c.querySelector('#u-pass').onclick = ()=> doPurchase('pass');
+    c.querySelector('#u-one').onclick = ()=> doPurchase('single');
+  });
+}
+
+/* ============================================================
+   SHOOTING
+   ============================================================ */
+function pickTier(zone){
+  // Pity override: 7th shot without a Grand always resolves Grand.
+  if(!S.claimed.grand && S.pity + 1 >= PITY_MAX) return 'grand';
+  // Disclosed welcome bonus: first 3 shots guaranteed Rare or better.
+  const table = ZONE_ODDS[zone];
+  let roll = Math.random() * 100, acc = 0, out = table[table.length-1][0];
+  for(const [t,w] of table){ acc += w; if(roll < acc){ out = t; break; } }
+  if(S.welcomeShots > 0 && out === 'common') out = 'rare';
+  return out;
+}
+
+field.addEventListener('click', e=>{
+  if(e.target.closest('.odds-btn')) return;
+  const r = field.getBoundingClientRect();
+  const px = ((e.clientX - r.left) / r.width) * 100;
+  const py = ((e.clientY - r.top) / r.height) * 100;
+
+  if(S.arrows <= 0){ arrowUpsell(); return; }
+
+  // Bullseye Lock overrides aim entirely.
+  let hit = null;
+  if(S.lock){
+    hit = SLOTS[0];
+    S.lock = false;
+  } else {
+    for(const s of SLOTS){
+      const dx = px - s.x, dy = py - s.y;
+      if(Math.sqrt(dx*dx + dy*dy) <= s.r * 1.05){ hit = s; break; }
+    }
+  }
+
+  S.arrows--;
+  S.shots++;
+  flyArrow(hit ? hit.x : px, hit ? hit.y : py, ()=> resolveShot(hit, px, py));
+  renderMeter();
+});
+
+function flyArrow(tx, ty, done){
+  const a = document.createElement('div');
+  a.className = 'arrow-fly';
+  a.style.left = tx + '%';
+  a.style.top  = '106%';
+  a.style.transition = 'top .28s cubic-bezier(.4,0,.9,.6)';
+  field.appendChild(a);
+  requestAnimationFrame(()=>{ a.style.top = ty + '%'; });
+  setTimeout(()=>{ a.remove(); done(); }, 300);
+}
+
+function resolveShot(slot, px, py){
+  if(!slot){
+    // Genuine miss — the arrow is spent. Consolation token keeps it from feeling dead.
+    const m = document.createElement('div');
+    m.className = 'miss-mark';
+    m.style.left = px + '%'; m.style.top = py + '%';
+    m.textContent = 'Missed · +1 token';
+    field.appendChild(m);
+    setTimeout(()=> m.remove(), 950);
+    S.tokens += 1;
+    renderTokens();
+    if(S.welcomeShots > 0) S.welcomeShots--;
+    checkDry();
+    return;
+  }
+
+  const tier = pickTier(slot.zone);
+  S.pity = (tier === 'grand') ? 0 : S.pity + 1;
+  if(S.welcomeShots > 0) S.welcomeShots--;
+
+  const el = field.querySelector(`.balloon[data-slot="${slot.id}"]`);
+  if(el){
+    el.classList.add('pop');
+    spawnBurst(slot.x, slot.y, TIERS[tier].color);
+    setTimeout(()=>{
+      el.classList.remove('pop');
+      el.classList.add('spawn');
+      setTimeout(()=> el.classList.remove('spawn'), 400);
+    }, 850);
+  }
+
+  // Rewards
+  S.claimed[tier] = true;
+  if(tier === 'epic') S.shards = Math.min(SHARDS_NEEDED, S.shards + 1);
+  if(tier === 'common') S.gold += 240;
+  if(tier === 'rare') S.gold += 700;
+
+  renderHUD(); renderTracker(); renderShards(); renderMeter();
+  setTimeout(()=> showReward(tier), 340);
+}
+
+function spawnBurst(x, y, color){
+  for(let i=0;i<10;i++){
+    const p = document.createElement('div');
+    p.className = 'burst';
+    p.style.left = x + '%'; p.style.top = y + '%';
+    p.style.background = color;
+    field.appendChild(p);
+    const ang = (Math.PI*2/10)*i + Math.random()*.4;
+    const dist = 40 + Math.random()*40;
+    p.animate([
+      {transform:'translate(-50%,-50%) scale(1)', opacity:1},
+      {transform:`translate(${Math.cos(ang)*dist - 50}%, ${Math.sin(ang)*dist - 50}%) scale(0)`, opacity:0}
+    ], {duration:620, easing:'cubic-bezier(.2,.8,.4,1)'}).onfinish = ()=> p.remove();
+  }
+}
+
+function showReward(tier){
+  const T = TIERS[tier];
+  const isGrand = tier === 'grand';
+  const rays = isGrand
+    ? Array.from({length:12},(_,i)=>`<div class="ray" style="transform:rotate(${i*30}deg)"></div>`).join('')
+    : '';
+  const shardLine = tier === 'epic'
+    ? `<p style="color:#C88BFF">Shard ${S.shards} of ${SHARDS_NEEDED} — ${SHARDS_NEEDED - S.shards} more to unlock the skin.</p>`
+    : '';
+
+  openModal(`
+    <button class="close">✕</button>
+    <div class="reveal-orb" style="background:linear-gradient(160deg,${T.color},${T.color}66);color:${T.color}">
+      ${rays}<span style="position:relative">${T.icon}</span>
+    </div>
+    <div class="tier-name" style="background:${T.color}22;color:${T.color};border:1px solid ${T.color}66">
+      ${T.name.toUpperCase()}
+    </div>
+    <h3 style="margin-top:10px">${T.label}</h3>
+    ${shardLine}
+    ${isGrand ? '<p>The guarantee has reset. Grand prize available again in 7 shots.</p>' : ''}
+    <button class="btn" id="r-ok">${S.arrows>0 ? 'Shoot again ('+S.arrows+' left)' : 'Collect'}</button>
+    ${S.arrows===0 ? '<button class="btn ghost" id="r-buy">Get more arrows</button>' : ''}
+  `, c=>{
+    c.querySelector('#r-ok').onclick = ()=>{ closeModal(); checkDry(); };
+    const rb = c.querySelector('#r-buy');
+    if(rb) rb.onclick = ()=>{ closeModal(); arrowUpsell(); };
+  });
+}
+
+/* When the player runs dry, surface the stall at the moment of desire. */
+function checkDry(){
+  if(S.arrows > 0) return;
+  const left = Math.max(0, PITY_MAX - S.pity);
+  if(!S.claimed.grand && left <= 2){
+    setTimeout(arrowUpsell, 500);
+  } else {
+    $('#hint').textContent = 'Out of arrows — clear challenges or visit the stall';
+  }
+}
+
+/* ============================================================
+   ODDS PANEL  (disclosed — required by store policy)
+   ============================================================ */
+$('#odds-btn').onclick = ()=>{
+  openModal(`
+    <button class="close">✕</button>
+    <h3>Prize odds</h3>
+    <p style="margin-top:4px">Every balloon rolls against the odds for the ring it sits in.</p>
+    <table class="odds-tbl">
+      <tr><th>Ring</th><th>Grand</th><th>Epic</th><th>Rare</th><th>Common</th></tr>
+      <tr><td>Bullseye</td><td>30%</td><td>60%</td><td>10%</td><td>—</td></tr>
+      <tr><td>Inner</td><td>—</td><td>10%</td><td>20%</td><td>70%</td></tr>
+      <tr><td>Outer</td><td>—</td><td>—</td><td>10%</td><td>90%</td></tr>
+    </table>
+    <p class="dis">
+      The Grand Prize is guaranteed on your 7th shot if you have not won it sooner; the counter carries across days and does not reset when you miss a day.<br><br>
+      Your first 3 shots of the week are guaranteed Rare or better.<br><br>
+      A shot that lands outside every balloon is a miss and the arrow is spent. Missing awards 1 carnival token.
+    </p>
+    <button class="btn" id="o-ok">Got it</button>
+  `, c=> c.querySelector('#o-ok').onclick = closeModal);
+};
+
+/* ============================================================
+   EVENT POPUP  (the interstitial)
+   ============================================================ */
+function showEventPopup(){
+  openModal(`
+    <button class="close">✕</button>
+    <div class="popup-art"><div class="bunting"></div><div class="em">🎪</div></div>
+    <h2>Carnival<br>of Arrows</h2>
+    <p>Seven days. Nine balloons. One Grand Prize.</p>
+    <div class="freebie">
+      <div class="big">3 FREE ARROWS</div>
+      <div class="sm">Your first three shots are guaranteed Rare or better</div>
+    </div>
+    <button class="btn" id="p-go">Enter the carnival</button>
+    <button class="btn ghost" id="p-later">Later</button>
+  `, c=>{
+    c.querySelector('#p-go').onclick = ()=>{ closeModal(); grantWelcome(); goEvent(); };
+    c.querySelector('#p-later').onclick = closeModal;
+  });
+}
+
+function grantWelcome(){
+  if(S.grantedToday) return;
+  S.grantedToday = true;
+  S.arrows += 3;
+  S.welcomeShots = 3;
+  renderMeter();
+  setTimeout(()=> toast('🏹','+3 free arrows','First 3 shots are Rare or better'), 500);
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function goEvent(){
+  $('#scr-home').hidden = true;
+  $('#scr-event').hidden = false;
+  renderAll();
+}
+function goHome(){
+  $('#scr-event').hidden = true;
+  $('#scr-home').hidden = false;
+  renderMeter();
+}
+$('#open-event').onclick = ()=> S.grantedToday ? goEvent() : showEventPopup();
+$('#nav-event').onclick  = ()=> S.grantedToday ? goEvent() : showEventPopup();
+$('#go-home').onclick    = goHome;
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+dealChallenges();
+renderBalloons();
+renderAll();
+setTimeout(showEventPopup, 900);
+
+/* Test hook — lets the headless suite drive the economy directly. */
+window.__dev = {
+  S, SLOTS, TIERS, ZONE_ODDS, PITY_MAX, TOKENS_PER_ARROW, SHARDS_NEEDED,
+  pickTier, completeChallenge, rerollChallenge, skipChallenge,
+  dealChallenges, nextDay, doPurchase, closeModal,
+  renderTokens, renderShards, renderChallenges
+};
+</script>
+<a id="caw-back" href="../archero.html" style="position:fixed;right:16px;bottom:16px;z-index:2147483647;display:inline-flex;align-items:center;gap:8px;padding:12px 16px;background:#e2402a;color:#121010;font:700 13px/1 'Space Mono',ui-monospace,Consolas,monospace;text-transform:uppercase;letter-spacing:.06em;text-decoration:none;border:2px solid #121010;box-shadow:4px 4px 0 #f2e6d3">&larr; Back to the analysis</a>
+</body>
+</html>

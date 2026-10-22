@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archero — The Necromancer's Reliquary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Archero UI language, recoloured for the crypt */
+  --deep:#0C0818;
+  --bg:#1A1230;
+  --panel:#291C4A;
+  --panel-2:#3A2866;
+  --panel-3:#4C3580;
+  --gold:#FFC947;
+  --gold-2:#F0A81E;
+  --gold-dk:#8A5A0A;
+  --necro:#6BFFA8;
+  --necro-dk:#1E8A54;
+  --green:#6BC442;
+  --green-dk:#3E8A21;
+  --violet:#8B5CF6;
+  --violet-dk:#5B2FB8;
+  --red:#E5484D;
+  --bone:#EDE4D0;
+  --cream:#F6EFDD;
+  --ink:#12081F;
+  /* rarity ramp */
+  --common:#B8B0A0;
+  --rare:#4A9DE8;
+  --epic:#B565F0;
+  --grand:#FFA724;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:'Baloo 2',system-ui,sans-serif;font-weight:600;
+  background:radial-gradient(ellipse at 50% 0%,#2A1C4C 0%,#050310 65%),#050310;
+  display:flex;align-items:center;justify-content:center;padding:16px;color:var(--cream);
+}
+.phone{
+  width:390px;height:844px;max-height:calc(100vh - 32px);
+  background:var(--bg);border-radius:34px;overflow:hidden;position:relative;
+  box-shadow:0 0 0 8px #070312,0 30px 80px rgba(0,0,0,.8);
+}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden}
+.screen[hidden]{display:none}
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;padding-bottom:78px}
+.scroll::-webkit-scrollbar{display:none}
+
+/* ---------- currency HUD ---------- */
+.hud{display:flex;gap:6px;padding:12px 12px 8px;align-items:center;position:relative;z-index:5}
+.cur{display:flex;align-items:center;gap:5px;flex:1;background:linear-gradient(180deg,#150E28,#0C0818);
+  border:2px solid var(--gold-dk);border-radius:999px;padding:3px 10px 3px 3px;font-size:13px;font-weight:700}
+.cur i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:11px;flex:none;color:#3A2A00}
+.i-gold{background:linear-gradient(160deg,#FFE08A,#D89B18)}
+.i-gem{background:linear-gradient(160deg,#8FE9FF,#2E9BD6);color:#05384F}
+.i-energy{background:linear-gradient(160deg,#A8FF88,#3FA33C);color:#0E3A08}
+.cur.flash{animation:cf .5s ease}
+@keyframes cf{0%{transform:scale(1)}35%{transform:scale(1.16);border-color:var(--gold)}100%{transform:scale(1)}}
+
+/* ---------- HOME ---------- */
+.home-art{flex:1;position:relative;min-height:0;display:flex;flex-direction:column;padding:0 14px 10px;
+  background:radial-gradient(circle at 50% 74%,rgba(107,255,168,.16),transparent 58%),
+             linear-gradient(180deg,#2A1C4C,#150E2C)}
+.chapter{background:linear-gradient(180deg,var(--panel-2),var(--panel));border:2px solid var(--gold-dk);border-radius:14px;padding:9px 12px}
+.chapter h3{font-size:14px;font-weight:700}
+.chapter p{font-size:11px;opacity:.75;font-weight:500;margin-top:-2px}
+.chbar{height:7px;background:#0C0818;border-radius:4px;margin-top:6px;overflow:hidden;border:1px solid #050310}
+.chbar span{display:block;height:100%;width:62%;background:linear-gradient(90deg,var(--green),#A6F07A)}
+.hero{align-self:center;margin:auto;width:150px;height:190px;position:relative}
+.hero .glow{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:140px;height:28px;border-radius:50%;background:radial-gradient(ellipse,rgba(107,255,168,.4),transparent 70%)}
+.hero .body{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);width:74px;height:104px;border-radius:38px 38px 20px 20px;background:linear-gradient(170deg,#4B7BD8,#22357A);box-shadow:inset 0 -12px 22px rgba(0,0,0,.45)}
+.hero .head{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);width:56px;height:56px;border-radius:50%;background:linear-gradient(170deg,#FFDCA8,#E0A96D)}
+.hero .hood{position:absolute;left:50%;bottom:120px;transform:translateX(-50%);width:64px;height:34px;border-radius:32px 32px 6px 6px;background:linear-gradient(170deg,#6B95F0,#2A3E8E)}
+.hero .bow{position:absolute;right:6px;bottom:34px;width:14px;height:84px;border-radius:50%;border:4px solid var(--gold);border-left-color:transparent;transform:rotate(-8deg)}
+
+.evt-banner{position:relative;border-radius:16px;overflow:hidden;cursor:pointer;border:2px solid var(--gold);
+  background:linear-gradient(115deg,#1E1038,#3A2866 55%,#4C3580);padding:11px 13px;display:flex;align-items:center;gap:11px;
+  box-shadow:0 6px 0 #150C2A,0 10px 24px rgba(0,0,0,.5)}
+.evt-banner::before{content:"";position:absolute;inset:0;opacity:.10;background:repeating-linear-gradient(115deg,#fff 0 14px,transparent 14px 28px)}
+.evt-banner .tag{position:absolute;top:0;right:0;background:var(--gold);color:var(--ink);font-size:10px;font-weight:800;padding:2px 9px;border-radius:0 0 0 10px}
+.evt-icon{width:44px;height:44px;flex:none;border-radius:11px;display:grid;place-items:center;background:#0C0818;border:2px solid var(--gold);position:relative;z-index:1;overflow:hidden}
+.evt-banner .txt{position:relative;z-index:1;flex:1;min-width:0}
+.evt-banner .txt b{font-size:15px;font-weight:800;display:block;line-height:1.15;color:var(--gold);text-shadow:0 2px 0 rgba(0,0,0,.45)}
+.evt-banner .txt span{font-size:11.5px;font-weight:500;opacity:.95}
+
+.nav{display:flex;background:linear-gradient(180deg,#251844,#0F0A20);border-top:2px solid var(--gold-dk);padding:6px 4px 10px}
+.nav button{flex:1;background:none;border:0;color:rgba(246,239,221,.5);font-family:inherit;font-size:10px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;position:relative}
+.nav button em{font-size:20px;font-style:normal;line-height:1}
+.nav button.on{color:var(--gold)}
+.nav .dot{position:absolute;top:0;right:24%;width:9px;height:9px;border-radius:50%;background:var(--red);border:2px solid #251844}
+
+/* ---------- EVENT header ---------- */
+.ev-head{padding:10px 12px;background:linear-gradient(180deg,#3A2866,#1A1230);border-bottom:2px solid var(--gold-dk);position:relative}
+.ev-head::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:9px;
+  background:repeating-linear-gradient(90deg,var(--gold) 0 18px,var(--violet-dk) 18px 36px);opacity:.85;
+  -webkit-mask:linear-gradient(180deg,#000,transparent);mask:linear-gradient(180deg,#000,transparent)}
+.ev-top{display:flex;align-items:center;gap:10px}
+.back{width:32px;height:32px;flex:none;border-radius:10px;border:2px solid var(--gold-dk);background:#150E28;color:var(--gold);font-size:17px;cursor:pointer;font-family:inherit;font-weight:700}
+.wordmark{flex:1;font-size:16px;font-weight:800;color:var(--gold);line-height:1.05;text-shadow:0 2px 0 rgba(0,0,0,.5)}
+.wordmark small{display:block;font-size:10.5px;font-weight:500;color:var(--cream);opacity:.75;text-shadow:none;margin-top:2px}
+.timer{font-size:11px;font-weight:600;background:#150E28;border:2px solid var(--gold-dk);padding:4px 9px;border-radius:10px;text-align:center;line-height:1.2;flex:none}
+.timer b{color:var(--gold);display:block;font-size:13px;font-weight:800}
+
+.day-strip{display:flex;gap:4px;padding:10px 12px 8px}
+.day-pip{flex:1;height:26px;border-radius:8px;display:grid;place-items:center;font-size:10.5px;font-weight:700;background:#150E28;border:2px solid #3A2866;color:rgba(246,239,221,.45)}
+.day-pip.past{background:#3A2866;border-color:var(--violet-dk);color:var(--cream)}
+.day-pip.now{background:linear-gradient(180deg,#FFD86B,var(--gold-2));border-color:var(--gold);color:var(--ink);box-shadow:0 0 12px rgba(255,201,71,.5)}
+
+.tracker{display:flex;gap:6px;padding:0 12px 10px}
+.tier{flex:1;border-radius:12px;padding:7px 4px;text-align:center;background:linear-gradient(180deg,var(--panel),#150E2C);border:2px solid #3A2866;position:relative}
+.tier b{display:block;font-size:17px;line-height:1.05}
+.tier span{font-size:8.5px;font-weight:700;letter-spacing:.3px;opacity:.7;display:block;margin-top:1px}
+.tier.got::after{content:"✓";position:absolute;top:-7px;right:-5px;width:18px;height:18px;border-radius:50%;background:var(--necro);color:#053A21;font-size:11px;font-weight:800;display:grid;place-items:center;border:2px solid var(--bg)}
+.tier[data-t="common"].got{border-color:var(--common)}
+.tier[data-t="rare"].got{border-color:var(--rare)}
+.tier[data-t="epic"].got{border-color:var(--epic)}
+.tier[data-t="grand"].got{border-color:var(--grand);box-shadow:0 0 16px rgba(255,167,36,.5)}
+
+/* reminder strip */
+.remind{margin:0 12px 10px;border-radius:13px;padding:9px 11px;
+  background:linear-gradient(180deg,rgba(255,201,71,.20),rgba(240,168,30,.08));
+  border:2px solid var(--gold);display:flex;align-items:center;gap:10px;animation:rin .35s cubic-bezier(.2,1.3,.4,1)}
+.remind[hidden]{display:none}
+@keyframes rin{from{transform:translateY(-10px);opacity:0}to{transform:translateY(0);opacity:1}}
+.remind .ri{font-size:22px;flex:none}
+.remind .rb{flex:1;font-size:11px;font-weight:500;line-height:1.35}
+.remind .rb b{display:block;font-size:12.5px;font-weight:800;color:var(--gold)}
+.remind button{background:linear-gradient(180deg,#8AE05E,var(--green));color:#0A2D04;border:0;font-family:inherit;font-weight:800;font-size:11.5px;padding:7px 11px;border-radius:9px;cursor:pointer;flex:none;box-shadow:0 3px 0 var(--green-dk)}
+
+/* bolt meter */
+.meter{margin:0 12px 10px;border-radius:14px;padding:10px 12px;background:linear-gradient(180deg,var(--panel-2),var(--panel));border:2px solid var(--gold-dk)}
+.meter-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.quiver{display:flex;align-items:center;gap:8px;min-width:0}
+.pips{display:flex;gap:3px}
+.pip{width:9px;height:22px;border-radius:3px;background:#0C0818;border:1.5px solid #3A2866}
+.pip.on{background:linear-gradient(180deg,#FFE08A,var(--gold-2));border-color:var(--gold);box-shadow:0 0 8px rgba(255,201,71,.55)}
+.qtxt{font-size:11px;font-weight:600;line-height:1.2;opacity:.85}
+.qtxt b{display:block;font-size:16px;font-weight:800;color:var(--gold);opacity:1}
+.btn-green{background:linear-gradient(180deg,#8AE05E,var(--green));color:#0A2D04;border:0;font-family:inherit;font-weight:800;font-size:13px;padding:9px 14px;border-radius:11px;cursor:pointer;box-shadow:0 4px 0 var(--green-dk);transition:.1s;flex:none}
+.btn-green:active{transform:translateY(3px);box-shadow:0 1px 0 var(--green-dk)}
+.pity{margin-top:9px}
+.pity-l{display:flex;justify-content:space-between;font-size:11px;font-weight:600;opacity:.85;margin-bottom:4px}
+.pity-l b{color:var(--gold);opacity:1}
+.pity-bar{height:9px;background:#0C0818;border-radius:5px;overflow:hidden;border:1.5px solid #050310}
+.pity-bar span{display:block;height:100%;background:linear-gradient(90deg,var(--gold-2),#FFE08A);transition:width .4s}
+.meter.hot{border-color:var(--gold);box-shadow:0 0 22px rgba(255,201,71,.35)}
+
+/* ---------- the crypt wall ---------- */
+.field-wrap{padding:0 12px;position:relative}
+.field{width:100%;aspect-ratio:1;position:relative;border-radius:18px;cursor:crosshair;overflow:hidden;
+  border:3px solid var(--gold-dk);
+  background:
+    radial-gradient(ellipse at 50% 8%,rgba(107,255,168,.16),transparent 55%),
+    radial-gradient(ellipse at 50% 100%,rgba(139,92,246,.18),transparent 60%),
+    linear-gradient(180deg,#241640,#100A22);
+  box-shadow:inset 0 0 50px rgba(0,0,0,.65)}
+/* faint brickwork */
+.field::before{content:"";position:absolute;inset:0;opacity:.055;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent 0 26px,#fff 26px 27px),
+             repeating-linear-gradient(90deg,transparent 0 44px,#fff 44px 45px)}
+.shelf{position:absolute;left:5%;right:5%;height:3.4%;border-radius:3px;pointer-events:none;
+  background:linear-gradient(180deg,#5B4A7A,#2A1D46 55%,#1A1030);
+  box-shadow:0 3px 8px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.14)}
+.shelf::after{content:"";position:absolute;left:0;right:0;top:100%;height:5px;
+  background:linear-gradient(180deg,rgba(0,0,0,.45),transparent)}
+.shelf-tag{position:absolute;font-size:8px;font-weight:800;letter-spacing:.5px;opacity:.5;pointer-events:none}
+
+/* targets */
+.target{position:absolute;transform:translate(-50%,-100%);pointer-events:none;transition:transform .18s,opacity .18s}
+.target.pop{transform:translate(-50%,-100%) scale(1.55);opacity:0}
+.target.spawn{animation:tin .35s cubic-bezier(.3,1.5,.5,1)}
+@keyframes tin{from{transform:translate(-50%,-100%) scale(0)}to{transform:translate(-50%,-100%) scale(1)}}
+.target.hintpulse{animation:hp 1.3s ease-in-out infinite}
+@keyframes hp{0%,100%{transform:translate(-50%,-100%) scale(1)}50%{transform:translate(-50%,-100%) scale(1.12)}}
+
+/* skull */
+.skull.v1{filter:hue-rotate(-8deg) brightness(1.04)}
+.skull.v2{filter:brightness(.95) saturate(.9)}
+.skull{width:100%;height:100%;position:relative;border-radius:48% 48% 38% 38%;
+  background:linear-gradient(170deg,#F2E9D6,#A99C82);border:2px solid rgba(0,0,0,.3);
+  box-shadow:inset 0 -6px 10px rgba(0,0,0,.28)}
+.skull .eye{position:absolute;top:30%;width:26%;height:28%;border-radius:50%;background:#1A0F26;
+  box-shadow:inset 0 0 6px #000}
+.skull .eye.l{left:15%}.skull .eye.r{right:15%}
+.skull .eye::after{content:"";position:absolute;inset:22%;border-radius:50%;background:currentColor;
+  filter:blur(1px);animation:hum 2.2s ease-in-out infinite}
+.skull .nose{position:absolute;top:58%;left:50%;transform:translateX(-50%);
+  border-left:5% solid transparent;border-right:5% solid transparent;
+  width:0;height:0;border-bottom:12% solid #1A0F26}
+.skull .jaw{position:absolute;bottom:4%;left:24%;right:24%;height:16%;border-radius:0 0 40% 40%;
+  background:#1A0F26;opacity:.72}
+.skull .jaw::before{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,transparent 0 18%,rgba(242,233,214,.6) 18% 22%)}
+@keyframes hum{0%,100%{opacity:.55}50%{opacity:1}}
+.t-common .eye{color:#8FE3FF}
+.t-epic   .eye{color:#D9A8FF}
+.t-epic .skull{background:linear-gradient(170deg,#EFE2F7,#9E86B8);box-shadow:inset 0 -6px 10px rgba(60,20,90,.4),0 0 14px rgba(181,101,240,.45)}
+
+/* sarcophagus / reliquary */
+.sarc{width:100%;height:100%;position:relative;border-radius:46% 46% 12% 12%;
+  background:linear-gradient(170deg,#FFE7A8,#B7861C);border:2px solid #6B4A08;
+  box-shadow:0 0 26px rgba(255,167,36,.75),inset 0 -8px 14px rgba(90,55,0,.5);
+  animation:sarcHum 2s ease-in-out infinite}
+@keyframes sarcHum{0%,100%{box-shadow:0 0 18px rgba(255,167,36,.6),inset 0 -8px 14px rgba(90,55,0,.5)}
+  50%{box-shadow:0 0 34px rgba(255,167,36,1),inset 0 -8px 14px rgba(90,55,0,.5)}}
+.sarc .face{position:absolute;top:16%;left:22%;right:22%;height:34%;border-radius:50% 50% 40% 40%;
+  background:#3A2408;opacity:.55}
+.sarc .band{position:absolute;left:0;right:0;height:9%;background:rgba(58,36,8,.55)}
+.sarc .band.b1{top:56%}.sarc .band.b2{top:74%}
+.sarc .seal{position:absolute;top:60%;left:50%;transform:translate(-50%,-50%);
+  width:34%;height:22%;border-radius:50%;background:var(--necro);opacity:.9;filter:blur(1px);
+  animation:hum 1.6s ease-in-out infinite}
+
+.slot-ghost{position:absolute;transform:translate(-50%,-100%);pointer-events:none;
+  border:2px dashed rgba(246,239,221,.16);border-radius:44% 44% 20% 20%;
+  background:radial-gradient(ellipse at 50% 70%,rgba(107,255,168,.07),transparent 70%)}
+
+.bolt-fly{position:absolute;width:4px;height:30px;background:linear-gradient(180deg,var(--bone),var(--necro));
+  border-radius:2px;pointer-events:none;z-index:4;box-shadow:0 0 8px rgba(107,255,168,.7)}
+.bolt-fly::before{content:"";position:absolute;top:-7px;left:50%;transform:translateX(-50%);
+  border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:9px solid var(--bone)}
+.burst{position:absolute;width:9px;height:9px;border-radius:50%;pointer-events:none;z-index:3}
+.miss-mark{position:absolute;transform:translate(-50%,-50%);font-size:11px;font-weight:700;color:var(--cream);
+  pointer-events:none;z-index:4;animation:mu 1s ease forwards;text-shadow:0 2px 4px #000}
+@keyframes mu{0%{opacity:0;transform:translate(-50%,-50%) scale(.7)}25%{opacity:1;transform:translate(-50%,-90%) scale(1)}100%{opacity:0;transform:translate(-50%,-160%) scale(1)}}
+.odds-btn{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;background:#150E28;
+  border:2px solid var(--gold-dk);color:var(--gold);font-size:12px;font-family:inherit;font-weight:800;cursor:pointer;z-index:6}
+.board-chip{position:absolute;top:8px;left:8px;z-index:6;background:#150E28;border:2px solid var(--gold-dk);
+  color:var(--cream);font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:9px;pointer-events:none}
+.board-chip b{color:var(--gold)}
+.field-hint{position:absolute;bottom:7px;left:0;right:0;text-align:center;font-size:10.5px;font-weight:600;opacity:.65;pointer-events:none;text-shadow:0 2px 4px #000}
+
+.dry{position:absolute;inset:0;background:rgba(10,6,22,.88);z-index:7;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:9px;padding:24px;text-align:center;backdrop-filter:blur(2px)}
+.dry[hidden]{display:none}
+.dry .dt{font-size:16px;font-weight:800;color:var(--gold)}
+.dry .db{font-size:12px;font-weight:500;opacity:.85;line-height:1.45;font-style:italic}
+
+/* shelf legend */
+.legend{display:flex;gap:6px;padding:8px 12px 0}
+.lg{flex:1;border-radius:10px;padding:6px 7px;background:#150E2C;border:2px solid #3A2866;text-align:center}
+.lg b{display:block;font-size:10px;font-weight:700}
+.lg span{font-size:9px;font-weight:500;opacity:.7;display:block;line-height:1.3;margin-top:1px}
+.lg.c-top{border-color:rgba(255,167,36,.55)}.lg.c-top b{color:var(--grand)}
+.lg.c-mid{border-color:rgba(181,101,240,.5)}.lg.c-mid b{color:var(--epic)}
+
+.lg.c-flat{flex:1;border-color:rgba(107,255,168,.45);text-align:left}
+.lg.c-flat b{color:var(--necro);font-size:10.5px}
+.lg.c-flat span{opacity:.8;line-height:1.45}
+.lg.c-low{border-color:rgba(184,176,160,.4)}.lg.c-low b{color:var(--common)}
+
+/* relic progress */
+.skin{margin:12px 12px 0;border-radius:14px;padding:10px 12px;display:flex;gap:11px;align-items:center;
+  background:linear-gradient(120deg,rgba(181,101,240,.22),var(--panel));border:2px solid rgba(181,101,240,.5)}
+.skin-thumb{width:44px;height:44px;flex:none;border-radius:11px;display:grid;place-items:center;font-size:22px;
+  background:linear-gradient(160deg,#D9A8FF,#6B2BB8);border:2px solid rgba(255,255,255,.2)}
+.skin-info{flex:1;min-width:0}
+.skin-info b{font-size:13px;display:block}
+.skin-info p{font-size:11px;opacity:.75;font-weight:500;margin-top:-2px}
+.shards{display:flex;gap:4px;margin-top:5px}
+.shard{flex:1;height:7px;border-radius:4px;background:#0C0818;border:1px solid #3A2866}
+.shard.on{background:linear-gradient(90deg,#D9A8FF,#8B33DE);border-color:var(--epic);box-shadow:0 0 7px rgba(181,101,240,.8)}
+
+.sec{margin:16px 12px 0}
+.sec-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px}
+.sec-h h4{font-size:15px;font-weight:800;color:var(--gold);display:flex;align-items:center;gap:6px}
+.sec-h em{font-size:11px;font-style:normal;opacity:.7;font-weight:600}
+.wallet{display:flex;align-items:center;gap:4px}
+
+.tokbar{border-radius:12px;padding:9px 11px;margin-bottom:9px;background:linear-gradient(180deg,var(--panel-2),var(--panel));
+  border:2px solid var(--necro-dk);display:flex;align-items:center;gap:10px}
+.tokbar .tn{font-size:20px;font-weight:800;color:var(--necro);line-height:1}
+.tokbar .tx{flex:1;font-size:11px;font-weight:500;opacity:.9;line-height:1.35}
+.tokbar .tx b{font-weight:700;opacity:1;display:block}
+.tokbar button{background:linear-gradient(180deg,#9BFFC8,var(--necro));color:#053A21;border:0;font-family:inherit;
+  font-weight:800;font-size:12px;padding:8px 12px;border-radius:10px;cursor:pointer;flex:none;box-shadow:0 3px 0 var(--necro-dk)}
+.tokbar button:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+
+.chal{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:11px;margin-bottom:6px;
+  background:linear-gradient(180deg,var(--panel),#150E2C);border:2px solid #3A2866}
+.chk{width:21px;height:21px;flex:none;border-radius:6px;border:2px solid #55407E;background:#0C0818;display:grid;place-items:center;font-size:12px;color:#053A21;font-weight:800}
+.chal.done .chk{background:var(--necro);border-color:var(--necro)}
+.chal.done .cname{opacity:.45;text-decoration:line-through}
+.cname{flex:1;font-size:12px;font-weight:500;line-height:1.25}
+.cname i{display:block;font-style:normal;font-size:9.5px;font-weight:600;color:var(--necro);opacity:.9}
+.chal-act{display:flex;gap:4px;flex:none}
+.mini{border:0;font-family:inherit;font-size:10px;font-weight:700;padding:6px 8px;border-radius:8px;cursor:pointer}
+.mini.do{background:linear-gradient(180deg,#8AE05E,var(--green));color:#0A2D04;box-shadow:0 2px 0 var(--green-dk)}
+.mini.roll{background:#0C0818;color:var(--gold);border:1.5px solid var(--gold-dk)}
+.mini.skip{background:#0C0818;color:var(--necro);border:1.5px solid var(--necro-dk)}
+
+.store{display:flex;flex-direction:column;gap:9px}
+.sku{display:flex;align-items:center;gap:11px;padding:10px;border-radius:14px;cursor:pointer;
+  background:linear-gradient(180deg,var(--panel-2),var(--panel));border:2px solid #3A2866;position:relative;transition:.12s}
+.sku:active{transform:scale(.985)}
+.sku-ic{width:46px;height:46px;flex:none;border-radius:12px;display:grid;place-items:center;font-size:22px;background:#0C0818;border:2px solid var(--gold-dk)}
+.sku-b{flex:1;min-width:0}
+.sku-b b{font-size:13px;display:block;line-height:1.2}
+.sku-b p{font-size:10.5px;opacity:.72;font-weight:500;margin-top:-1px;line-height:1.3}
+.sku-p{flex:none;text-align:center}
+.tagp{background:linear-gradient(180deg,#FFE08A,var(--gold-2));color:var(--ink);font-weight:800;font-size:12px;padding:8px 12px;border-radius:10px;white-space:nowrap;box-shadow:0 3px 0 var(--gold-dk);display:block}
+.tagp.cash{background:linear-gradient(180deg,#8AE05E,var(--green));color:#0A2D04;box-shadow:0 3px 0 var(--green-dk)}
+.unit{font-size:9px;opacity:.6;font-weight:600;display:block;margin-top:3px}
+.sku .flag{position:absolute;top:-8px;left:10px;font-size:9px;font-weight:800;padding:2px 8px;border-radius:6px;background:var(--red);color:#fff}
+.sku.best{border-color:var(--gold);box-shadow:0 0 18px rgba(255,201,71,.25)}
+.sku.best .flag{background:var(--gold);color:var(--ink)}
+
+/* ================= THE LICH ================= */
+.lich{position:relative;width:100%;height:100%}
+.lich .aura{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:118%;height:118%;
+  border-radius:50%;background:radial-gradient(circle,rgba(107,255,168,.30),transparent 68%)}
+.lich .hood{position:absolute;left:50%;top:2%;transform:translateX(-50%);width:86%;height:74%;
+  border-radius:50% 50% 42% 42%;background:linear-gradient(170deg,#4C3580,#241640);
+  border:2px solid #6B4A08}
+.lich .face{position:absolute;left:50%;top:20%;transform:translateX(-50%);width:52%;height:46%;
+  border-radius:46% 46% 40% 40%;background:linear-gradient(170deg,#F2E9D6,#B4A78C);
+  box-shadow:inset 0 -4px 8px rgba(0,0,0,.3)}
+.lich .eye{position:absolute;top:34%;width:24%;height:24%;border-radius:50%;background:#160C22}
+.lich .eye.l{left:14%}.lich .eye.r{right:14%}
+.lich .eye::after{content:"";position:absolute;inset:20%;border-radius:50%;background:var(--necro);
+  box-shadow:0 0 7px var(--necro);animation:hum 1.9s ease-in-out infinite}
+.lich .grin{position:absolute;bottom:8%;left:22%;right:22%;height:16%;border-radius:0 0 45% 45%;background:#160C22;opacity:.8}
+.lich .grin::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 16%,rgba(242,233,214,.65) 16% 21%)}
+.lich .collar{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:100%;height:30%;
+  border-radius:44% 44% 20% 20%;background:linear-gradient(180deg,#3A2866,#1A1030);border:2px solid #6B4A08;border-bottom:0}
+.lich .wisp{position:absolute;width:12%;height:12%;border-radius:50%;background:var(--necro);
+  filter:blur(2px);opacity:.75;animation:float 3.4s ease-in-out infinite}
+.lich .wisp.w1{left:-4%;top:24%}
+.lich .wisp.w2{right:-2%;top:44%;animation-delay:1.2s}
+@keyframes float{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-8px);opacity:.95}}
+
+/* host anchored bottom-left of the event screen */
+.host{position:absolute;left:10px;bottom:74px;z-index:20;display:flex;align-items:flex-end;gap:8px;
+  pointer-events:none;visibility:hidden;opacity:0;transform:translateX(-16px) translateY(10px);
+  transition:opacity .26s ease,transform .3s cubic-bezier(.2,1.25,.4,1),visibility 0s linear .3s}
+.host.in{visibility:visible;opacity:1;transform:none;transition-delay:0s,0s,0s}
+.host-portrait{width:74px;height:86px;flex:none;pointer-events:auto;cursor:pointer;
+  filter:drop-shadow(0 6px 14px rgba(0,0,0,.75)) drop-shadow(0 0 12px rgba(107,255,168,.35))}
+.host-portrait:active{transform:translateY(2px)}
+.say{max-width:236px;pointer-events:auto;background:linear-gradient(180deg,var(--panel-3),var(--panel));
+  border:2px solid var(--necro);border-radius:13px;padding:9px 11px;margin-bottom:14px;position:relative;
+  font-size:11.5px;font-weight:500;font-style:italic;line-height:1.4;color:var(--cream);
+  box-shadow:0 8px 22px rgba(0,0,0,.6);animation:sayin .28s cubic-bezier(.2,1.3,.4,1)}
+.say[hidden]{display:none}
+@keyframes sayin{from{transform:translateX(-8px) scale(.94);opacity:0}to{transform:none;opacity:1}}
+.say::before{content:"";position:absolute;left:-9px;bottom:12px;border-top:7px solid transparent;
+  border-bottom:7px solid transparent;border-right:9px solid var(--necro)}
+
+
+.host-call{
+  width:32px;height:32px;flex:none;border-radius:10px;cursor:pointer;font-family:inherit;
+  background:#150E26;border:2px solid var(--necro);color:var(--necro);font-size:15px;line-height:1;
+  box-shadow:0 0 12px rgba(107,255,168,.25);transition:.12s;
+}
+.host-call:active{transform:translateY(2px)}
+
+/* ---------- tab bar ---------- */
+.tabs{display:flex;gap:5px;padding:8px 12px 0;background:linear-gradient(180deg,rgba(11,6,20,.55),transparent)}
+.tab{
+  flex:1;position:relative;cursor:pointer;font-family:inherit;
+  display:flex;flex-direction:column;align-items:center;gap:1px;
+  padding:7px 4px 8px;border-radius:11px 11px 0 0;
+  background:linear-gradient(180deg,#1B1330,#150E26);
+  border:2px solid #2E2247;border-bottom:0;
+  color:rgba(242,233,214,.5);font-size:10.5px;font-weight:700;letter-spacing:.2px;
+  transition:.14s;
+}
+.tab em{font-size:16px;font-style:normal;line-height:1}
+.tab.on{
+  background:linear-gradient(180deg,var(--panel-3),var(--panel));
+  border-color:var(--necro);color:var(--necro);
+  box-shadow:0 -3px 14px rgba(107,255,168,.22);
+}
+.tab.on::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--panel)}
+.tbadge{
+  position:absolute;top:2px;right:calc(50% - 26px);
+  min-width:16px;height:16px;padding:0 4px;border-radius:9px;
+  background:var(--red);color:#fff;font-size:9.5px;font-weight:800;
+  display:grid;place-items:center;border:2px solid #150E26;
+}
+.tbadge[hidden]{display:none}
+.pane[hidden]{display:none}
+
+/* ---------- restock CTA ---------- */
+.promo{
+  position:absolute;left:12px;right:12px;bottom:14px;z-index:19;
+  display:flex;align-items:center;gap:10px;text-align:left;
+  padding:9px 12px;border-radius:14px;cursor:pointer;font-family:inherit;
+  background:linear-gradient(180deg,#FFE08A,var(--gold-2));
+  border:2px solid #FFF0BE;color:var(--ink);
+  box-shadow:0 5px 0 var(--gold-dk),0 10px 26px rgba(0,0,0,.55);
+  animation:promoPulse 2.2s ease-in-out infinite;transition:.1s;
+}
+.promo:active{transform:translateY(4px);box-shadow:0 1px 0 var(--gold-dk),0 6px 16px rgba(0,0,0,.5)}
+@keyframes promoPulse{
+  0%,100%{box-shadow:0 5px 0 var(--gold-dk),0 10px 26px rgba(0,0,0,.55),0 0 0 0 rgba(255,201,71,.5)}
+  50%{box-shadow:0 5px 0 var(--gold-dk),0 10px 26px rgba(0,0,0,.55),0 0 22px 5px rgba(255,201,71,.42)}
+}
+.promo-ic{font-size:22px;flex:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
+.promo-tx{flex:1;min-width:0;line-height:1.25}
+.promo-tx b{display:block;font-size:13.5px;font-weight:800;letter-spacing:.2px}
+.promo-tx span{display:block;font-size:10.5px;font-weight:600;opacity:.78}
+.promo-go{font-size:20px;font-weight:800;flex:none;opacity:.65}
+.promo.hot{
+  background:linear-gradient(180deg,#FF9E6B,#E5484D);border-color:#FFC2A3;color:#fff;
+  box-shadow:0 5px 0 #8E1F23,0 10px 26px rgba(0,0,0,.55);
+  animation:promoHot 1s ease-in-out infinite;
+}
+@keyframes promoHot{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.025)}
+}
+.promo.hot .promo-tx span{opacity:.9}
+.promo[hidden]{display:none}
+
+/* ---------- modals ---------- */
+.veil{position:absolute;inset:0;background:rgba(6,3,16,.87);z-index:40;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);animation:fd .2s ease}
+.veil[hidden]{display:none}
+@keyframes fd{from{opacity:0}to{opacity:1}}
+.card{width:100%;border-radius:20px;padding:18px;text-align:center;position:relative;
+  background:linear-gradient(180deg,var(--panel-3),var(--panel));border:3px solid var(--gold);
+  box-shadow:0 24px 60px rgba(0,0,0,.75);animation:pp .3s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pp{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.card h2{font-size:22px;font-weight:800;color:var(--gold);line-height:1.12;text-shadow:0 3px 0 rgba(0,0,0,.45)}
+.card h3{font-size:17px;font-weight:800;margin-bottom:2px}
+.card p{font-size:12.5px;font-weight:500;opacity:.88;line-height:1.5;margin-top:7px}
+.card .close{position:absolute;top:-10px;right:-10px;width:30px;height:30px;border-radius:50%;background:var(--red);
+  border:3px solid var(--panel);color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;z-index:3}
+
+/* the host speaking inside a modal */
+.mhost{display:flex;align-items:flex-start;gap:9px;text-align:left;margin-bottom:12px}
+.mhost .mp{width:52px;height:60px;flex:none;filter:drop-shadow(0 0 10px rgba(107,255,168,.4))}
+.mhost .ml{flex:1;background:rgba(12,8,24,.55);border:2px solid var(--necro-dk);border-radius:11px;
+  padding:8px 10px;font-size:11.5px;font-weight:500;font-style:italic;line-height:1.42;color:var(--cream);position:relative}
+.mhost .ml::before{content:"";position:absolute;left:-8px;top:16px;border-top:6px solid transparent;
+  border-bottom:6px solid transparent;border-right:8px solid var(--necro-dk)}
+
+.btn{width:100%;border:0;font-family:inherit;font-weight:800;font-size:15px;padding:13px;border-radius:12px;cursor:pointer;margin-top:12px;
+  background:linear-gradient(180deg,#8AE05E,var(--green));color:#0A2D04;box-shadow:0 5px 0 var(--green-dk);transition:.1s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--green-dk)}
+.btn.gold{background:linear-gradient(180deg,#FFE08A,var(--gold-2));color:var(--ink);box-shadow:0 5px 0 var(--gold-dk)}
+.btn.gold:active{box-shadow:0 1px 0 var(--gold-dk)}
+.btn.ghost{background:transparent;border:2px solid rgba(246,239,221,.25);color:rgba(246,239,221,.8);box-shadow:none;font-size:13px;padding:10px;margin-top:8px}
+.btn.ghost:active{transform:none}
+
+.popup-art{height:118px;margin:-18px -18px 12px;border-radius:17px 17px 0 0;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 90%,rgba(107,255,168,.30),transparent 62%),
+             linear-gradient(115deg,#1E1038,#3A2866 55%,#4C3580);display:grid;place-items:center}
+.popup-art::before{content:"";position:absolute;inset:0;opacity:.09;background:repeating-linear-gradient(115deg,#fff 0 18px,transparent 18px 36px)}
+.popup-art .bunting{position:absolute;top:0;left:0;right:0;height:13px;background:repeating-linear-gradient(90deg,var(--gold) 0 18px,var(--violet-dk) 18px 36px)}
+.popup-art .lichbig{width:86px;height:100px;position:relative;filter:drop-shadow(0 6px 16px rgba(0,0,0,.6))}
+.freebie{background:rgba(107,255,168,.13);border:2px dashed var(--necro);border-radius:13px;padding:11px;margin-top:12px}
+.freebie .big{font-size:26px;font-weight:800;color:var(--necro);line-height:1}
+.freebie .sm{font-size:11.5px;font-weight:500;opacity:.9;margin-top:3px;line-height:1.4}
+
+.reveal-orb{width:100px;height:100px;border-radius:50%;margin:2px auto 0;display:grid;place-items:center;font-size:44px;
+  position:relative;animation:oi .45s cubic-bezier(.2,1.5,.4,1);border:3px solid rgba(255,255,255,.25)}
+@keyframes oi{from{transform:scale(0) rotate(-25deg)}to{transform:scale(1) rotate(0)}}
+.tier-name{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:1px;padding:4px 13px;border-radius:999px;margin-top:11px}
+.ray{position:absolute;top:50%;left:50%;width:2px;height:115px;transform-origin:50% 0;background:linear-gradient(180deg,currentColor,transparent);opacity:.4}
+
+.toast{position:absolute;left:16px;right:16px;bottom:104px;z-index:30;background:linear-gradient(180deg,var(--panel-3),var(--panel));
+  border:2px solid var(--gold);border-radius:13px;padding:11px 13px;display:flex;align-items:center;gap:10px;
+  box-shadow:0 12px 32px rgba(0,0,0,.65);animation:ti .3s cubic-bezier(.2,1.3,.4,1)}
+.toast[hidden]{display:none}
+@keyframes ti{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+.toast .ti{font-size:22px;flex:none}
+.toast .tb{flex:1;font-size:11.5px;font-weight:500;line-height:1.35}
+.toast .tb b{display:block;font-weight:800;font-size:13px}
+
+.odds-tbl{width:100%;font-size:11.5px;font-weight:500;margin-top:10px;border-collapse:collapse;text-align:left}
+.odds-tbl th{font-weight:700;font-size:10px;opacity:.65;padding:5px 4px;border-bottom:2px solid rgba(255,255,255,.15)}
+.odds-tbl td{padding:6px 4px;border-bottom:1px solid rgba(255,255,255,.08)}
+.odds-tbl td:first-child{font-weight:700}
+.dis{font-size:10.5px;opacity:.75;font-weight:500;line-height:1.55;margin-top:10px;text-align:left}
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- ===== HOME ===== -->
+  <section class="screen" id="scr-home">
+    <div class="hud">
+      <div class="cur" id="c-gold"><i class="i-gold">◆</i><span>12,400</span></div>
+      <div class="cur" id="c-gem"><i class="i-gem">◈</i><span>320</span></div>
+      <div class="cur" id="c-energy"><i class="i-energy">⚡</i><span>18/20</span></div>
+    </div>
+    <div class="home-art">
+      <div class="chapter">
+        <h3>Chapter 7 — Cavern of Echoes</h3>
+        <p>Wave 24 of 50</p>
+        <div class="chbar"><span></span></div>
+      </div>
+      <div class="hero">
+        <div class="glow"></div><div class="body"></div>
+        <div class="head"></div><div class="hood"></div><div class="bow"></div>
+      </div>
+      <div class="evt-banner" id="open-event">
+        <span class="tag">6d 04h</span>
+        <div class="evt-icon"><div style="width:30px;height:36px" id="banner-lich"></div></div>
+        <div class="txt"><b>The Necromancer's Reliquary</b><span id="banner-sub">3 free bolts waiting</span></div>
+      </div>
+    </div>
+    <nav class="nav">
+      <button><em>🛡</em>Equip</button>
+      <button><em>🌿</em>Talent</button>
+      <button class="on"><em>⚔️</em>Battle</button>
+      <button><em>🛒</em>Shop</button>
+      <button id="nav-event"><em>💀</em>Event<span class="dot"></span></button>
+    </nav>
+  </section>
+
+  <!-- ===== EVENT ===== -->
+  <section class="screen" id="scr-event" hidden>
+    <div class="ev-head">
+      <div class="ev-top">
+        <button class="back" id="go-home">‹</button>
+        <div class="wordmark">The Necromancer's Reliquary<small>Week 1 · he calls them exhibits</small></div>
+        <button class="host-call" id="host-call" title="Ask the curator">💀</button>
+        <div class="timer">Ends<b>6d 04h</b></div>
+      </div>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-tab="shelves"><em>🏹</em>Shelves</button>
+      <button class="tab" data-tab="errands"><em>📜</em>Errands<span class="tbadge" id="errand-badge">7</span></button>
+      <button class="tab" data-tab="stall"><em>⚱️</em>Stall</button>
+    </div>
+
+    <div class="scroll" id="ev-scroll">
+      <div class="pane" data-pane="shelves">
+      <div class="day-strip" id="day-strip"></div>
+
+      <div class="tracker" id="tracker">
+        <div class="tier" data-t="common"><b>🦴</b><span>COMMON</span></div>
+        <div class="tier" data-t="rare"><b>🔮</b><span>RARE</span></div>
+        <div class="tier" data-t="epic"><b>💀</b><span>EPIC</span></div>
+        <div class="tier" data-t="grand"><b>👑</b><span>GRAND</span></div>
+      </div>
+
+      <div class="remind" id="remind" hidden>
+        <div class="ri">💀</div>
+        <div class="rb"><b id="remind-t">Day cleared</b><span id="remind-b"></span></div>
+        <button id="remind-act">Trade</button>
+      </div>
+
+      <div class="meter" id="meter">
+        <div class="meter-row">
+          <div class="quiver">
+            <div class="pips" id="pips"></div>
+            <div class="qtxt"><b id="arrow-n">0</b>bolts left</div>
+          </div>
+          <button class="btn-green" id="quick-buy">+ Bolts</button>
+        </div>
+        <div class="pity">
+          <div class="pity-l"><span>👑 Great Reliquary guarantee</span><b id="pity-txt">7 shots away</b></div>
+          <div class="pity-bar"><span id="pity-fill" style="width:0%"></span></div>
+        </div>
+      </div>
+
+      <div class="field-wrap">
+        <div class="field" id="field">
+          <button class="odds-btn" id="odds-btn">i</button>
+          <div class="board-chip" id="board-chip"><b>9</b> of 9 exhibits left today</div>
+          <div class="field-hint" id="hint">Break any skull — none of them will tell you what is inside</div>
+          <div class="dry" id="dry" hidden>
+            <div style="font-size:34px" id="dry-ic">🏹</div>
+            <div class="dt" id="dry-t">Out of bolts</div>
+            <div class="db" id="dry-b"></div>
+            <button class="btn-green" id="dry-buy">Get bolts</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <div class="lg c-flat"><b>EVERY SKULL, THE SAME ODDS</b><span>Common 62% · Rare 24% · Epic 11% · Grand 3% — shelf and skull tell you nothing. Tap <b>i</b> for the full table.</span></div>
+      </div>
+
+      <div class="skin">
+        <div class="skin-thumb">💀</div>
+        <div class="skin-info">
+          <b>Bone Sovereign — Legendary Skin</b>
+          <p><span id="shard-n">0</span> of 5 relic shards recovered</p>
+          <div class="shards" id="shards"></div>
+        </div>
+      </div>
+
+      </div><!-- /shelves pane -->
+
+      <div class="pane" data-pane="errands" hidden>
+      <div class="sec" style="margin-top:12px">
+        <div class="sec-h"><h4>📜 The lich's errands</h4><em id="chal-count">0 / 7 done</em></div>
+        <div class="tokbar">
+          <span class="tn" id="tok-n">0</span>
+          <span class="tx"><b>Soul tokens</b>5 tokens = 1 bolt</span>
+          <button id="trade-btn" disabled>Trade</button>
+        </div>
+        <div id="chal-list"></div>
+      </div>
+
+      </div><!-- /errands pane -->
+
+      <div class="pane" data-pane="stall" hidden>
+      <div class="sec" style="margin-top:12px">
+        <div class="sec-h"><h4>⚱️ The lich's stall</h4><em class="wallet">You have <b id="wallet-gem">320</b> ◈</em></div>
+        <div class="store">
+          <div class="sku" data-sku="single">
+            <div class="sku-ic">🏹</div>
+            <div class="sku-b"><b>Single bolt</b><p>One more shot at the shelves</p></div>
+            <div class="sku-p"><span class="tagp">50 ◈</span><span class="unit">50 ◈ each</span></div>
+          </div>
+          <div class="sku" data-sku="bundle">
+            <span class="flag">SAVE 10%</span>
+            <div class="sku-ic">🎯</div>
+            <div class="sku-b"><b>Bone quiver ×4</b><p>Four bolts in one go</p></div>
+            <div class="sku-p"><span class="tagp">180 ◈</span><span class="unit">45 ◈ each</span></div>
+          </div>
+          <div class="sku best" data-sku="pass">
+            <span class="flag">BEST VALUE</span>
+            <div class="sku-ic">⚱️</div>
+            <div class="sku-b"><b>Reliquary Pass</b><p>10 bolts + double soul tokens all week</p></div>
+            <div class="sku-p"><span class="tagp cash">₹169</span><span class="unit">≈17 ◈ each</span></div>
+          </div>
+          <div class="sku" data-sku="lock">
+            <div class="sku-ic">📜</div>
+            <div class="sku-b"><b>Curator's Oath</b><p>Next bolt guaranteed Epic or better</p></div>
+            <div class="sku-p"><span class="tagp cash">₹89</span><span class="unit">one shot</span></div>
+          </div>
+        </div>
+      </div>
+      </div><!-- /stall pane -->
+    </div>
+
+    <!-- always-visible restock CTA, presented by the host beside him -->
+    <button class="promo" id="promo">
+      <span class="promo-ic" id="promo-ic">🏹</span>
+      <span class="promo-tx">
+        <b id="promo-t">Get soul bolts</b>
+        <span id="promo-b">Reliquary Pass · 10 bolts · ₹169</span>
+      </span>
+      <span class="promo-go">›</span>
+    </button>
+
+    <!-- the host, always present, bottom-left -->
+    <div class="host" id="host">
+      <div class="host-portrait" id="host-portrait"></div>
+      <div class="say" id="say" hidden></div>
+    </div>
+  </section>
+
+  <div class="veil" id="veil" hidden><div class="card" id="card"></div></div>
+</div>
+
+<script>
+/* ============ THE HOST ============ */
+const LICH_HTML=`
+  <div class="lich">
+    <div class="aura"></div>
+    <div class="wisp w1"></div><div class="wisp w2"></div>
+    <div class="hood"></div>
+    <div class="face"><div class="eye l"></div><div class="eye r"></div><div class="grin"></div></div>
+    <div class="collar"></div>
+  </div>`;
+
+/* Every line the player reads is his. */
+const VOICE={
+  tokensGot:  "Dust for the errand. Five of those buys a bolt, should you want one.",
+  errandDone: "Noted. Keep going — the dust only pays out in threes, fives and sevens.",
+  poorGold:   "Not enough gold to swap that one. Even I have standards.",
+  rerolled:   "Swapped. The next swap costs more, naturally.",
+  waived:     "Gems for an errand you could not be bothered with. No judgement. Some judgement.",
+  boughtBolt: "Bolts in hand. The shelves are not going to empty themselves.",
+  toppedUp:   "Your purse is heavy again. How convenient for us both.",
+  weekEnd:    "The week is spent. Come Monday I restock, and your relic shards keep.",
+  greet:      "Step closer, breathing one. My catacomb is a museum now, and every exhibit is for the taking — if your aim is worth anything.",
+  welcome:    "Three bolts, gratis. Call it advertising. Do not bother studying them — I sorted these shelves blindfolded, and I sort them again each dawn.",
+  aimHint:    "They all hum the same note. I stopped pretending I knew which was which a century ago. Pick one.",
+  miss:       "Your bolt finds only dust. Dust, alas, pays poorly — take a token for the effort.",
+  common:     "A trinket. The catacomb keeps its better secrets on higher shelves.",
+  rare:       "Serviceable. It hummed once. With work, it may hum again.",
+  epic:       "Ahh — a shard of the Bone Sovereign. Collect five and the mask is yours. You have rather fewer than five.",
+  grand:      "The Great Reliquary yields! Take it, quickly, before I remember what it cost me.",
+  rampEarly:  "Patience. I do not open the good caskets for a stranger's first bolt.",
+  hookShot:   "Now then. For your third bolt I unseal something worth the walk.",
+  dry:        "Your quiver is empty and my shelves are not. I sense the beginnings of an arrangement.",
+  dryHot:     "The Great Reliquary is one bolt from opening. One. I have watched heroes walk away at this exact moment. Most regret it.",
+  cleared:    "You have stripped my shelves bare, and I am impressed against my will. Return at dusk — the dead restock nightly.",
+  dayDone:    "Your errands are noted, and my ledger is honest. But bolts left unfired are simply... waste.",
+  poor:       "Your purse is light. Mine, you will find, never is.",
+  boughtPass: "A patron! The Pass is yours. Every errand now pays double, and the shelves shall know your name.",
+  boughtLock: "The oath is sworn. Whichever skull you break, it yields something worth carrying. Do not ask what it cost me to promise that.",
+  traded:     "Souls into bolts. An honest exchange, by the standards of the dead.",
+  newDay:     "Fresh exhibits, fresh errands. I restocked while you slept. I always do.",
+  reroll:     "Squeamish about that errand? Very well. Gold soothes most objections — mine included.",
+  odds:       "I keep no secrets about the odds. Secrets are for amateurs; disclosure is for showmen."
+};
+
+/* ============ ECONOMY ============ */
+const TIERS={
+  common:{name:'Common',color:'#B8B0A0',icon:'🦴',label:'Bone Dust ×3 + 240 gold'},
+  rare:  {name:'Rare',  color:'#4A9DE8',icon:'🔮',label:'Soul Stone ×1 + 700 gold'},
+  epic:  {name:'Epic',  color:'#B565F0',icon:'💀',label:'Bone Sovereign Relic Shard ×1'},
+  grand: {name:'Grand', color:'#FFA724',icon:'👑',label:'Permanent +5% ATK · Title "Curator of the Dead"'}
+};
+/* Every exhibit rolls the same table. Shelf and skull are layout, not signal —
+   nothing on the board tells you what is inside until it breaks. */
+const DROP_ODDS=[['common',62],['rare',24],['epic',11],['grand',3]];
+const ZONE_ODDS={top:DROP_ODDS,mid:DROP_ODDS,low:DROP_ODDS};
+const PITY_MAX=7, TOKENS_PER_ARROW=5, SHARDS_NEEDED=5, FREE_DAILY=3;
+
+const S={
+  gold:12400, gems:320, energy:18, day:1,
+  arrows:0, tokens:0, shards:0, shots:0, pops:0, pity:0,
+  popped:[], skinSeed:[],
+  claimed:{common:false,rare:false,epic:false,grand:false},
+  pass:false, lock:false, grantedToday:false, rerollCost:150,
+  challenges:[]
+};
+
+const CHALLENGE_POOL=[
+  'Clear 3 rooms in any chapter','Defeat 40 enemies','Use 2 abilities in one run',
+  'Clear a room without taking damage','Collect 5 coin piles','Defeat 1 elite enemy',
+  'Reach wave 10 in Chapter 2','Upgrade any gear once','Deal 5,000 total damage',
+  'Complete a run without reviving','Open 2 treasure chests','Land 15 critical hits',
+  'Spend 3 energy','Equip a different weapon'
+];
+
+/* Three shelves of three. Identical targets — equal size, equal odds, so no
+   position is ever the "right" one to aim at. */
+const SHELVES=[
+  {zone:'top', y:26, label:'TOP SHELF'},
+  {zone:'mid', y:55, label:'MIDDLE SHELF'},
+  {zone:'low', y:84, label:'BOTTOM SHELF'}
+];
+function buildSlots(){
+  const out=[];
+  SHELVES.forEach((sh,r)=>{
+    [23,50,77].forEach((x,c)=>out.push({
+      id:r*3+c, zone:sh.zone, x, y:sh.y-8, w:16, h:16, type:'skull'
+    }));
+  });
+  return out;
+}
+const SLOTS=buildSlots();
+
+/* ============ DOM ============ */
+const $=s=>document.querySelector(s);
+const field=$('#field'), veil=$('#veil'), card=$('#card');
+let sayTimer=null;
+const fmt=n=>n.toLocaleString('en-IN');
+function flash(sel){const e=$(sel);e.classList.remove('flash');void e.offsetWidth;e.classList.add('flash');}
+
+/* host speech bubble */
+function say(line,hold){
+  clearTimeout(sayTimer);
+  const host=$('#host'), el=$('#say');
+  el.textContent=line;el.hidden=false;
+  host.classList.add('in');                       // he rises only to speak
+  sayTimer=setTimeout(()=>{
+    host.classList.remove('in');
+    setTimeout(()=>{el.hidden=true;},320);        // clear after he withdraws
+  },hold||5200);
+}
+function dismissHost(){
+  clearTimeout(sayTimer);
+  $('#host').classList.remove('in');
+  setTimeout(()=>{$('#say').hidden=true;},320);
+}
+function hostBlock(line){
+  return `<div class="mhost"><div class="mp">${LICH_HTML}</div><div class="ml">${line}</div></div>`;
+}
+
+function renderHUD(){
+  $('#c-gold span').textContent=fmt(S.gold);
+  $('#c-gem span').textContent=fmt(S.gems);
+  $('#c-energy span').textContent=S.energy+'/20';
+  $('#wallet-gem').textContent=fmt(S.gems);
+}
+function renderDays(){
+  const w=$('#day-strip');w.innerHTML='';
+  for(let d=1;d<=7;d++){
+    const p=document.createElement('div');
+    p.className='day-pip'+(d<S.day?' past':d===S.day?' now':'');
+    p.textContent='D'+d;w.appendChild(p);
+  }
+}
+function renderMeter(){
+  $('#arrow-n').textContent=S.arrows;
+  const pw=$('#pips');pw.innerHTML='';
+  const show=Math.max(FREE_DAILY,Math.min(S.arrows,8));
+  for(let i=0;i<show;i++){
+    const p=document.createElement('div');p.className='pip'+(i<S.arrows?' on':'');pw.appendChild(p);
+  }
+  const left=Math.max(0,PITY_MAX-S.pity);
+  $('#pity-txt').textContent=S.claimed.grand?'Claimed ✓':left===1?'1 shot away!':left+' shots away';
+  $('#pity-fill').style.width=(S.pity/PITY_MAX*100)+'%';
+  $('#meter').classList.toggle('hot',!S.claimed.grand&&left<=2);
+  if($('#promo'))renderPromo();
+  $('#banner-sub').textContent=S.arrows>0?S.arrows+' bolt'+(S.arrows>1?'s':'')+' ready':'Out of bolts — the stall is open';
+  renderDry();
+}
+function balloonsLeft(){return SLOTS.length-S.popped.length;}
+function renderBoardCount(){
+  $('#board-chip').innerHTML=`<b>${balloonsLeft()}</b> of ${SLOTS.length} exhibits left today`;
+}
+function renderDry(){
+  const dry=$('#dry'), buy=$('#dry-buy');
+  if(balloonsLeft()===0){
+    $('#dry-ic').textContent='⚱️';
+    $('#dry-t').textContent='Shelves picked clean';
+    $('#dry-b').textContent=VOICE.cleared;
+    buy.textContent='Return tomorrow';buy.dataset.act='nextday';
+    dry.hidden=false;return;
+  }
+  buy.dataset.act='buy';
+  if(S.arrows>0){dry.hidden=true;return;}
+  const left=Math.max(0,PITY_MAX-S.pity);
+  const hot=!S.claimed.grand&&left<=2;
+  $('#dry-ic').textContent='🏹';
+  $('#dry-t').textContent=hot?left+' bolt'+(left>1?'s':'')+' from the Great Reliquary':'Out of bolts';
+  $('#dry-b').textContent=hot?VOICE.dryHot:VOICE.dry;
+  buy.textContent='Get bolts';
+  dry.hidden=false;
+}
+function renderRemind(){
+  const el=$('#remind');
+  const done=S.challenges.filter(c=>c.done).length;
+  const tradeable=Math.floor(S.tokens/TOKENS_PER_ARROW);
+  if(done<7||(S.arrows===0&&tradeable===0)||balloonsLeft()===0){el.hidden=true;return;}
+  const bits=[];
+  if(S.arrows>0)bits.push(S.arrows+' bolt'+(S.arrows>1?'s':'')+' unfired');
+  if(tradeable>0)bits.push(S.tokens+' tokens ('+tradeable+' more bolt'+(tradeable>1?'s':'')+')');
+  $('#remind-t').textContent='Day '+S.day+' errands done — spend before you go';
+  $('#remind-b').textContent=bits.join(' · ')+'. '+balloonsLeft()+' exhibits still on the shelves.';
+  const btn=$('#remind-act');
+  btn.textContent=tradeable>0?'Trade tokens':'Use bolts';
+  btn.dataset.act=tradeable>0?'trade':'shoot';
+  el.hidden=false;
+}
+function renderTracker(){document.querySelectorAll('.tier').forEach(e=>e.classList.toggle('got',S.claimed[e.dataset.t]));}
+function renderShards(){
+  $('#shard-n').textContent=S.shards;
+  const w=$('#shards');w.innerHTML='';
+  for(let i=0;i<SHARDS_NEEDED;i++){const s=document.createElement('div');s.className='shard'+(i<S.shards?' on':'');w.appendChild(s);}
+}
+function renderTokens(){
+  $('#tok-n').textContent=S.tokens;
+  $('#trade-btn').disabled=S.tokens<TOKENS_PER_ARROW;
+}
+function nextTokenAt(d){return d<3?3:d<5?5:7;}
+function renderChallenges(){
+  const list=$('#chal-list');list.innerHTML='';
+  const done=S.challenges.filter(c=>c.done).length;
+  S.challenges.forEach((c,i)=>{
+    const row=document.createElement('div');
+    row.className='chal'+(c.done?' done':'');
+    const at=[3,5,7].includes(i+1)?`<i>+${(i+1)===7?2:1} soul token at ${i+1}/7</i>`:'';
+    row.innerHTML=`<div class="chk">${c.done?'✓':''}</div><div class="cname">${c.text}${at}</div><div class="chal-act"></div>`;
+    const a=row.querySelector('.chal-act');
+    if(!c.done){
+      const b1=mk('button','mini do','Do');b1.onclick=()=>completeChallenge(i,false);
+      const b2=mk('button','mini roll','↻'+S.rerollCost);b2.onclick=()=>rerollChallenge(i);
+      const b3=mk('button','mini skip','⏭80');b3.onclick=()=>skipChallenge(i);
+      a.append(b1,b2,b3);
+    }
+    list.appendChild(row);
+  });
+  $('#chal-count').textContent=done+' / 7 done · next token at '+nextTokenAt(done);
+}
+function mk(t,c,x){const e=document.createElement(t);e.className=c;e.textContent=x;return e;}
+
+/* Purely decorative. Reshuffled each day and deliberately uncorrelated with the
+   drop — a skull that looks livelier is not worth more. */
+function targetHTML(slot){
+  const v=S.skinSeed[slot.id]||0;
+  const tilt=(v%3-1)*4;
+  return `<div class="skull v${v%3}" style="transform:rotate(${tilt}deg)">
+    <div class="eye l"></div><div class="eye r"></div><div class="nose"></div><div class="jaw"></div></div>`;
+}
+function reshuffleSkulls(){
+  S.skinSeed=SLOTS.map(()=>Math.floor(Math.random()*3));
+}
+function renderBalloons(){
+  field.querySelectorAll('.target,.slot-ghost,.shelf,.shelf-tag').forEach(n=>n.remove());
+  // shelves first, behind the exhibits
+  SHELVES.forEach(sh=>{
+    const p=document.createElement('div');
+    p.className='shelf';p.style.top=sh.y+'%';field.appendChild(p);
+    const tg=document.createElement('div');
+    tg.className='shelf-tag';tg.style.cssText=`left:6.5%;top:${sh.y+4.2}%`;tg.textContent=sh.label;
+    field.appendChild(tg);
+  });
+  SLOTS.forEach(s=>{
+    const el=document.createElement('div');
+    el.style.cssText=`left:${s.x}%;top:${s.y}%;width:${s.w}%;height:${s.h}%;`;
+    if(S.popped.includes(s.id)){
+      el.className='slot-ghost';field.appendChild(el);return;
+    }
+    el.className='target spawn';
+    el.dataset.slot=s.id;
+    el.innerHTML=targetHTML(s);
+    field.appendChild(el);
+  });
+  renderBoardCount();
+}
+function renderAll(){renderHUD();renderDays();renderMeter();renderTracker();renderShards();renderTokens();renderChallenges();renderBoardCount();renderRemind();renderErrandBadge();renderPromo();}
+
+function openModal(html,mount){
+  card.innerHTML=html;veil.hidden=false;
+  const c=card.querySelector('.close');if(c)c.onclick=closeModal;
+  if(mount)mount(card);
+}
+function closeModal(){veil.hidden=true;card.innerHTML='';}
+veil.addEventListener('click',e=>{if(e.target===veil)closeModal();});
+
+/* ============ ERRANDS ============ */
+function dealChallenges(){
+  S.challenges=[...CHALLENGE_POOL].sort(()=>Math.random()-.5).slice(0,7).map(t=>({text:t,done:false}));
+  S.rerollCost=150;
+}
+function awardTokens(n){const g=n*(S.pass?2:1);S.tokens+=g;renderTokens();return g;}
+function completeChallenge(i,silent){
+  if(S.challenges[i].done)return;
+  S.challenges[i].done=true;
+  const done=S.challenges.filter(c=>c.done).length;
+  let g=0;
+  if(done===3)g=awardTokens(1);
+  if(done===5)g=awardTokens(1);
+  if(done===7)g=awardTokens(2);
+  renderChallenges();renderRemind();renderErrandBadge();
+  if(!silent){
+    if(g)say('+'+g+' soul tokens. '+VOICE.tokensGot+(S.pass?' Your Pass is doubling it.':''));
+    else say(VOICE.errandDone+' Next dust at '+nextTokenAt(done)+' of 7.');
+  }
+  if(done===7)setTimeout(dayCompletePrompt,700);
+}
+function rerollChallenge(i){
+  if(S.gold<S.rerollCost){say(VOICE.poorGold+' It costs '+fmt(S.rerollCost)+' gold.');return;}
+  S.gold-=S.rerollCost;S.rerollCost+=50;
+  const used=S.challenges.map(c=>c.text);
+  const fresh=CHALLENGE_POOL.filter(t=>!used.includes(t));
+  S.challenges[i]={text:fresh.length?fresh[Math.floor(Math.random()*fresh.length)]:CHALLENGE_POOL[0],done:false};
+  renderHUD();flash('#c-gold');renderChallenges();
+  say(VOICE.reroll);
+  say(VOICE.rerolled+' '+fmt(S.rerollCost)+' gold next time.');
+}
+function skipChallenge(i){
+  if(S.gems<80){notEnoughGems(80);return;}
+  S.gems-=80;renderHUD();flash('#c-gem');
+  completeChallenge(i,true);
+  say(VOICE.waived);
+}
+function dayCompletePrompt(){
+  const tradeable=Math.floor(S.tokens/TOKENS_PER_ARROW);
+  const left=balloonsLeft();
+  const potential=S.arrows+tradeable;
+  const lastDay=S.day>=7;
+  const rows=`
+    <div style="text-align:left;margin-top:10px;font-size:12.5px;font-weight:600;line-height:1.9">
+      <div>🏹 Bolts unfired <b style="float:right;color:var(--gold)">${S.arrows}</b></div>
+      <div>🔮 Soul tokens <b style="float:right;color:var(--necro)">${S.tokens}${tradeable?' → '+tradeable+' bolt'+(tradeable>1?'s':''):''}</b></div>
+      <div>⚱️ Exhibits still up <b style="float:right;color:var(--cream)">${left} of ${SLOTS.length}</b></div>
+    </div>`;
+  const nudge = potential===0
+    ? '<p>Nothing left to spend today. Fresh exhibits go up tomorrow.</p>'
+    : left===0
+      ? '<p>You have cleared every shelf. Your bolts and tokens carry over.</p>'
+      : `<p>You can still take <b>${Math.min(potential,left)}</b> more shot${Math.min(potential,left)>1?'s':''} today. ${lastDay?'This is the final day — anything unspent is lost when the event ends.':'Bolts and tokens carry over, but they are lost when the event ends on Day 7.'}</p>`;
+  openModal(`<button class="close">✕</button>
+    ${hostBlock(VOICE.dayDone)}
+    <h3>Day ${S.day} errands cleared</h3>
+    ${rows}${nudge}
+    ${tradeable?`<button class="btn" id="m-trade">Trade ${tradeable*TOKENS_PER_ARROW} tokens for ${tradeable} bolt${tradeable>1?'s':''}</button>`:''}
+    ${(S.arrows>0&&left>0)?'<button class="btn gold" id="m-shoot">Use my bolts now</button>':''}
+    <button class="btn ${(tradeable||S.arrows)?'ghost':''}" id="m-next">${lastDay?'Close':'Start day '+(S.day+1)}</button>`,
+    c=>{
+      const tr=c.querySelector('#m-trade');
+      if(tr)tr.onclick=()=>{
+        for(let i=0;i<tradeable;i++){S.tokens-=TOKENS_PER_ARROW;S.arrows++;}
+        renderTokens();renderMeter();renderRemind();closeModal();say(VOICE.traded);
+        say('+'+tradeable+' bolt'+(tradeable>1?'s':'')+'. '+VOICE.traded);
+      };
+      const sh=c.querySelector('#m-shoot');
+      if(sh)sh.onclick=()=>{closeModal();setTab('shelves');$('#field').scrollIntoView({behavior:'smooth',block:'center'});say(VOICE.aimHint);};
+      c.querySelector('#m-next').onclick=()=>{closeModal();if(!lastDay)nextDay();};
+    });
+}
+function nextDay(){
+  if(S.day>=7){say(VOICE.weekEnd,6000);return;}
+  S.day++;S.popped=[];
+  dealChallenges();reshuffleSkulls();renderBalloons();renderAll();
+  say(VOICE.newDay);
+  say(VOICE.newDay,5500);
+}
+$('#trade-btn').onclick=()=>{
+  if(S.tokens<TOKENS_PER_ARROW)return;
+  S.tokens-=TOKENS_PER_ARROW;S.arrows++;
+  renderTokens();renderMeter();renderRemind();say(VOICE.traded);
+  say(VOICE.traded);
+};
+
+/* ============ PURCHASES ============ */
+const SKUS={
+  single:{name:'Single bolt',arrows:1,gems:50,icon:'🏹',desc:'One more shot at the shelves.'},
+  bundle:{name:'Bone quiver ×4',arrows:4,gems:180,icon:'🎯',desc:'Four bolts at 45 gems each instead of 50.'},
+  pass:{name:'Reliquary Pass',arrows:10,cash:'₹169',icon:'⚱️',desc:'10 bolts now, and every errand pays double soul tokens for the rest of the week.'},
+  lock:{name:"Curator's Oath",arrows:0,cash:'₹89',icon:'📜',desc:'He names your next bolt before you loose it: guaranteed Epic or better, whichever skull you break. Overrides the opening two pops.'}
+};
+document.querySelectorAll('.sku').forEach(e=>e.onclick=()=>confirmPurchase(e.dataset.sku));
+$('#quick-buy').onclick=()=>arrowUpsell();
+$('#dry-buy').onclick=e=>{
+  if(e.currentTarget.dataset.act==='nextday'){nextDay();return;}
+  arrowUpsell();
+};
+$('#remind-act').onclick=e=>{
+  if(e.currentTarget.dataset.act==='trade'){setTab('errands');$('#trade-btn').click();return;}
+  setTab('shelves');$('#field').scrollIntoView({behavior:'smooth',block:'center'});
+  say(VOICE.aimHint);
+};
+$('#host-portrait').onclick=()=>dismissHost();
+$('#say').onclick=()=>dismissHost();
+
+/* ============ TABS ============ */
+let activeTab='shelves';
+function setTab(name){
+  activeTab=name;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===name));
+  document.querySelectorAll('.pane').forEach(p=>{p.hidden=(p.dataset.pane!==name);});
+  $('#ev-scroll').scrollTop=0;
+  renderPromo();
+}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+
+function renderErrandBadge(){
+  const openCount=S.challenges.filter(c=>!c.done).length;
+  const b=$('#errand-badge');
+  b.textContent=openCount;
+  b.hidden=openCount===0;
+}
+
+/* ============ RESTOCK CTA ============ */
+function renderPromo(){
+  const el=$('#promo');
+  // On the stall tab the offers are already on screen — the bar would be noise.
+  if(activeTab==='stall'){el.hidden=true;return;}
+  el.hidden=false;
+  const left=Math.max(0,PITY_MAX-S.pity);
+  const hot=!S.claimed.grand&&left<=2&&balloonsLeft()>0;
+  const cleared=balloonsLeft()===0;
+  el.classList.toggle('hot',hot);
+  if(cleared){
+    $('#promo-ic').textContent='🌙';
+    $('#promo-t').textContent='Shelves are bare';
+    $('#promo-b').textContent='He restocks tomorrow — bolts keep';
+  } else if(hot){
+    $('#promo-ic').textContent='👑';
+    $('#promo-t').textContent=left===1?'1 bolt from the Great Reliquary':left+' bolts from the Great Reliquary';
+    $('#promo-b').textContent="Curator's Oath · \u20B989 · guaranteed Epic+";
+  } else if(S.arrows===0){
+    $('#promo-ic').textContent='🏹';
+    $('#promo-t').textContent='Out of bolts — restock';
+    $('#promo-b').textContent='Reliquary Pass · 10 bolts · ₹169';
+  } else {
+    $('#promo-ic').textContent='⚱️';
+    $('#promo-t').textContent='Get soul bolts';
+    $('#promo-b').textContent=S.pass?'Bone quiver ×4 · 180 ◈':'Reliquary Pass · 10 bolts · ₹169';
+  }
+}
+$('#host-call').onclick=()=>say(idleLine(),6000);
+$('#promo').onclick=()=>{
+  if(balloonsLeft()===0){say(VOICE.cleared,6000);return;}
+  arrowUpsell();
+};
+
+function idleLine(){
+  if(balloonsLeft()===0)return VOICE.cleared;
+  if(S.arrows===0)return VOICE.dry;
+  if(S.popped.length<SLOTS.length)return VOICE.aimHint;
+  return VOICE.greet;
+}
+
+function confirmPurchase(k){
+  const s=SKUS[k],price=s.cash||s.gems+' ◈',owned=k==='pass'&&S.pass;
+  openModal(`<button class="close">✕</button>
+    ${hostBlock(k==='lock'?VOICE.boughtLock:VOICE.dry)}
+    <div style="font-size:36px">${s.icon}</div>
+    <h3 style="margin-top:4px">${s.name}</h3><p>${s.desc}</p>
+    ${owned?'<p style="color:#6BFFA8">The Pass is already yours.</p>'
+      :`<button class="btn ${s.cash?'':'gold'}" id="m-buy">Buy for ${price}</button>`}
+    <button class="btn ghost" id="m-no">Not now</button>`,
+    c=>{c.querySelector('#m-no').onclick=closeModal;
+        const b=c.querySelector('#m-buy');if(b)b.onclick=()=>doPurchase(k);});
+}
+function doPurchase(k){
+  const s=SKUS[k];
+  if(s.gems){
+    if(S.gems<s.gems){closeModal();notEnoughGems(s.gems);return;}
+    S.gems-=s.gems;flash('#c-gem');
+  }
+  if(k==='pass')S.pass=true;
+  if(k==='lock')S.lock=true;
+  S.arrows+=s.arrows;
+  renderHUD();renderMeter();renderRemind();closeModal();
+  if(k==='lock'){say(VOICE.boughtLock,5500);}
+  else if(k==='pass'){say(VOICE.boughtPass,5500);}
+  else say('+'+s.arrows+' bolt'+(s.arrows>1?'s':'')+'. '+VOICE.boughtBolt);
+}
+function notEnoughGems(need){
+  openModal(`<button class="close">✕</button>
+    ${hostBlock(VOICE.poor)}
+    <div style="font-size:36px">◈</div>
+    <h3 style="margin-top:4px">Not enough gems</h3>
+    <p>You need <b>${need-S.gems} more gems</b>. You have ${S.gems}.</p>
+    <button class="btn" id="m-top">Top up 500 gems · ₹399</button>
+    <button class="btn ghost" id="m-no">Not now</button>`,
+    c=>{c.querySelector('#m-no').onclick=closeModal;
+        c.querySelector('#m-top').onclick=()=>{S.gems+=500;renderHUD();flash('#c-gem');closeModal();say(VOICE.toppedUp);};});
+}
+function arrowUpsell(){
+  const left=Math.max(0,PITY_MAX-S.pity);
+  const hot=!S.claimed.grand&&left<=2;
+  openModal(`<button class="close">✕</button>
+    ${hostBlock(hot?VOICE.dryHot:VOICE.dry)}
+    ${hot?`<div class="freebie" style="margin-top:0"><div class="big">${left}</div>
+      <div class="sm">bolt${left>1?'s':''} from your guaranteed Great Reliquary</div></div>`:''}
+    <h3 style="margin-top:10px">${hot?'One shelf away.':"That's your free bolts for today"}</h3>
+    <p>${hot?'The guarantee does not reset. Take the shot now, or return tomorrow.'
+      :'More come from errands, or from the stall — his shelves never close.'}</p>
+    <button class="btn" id="u-pass">Reliquary Pass · ₹169 <span style="font-weight:500;font-size:11.5px">(10 bolts)</span></button>
+    <button class="btn gold" id="u-one">Single bolt · 50 ◈</button>
+    <button class="btn ghost" id="u-no">Return tomorrow</button>`,
+    c=>{c.querySelector('#u-no').onclick=closeModal;
+        c.querySelector('#u-pass').onclick=()=>doPurchase('pass');
+        c.querySelector('#u-one').onclick=()=>doPurchase('single');});
+}
+
+/* ============ SHOOTING ============ */
+function rollZone(z){
+  let r=Math.random()*100,a=0;const t=ZONE_ODDS[z];
+  for(const [k,w] of t){a+=w;if(r<a)return k;}
+  return t[t.length-1][0];
+}
+function pickTier(zone){
+  // A paid Oath outranks everything, including the opening ramp.
+  if(S.lock){S.lock=false;return Math.random()<0.22?'grand':'epic';}
+  const idx=S.pops+1;
+  if(idx<=2){const o=rollZone(zone);return (o==='epic'||o==='grand')?'rare':o;}
+  if(idx===3){return Math.random()<0.18?'grand':'epic';}
+  if(!S.claimed.grand&&S.pity+1>=PITY_MAX)return 'grand';
+  return rollZone(zone);
+}
+/* rectangular hitboxes — exhibits stand on shelves, so boxes beat circles here */
+function hitAt(px,py){
+  for(const s of SLOTS){
+    if(S.popped.includes(s.id))continue;
+    const halfW=s.w/2*1.12, top=s.y-s.h*1.12, bot=s.y+s.h*0.12;
+    if(px>=s.x-halfW&&px<=s.x+halfW&&py>=top&&py<=bot)return s;
+  }
+  return null;
+}
+
+field.addEventListener('click',e=>{
+  if(e.target.closest('.odds-btn')||e.target.closest('.dry'))return;
+  if(balloonsLeft()===0){renderDry();return;}
+  if(S.arrows<=0){arrowUpsell();return;}
+  const r=field.getBoundingClientRect();
+  const px=((e.clientX-r.left)/r.width)*100, py=((e.clientY-r.top)/r.height)*100;
+  // The Oath guarantees a tier, not a slot — aim is untouched by it.
+  const hit=hitAt(px,py);
+  S.arrows--;S.shots++;
+  field.querySelectorAll('.hintpulse').forEach(b=>b.classList.remove('hintpulse'));
+  flyBolt(hit?hit.x:px, hit?hit.y-hit.h/2:py, ()=>resolveShot(hit,px,py));
+  renderMeter();
+});
+function flyBolt(tx,ty,done){
+  const a=document.createElement('div');
+  a.className='bolt-fly';a.style.left=tx+'%';a.style.top='106%';
+  a.style.transition='top .28s cubic-bezier(.4,0,.9,.6)';
+  field.appendChild(a);
+  requestAnimationFrame(()=>{a.style.top=ty+'%';});
+  setTimeout(()=>{a.remove();done();},300);
+}
+function resolveShot(slot,px,py){
+  if(!slot){
+    const m=document.createElement('div');
+    m.className='miss-mark';m.style.left=px+'%';m.style.top=py+'%';
+    m.textContent='Missed · +1 token';field.appendChild(m);
+    setTimeout(()=>m.remove(),1000);
+    S.tokens++;renderTokens();say(VOICE.miss,3800);checkDry();return;
+  }
+  const tier=pickTier(slot.zone);
+  S.pops++;
+  S.pity=(tier==='grand')?0:S.pity+1;
+  S.popped.push(slot.id);
+  const el=field.querySelector(`.target[data-slot="${slot.id}"]`);
+  if(el){
+    el.classList.add('pop');
+    spawnBurst(slot.x,slot.y-slot.h/2,TIERS[tier].color);
+    setTimeout(()=>{el.remove();renderBalloons();},600);
+  } else renderBalloons();
+  S.claimed[tier]=true;
+  if(tier==='epic')S.shards=Math.min(SHARDS_NEEDED,S.shards+1);
+  if(tier==='common')S.gold+=240;
+  if(tier==='rare')S.gold+=700;
+  renderHUD();renderTracker();renderShards();renderMeter();renderRemind();
+  setTimeout(()=>showReward(tier),340);
+}
+function spawnBurst(x,y,color){
+  for(let i=0;i<12;i++){
+    const p=document.createElement('div');
+    p.className='burst';p.style.left=x+'%';p.style.top=y+'%';p.style.background=color;
+    field.appendChild(p);
+    const ang=(Math.PI*2/12)*i+Math.random()*.4, dist=36+Math.random()*44;
+    p.animate([{transform:'translate(-50%,-50%) scale(1)',opacity:1},
+      {transform:`translate(${Math.cos(ang)*dist-50}%,${Math.sin(ang)*dist-50}%) scale(0)`,opacity:0}],
+      {duration:640,easing:'cubic-bezier(.2,.8,.4,1)'}).onfinish=()=>p.remove();
+  }
+}
+function showReward(tier){
+  const T=TIERS[tier], isG=tier==='grand';
+  const rays=isG?Array.from({length:12},(_,i)=>`<div class="ray" style="transform:rotate(${i*30}deg)"></div>`).join(''):'';
+  const shard=tier==='epic'?`<p style="color:#D9A8FF">Relic shard ${S.shards} of ${SHARDS_NEEDED} — ${SHARDS_NEEDED-S.shards} more to unlock the skin.</p>`:'';
+  const line = S.pops<=2 ? VOICE.rampEarly : S.pops===3 ? VOICE.hookShot : VOICE[tier];
+  const ramp = S.pops<=2 ? '<p style="opacity:.7">Epic and Grand unseal from your 3rd exhibit.</p>' : '';
+  openModal(`<button class="close">✕</button>
+    ${hostBlock(line)}
+    <div class="reveal-orb" style="background:linear-gradient(160deg,${T.color},${T.color}55);color:${T.color}">
+      ${rays}<span style="position:relative">${T.icon}</span></div>
+    <div class="tier-name" style="background:${T.color}22;color:${T.color};border:2px solid ${T.color}77">${T.name.toUpperCase()}</div>
+    <h3 style="margin-top:9px">${T.label}</h3>${shard}${ramp}
+    ${isG?'<p>Guarantee reset — the Great Reliquary reseals for 7 shots.</p>':''}
+    <button class="btn" id="r-ok">${(S.arrows>0&&balloonsLeft()>0)?'Fire again ('+S.arrows+' left)':'Collect'}</button>
+    ${(S.arrows===0&&balloonsLeft()>0)?'<button class="btn gold" id="r-buy">Get more bolts</button>':''}`,
+    c=>{c.querySelector('#r-ok').onclick=()=>{closeModal();checkDry();};
+        const b=c.querySelector('#r-buy');if(b)b.onclick=()=>{closeModal();arrowUpsell();};});
+}
+function checkDry(){
+  renderDry();renderRemind();renderPromo();
+  if(balloonsLeft()===0){say(VOICE.cleared,7000);return;}
+  if(S.arrows>0)return;
+  setTimeout(arrowUpsell,450);
+}
+
+/* ============ ODDS ============ */
+$('#odds-btn').onclick=()=>{
+  say(VOICE.odds);
+  openModal(`<button class="close">✕</button>
+    ${hostBlock(VOICE.odds)}
+    <h3>Exhibit odds</h3>
+    <p style="margin-top:2px">Every exhibit rolls against the odds for its shelf.</p>
+    <table class="odds-tbl">
+      <tr><th>Reward</th><th>Chance</th></tr>
+      <tr><td>Common</td><td>62%</td></tr>
+      <tr><td>Rare</td><td>24%</td></tr>
+      <tr><td>Epic</td><td>11%</td></tr>
+      <tr><td>Grand</td><td>3%</td></tr>
+    </table>
+    <p class="dis">
+      Your first 2 exhibits of the week pay Common or Rare only — Epic and Grand stay sealed.<br><br>
+      Your 3rd exhibit is guaranteed Epic or better.<br><br>
+      From the 4th on, the table above applies to every skull equally. The Great Reliquary is guaranteed on your 7th scoring shot if you have not opened it sooner; the counter carries across days and does not reset when you miss a day.<br><br>
+      A bolt that lands on no exhibit is a miss. It is spent, and pays 1 soul token.<br><br>
+      Nine exhibits go up each day. Once broken they stay broken until the next day's restock.
+    </p>
+    <button class="btn" id="o-ok">Understood</button>`,
+    c=>c.querySelector('#o-ok').onclick=closeModal);
+};
+
+/* ============ POPUP / NAV ============ */
+function showEventPopup(){
+  openModal(`<button class="close">✕</button>
+    <div class="popup-art"><div class="bunting"></div><div class="lichbig">${LICH_HTML}</div></div>
+    <h2>The Necromancer's<br>Reliquary</h2>
+    ${hostBlock(VOICE.greet)}
+    <div class="freebie"><div class="big">3 FREE BOLTS</div>
+      <div class="sm">Your 3rd exhibit is guaranteed Epic or better</div></div>
+    <button class="btn" id="p-go">Enter the catacomb</button>
+    <button class="btn ghost" id="p-later">Later</button>`,
+    c=>{c.querySelector('#p-go').onclick=()=>{closeModal();grantWelcome();goEvent();};
+        c.querySelector('#p-later').onclick=closeModal;});
+}
+function grantWelcome(){
+  if(S.grantedToday)return;
+  S.grantedToday=true;S.arrows+=FREE_DAILY;renderMeter();
+  setTimeout(()=>{
+    say(VOICE.welcome,6500);
+    
+    const b=field.querySelector('.target[data-slot="0"]');
+    if(b)b.classList.add('hintpulse');
+  },450);
+}
+function goEvent(){$('#scr-home').hidden=true;$('#scr-event').hidden=false;setTab('shelves');renderAll();}
+function goHome(){$('#scr-event').hidden=true;$('#scr-home').hidden=false;renderMeter();}
+$('#open-event').onclick=()=>S.grantedToday?goEvent():showEventPopup();
+$('#nav-event').onclick=()=>S.grantedToday?goEvent():showEventPopup();
+$('#go-home').onclick=goHome;
+
+/* ============ BOOT ============ */
+$('#host-portrait').innerHTML=LICH_HTML;
+$('#banner-lich').innerHTML=LICH_HTML;
+dealChallenges();reshuffleSkulls();renderBalloons();renderAll();
+setTimeout(showEventPopup,900);
+
+window.__dev={S,SLOTS,SHELVES,TIERS,ZONE_ODDS,DROP_ODDS,reshuffleSkulls,VOICE,say,dismissHost,idleLine,setTab,renderPromo,renderErrandBadge,PITY_MAX,TOKENS_PER_ARROW,SHARDS_NEEDED,FREE_DAILY,
+  pickTier,rollZone,hitAt,balloonsLeft,renderBalloons,renderRemind,renderDry,dayCompletePrompt,
+  completeChallenge,rerollChallenge,skipChallenge,dealChallenges,nextDay,doPurchase,closeModal,
+  checkDry,say,renderTokens,renderShards,renderChallenges,renderMeter};
+</script>
+<a id="caw-back" href="../archero.html" style="position:fixed;right:16px;bottom:16px;z-index:2147483647;display:inline-flex;align-items:center;gap:8px;padding:12px 16px;background:#e2402a;color:#121010;font:700 13px/1 'Space Mono',ui-monospace,Consolas,monospace;text-transform:uppercase;letter-spacing:.06em;text-decoration:none;border:2px solid #121010;box-shadow:4px 4px 0 #f2e6d3">&larr; Back to the analysis</a>
+</body>
+</html>

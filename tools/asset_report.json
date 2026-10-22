@@ -1,0 +1,790 @@
+{
+ "shots": {
+  "terminus": [
+   "01-start-menu",
+   "02-zone-select",
+   "03-unit-select",
+   "04-kill-streak-crit",
+   "05-boss-phantom-5",
+   "06-set-piece-ring-of-fire"
+  ],
+  "bombay": [
+   "shot-1-start",
+   "shot-2-missions",
+   "shot-3-chawl",
+   "shot-4-records-office",
+   "shot-5-docks",
+   "shot-6-bar"
+  ],
+  "kancha": [
+   "01-menu",
+   "02-aim-and-flick",
+   "03-boss-stage",
+   "04-pick-a-boon",
+   "05-info-guide"
+  ],
+  "beat": [
+   "01-title",
+   "02-pick-your-sound",
+   "03-edm-hold-wall",
+   "04-edm-fever",
+   "05-metal-fake-side",
+   "06-results"
+  ],
+  "ratrace": [
+   "01-title",
+   "02-infancy",
+   "03-teenage",
+   "04-early-adulthood",
+   "05-middle-age",
+   "06-ending"
+  ]
+ },
+ "art": [
+  {
+   "slug": "absolute-batman",
+   "title": "Absolute-Batman"
+  },
+  {
+   "slug": "avicii",
+   "title": "Avicii"
+  },
+  {
+   "slug": "bandit-mahadev",
+   "title": "Bandit-Mahadev"
+  },
+  {
+   "slug": "barbarian-and-t-rex",
+   "title": "Barbarian-And-T-Rex"
+  },
+  {
+   "slug": "daft-punk",
+   "title": "Daft-Punk"
+  },
+  {
+   "slug": "koh-the-soul-eater",
+   "title": "Koh-The-Soul-Eater"
+  },
+  {
+   "slug": "miles-morales",
+   "title": "Miles-Morales"
+  },
+  {
+   "slug": "optimus-prime",
+   "title": "Optimus-Prime"
+  },
+  {
+   "slug": "rakshas",
+   "title": "Rakshas"
+  },
+  {
+   "slug": "skulls",
+   "title": "Skulls"
+  },
+  {
+   "slug": "the-end-of-evangelion",
+   "title": "The-End-Of-Evangelion"
+  },
+  {
+   "slug": "untitled-portrait",
+   "title": "Untitled-Portrait"
+  },
+  {
+   "slug": "venom",
+   "title": "Venom"
+  }
+ ],
+ "files": {
+  "img\\terminus\\cover.webp": [
+   630,
+   500,
+   25
+  ],
+  "img\\terminus\\banner.webp": [
+   960,
+   300,
+   27
+  ],
+  "img\\terminus\\shot-1.webp": [
+   1280,
+   720,
+   60
+  ],
+  "img\\terminus\\shot-2.webp": [
+   1280,
+   720,
+   67
+  ],
+  "img\\terminus\\shot-3.webp": [
+   1280,
+   720,
+   66
+  ],
+  "img\\terminus\\shot-4.webp": [
+   1280,
+   720,
+   132
+  ],
+  "img\\terminus\\shot-5.webp": [
+   1280,
+   720,
+   103
+  ],
+  "img\\terminus\\shot-6.webp": [
+   1280,
+   720,
+   105
+  ],
+  "img\\bombay\\cover.webp": [
+   630,
+   500,
+   56
+  ],
+  "img\\bombay\\banner.webp": [
+   960,
+   300,
+   54
+  ],
+  "img\\bombay\\shot-1.webp": [
+   1280,
+   720,
+   134
+  ],
+  "img\\bombay\\shot-2.webp": [
+   1280,
+   720,
+   150
+  ],
+  "img\\bombay\\shot-3.webp": [
+   1280,
+   720,
+   142
+  ],
+  "img\\bombay\\shot-4.webp": [
+   1280,
+   720,
+   81
+  ],
+  "img\\bombay\\shot-5.webp": [
+   1280,
+   720,
+   120
+  ],
+  "img\\bombay\\shot-6.webp": [
+   1280,
+   720,
+   141
+  ],
+  "img\\kancha\\cover.webp": [
+   630,
+   500,
+   83
+  ],
+  "img\\kancha\\banner.webp": [
+   960,
+   300,
+   86
+  ],
+  "img\\kancha\\shot-1.webp": [
+   1280,
+   720,
+   172
+  ],
+  "img\\kancha\\shot-2.webp": [
+   1280,
+   720,
+   163
+  ],
+  "img\\kancha\\shot-3.webp": [
+   1280,
+   720,
+   170
+  ],
+  "img\\kancha\\shot-4.webp": [
+   1280,
+   720,
+   177
+  ],
+  "img\\kancha\\shot-5.webp": [
+   1280,
+   720,
+   136
+  ],
+  "img\\beat\\cover.webp": [
+   630,
+   500,
+   16
+  ],
+  "img\\beat\\banner.webp": [
+   960,
+   300,
+   10
+  ],
+  "img\\beat\\shot-1.webp": [
+   1280,
+   720,
+   20
+  ],
+  "img\\beat\\shot-2.webp": [
+   1280,
+   720,
+   44
+  ],
+  "img\\beat\\shot-3.webp": [
+   1280,
+   720,
+   16
+  ],
+  "img\\beat\\shot-4.webp": [
+   1280,
+   720,
+   20
+  ],
+  "img\\beat\\shot-5.webp": [
+   1280,
+   720,
+   16
+  ],
+  "img\\beat\\shot-6.webp": [
+   1280,
+   720,
+   18
+  ],
+  "img\\ratrace\\cover.webp": [
+   630,
+   500,
+   4
+  ],
+  "img\\ratrace\\banner.webp": [
+   960,
+   300,
+   2
+  ],
+  "img\\ratrace\\shot-1.webp": [
+   1280,
+   720,
+   11
+  ],
+  "img\\ratrace\\shot-2.webp": [
+   1280,
+   720,
+   10
+  ],
+  "img\\ratrace\\shot-3.webp": [
+   1280,
+   720,
+   10
+  ],
+  "img\\ratrace\\shot-4.webp": [
+   1280,
+   720,
+   11
+  ],
+  "img\\ratrace\\shot-5.webp": [
+   1280,
+   720,
+   10
+  ],
+  "img\\ratrace\\shot-6.webp": [
+   1280,
+   720,
+   13
+  ],
+  "img\\terminus\\concept\\unit-01.webp": [
+   1536,
+   1024,
+   121
+  ],
+  "img\\terminus\\concept\\unit-01-t.webp": [
+   640,
+   427,
+   35
+  ],
+  "img\\terminus\\concept\\sentinel.webp": [
+   800,
+   1600,
+   120
+  ],
+  "img\\terminus\\concept\\sentinel-t.webp": [
+   320,
+   640,
+   34
+  ],
+  "img\\terminus\\concept\\berserker.webp": [
+   800,
+   1600,
+   127
+  ],
+  "img\\terminus\\concept\\berserker-t.webp": [
+   320,
+   640,
+   34
+  ],
+  "img\\terminus\\concept\\sniper.webp": [
+   800,
+   1600,
+   120
+  ],
+  "img\\terminus\\concept\\sniper-t.webp": [
+   320,
+   640,
+   32
+  ],
+  "img\\terminus\\concept\\breacher.webp": [
+   1536,
+   1024,
+   179
+  ],
+  "img\\terminus\\concept\\breacher-t.webp": [
+   640,
+   427,
+   46
+  ],
+  "img\\terminus\\concept\\operator.webp": [
+   1536,
+   1024,
+   147
+  ],
+  "img\\terminus\\concept\\operator-t.webp": [
+   640,
+   427,
+   39
+  ],
+  "img\\terminus\\concept\\apex-1.webp": [
+   1536,
+   1024,
+   147
+  ],
+  "img\\terminus\\concept\\apex-1-t.webp": [
+   640,
+   427,
+   42
+  ],
+  "img\\terminus\\concept\\bastion-2.webp": [
+   1312,
+   1199,
+   246
+  ],
+  "img\\terminus\\concept\\bastion-2-t.webp": [
+   640,
+   585,
+   75
+  ],
+  "img\\terminus\\concept\\nexus-3.webp": [
+   1536,
+   1024,
+   186
+  ],
+  "img\\terminus\\concept\\nexus-3-t.webp": [
+   640,
+   427,
+   45
+  ],
+  "img\\terminus\\concept\\colossus-4.webp": [
+   1536,
+   1024,
+   312
+  ],
+  "img\\terminus\\concept\\colossus-4-t.webp": [
+   640,
+   427,
+   69
+  ],
+  "img\\terminus\\concept\\phantom-5.webp": [
+   1536,
+   1024,
+   187
+  ],
+  "img\\terminus\\concept\\phantom-5-t.webp": [
+   640,
+   427,
+   46
+  ],
+  "img\\terminus\\concept\\core.webp": [
+   1536,
+   1024,
+   222
+  ],
+  "img\\terminus\\concept\\core-t.webp": [
+   640,
+   427,
+   53
+  ],
+  "img\\terminus\\concept\\zone-2.webp": [
+   1600,
+   533,
+   111
+  ],
+  "img\\terminus\\concept\\zone-2-t.webp": [
+   640,
+   213,
+   24
+  ],
+  "img\\terminus\\concept\\zone-3.webp": [
+   1600,
+   534,
+   159
+  ],
+  "img\\terminus\\concept\\zone-3-t.webp": [
+   640,
+   213,
+   35
+  ],
+  "img\\terminus\\concept\\zone-4.webp": [
+   1600,
+   533,
+   196
+  ],
+  "img\\terminus\\concept\\zone-4-t.webp": [
+   640,
+   213,
+   39
+  ],
+  "img\\terminus\\concept\\zone-5.webp": [
+   1600,
+   533,
+   224
+  ],
+  "img\\terminus\\concept\\zone-5-t.webp": [
+   640,
+   213,
+   41
+  ],
+  "img\\terminus\\concept\\zone-6.webp": [
+   1600,
+   534,
+   222
+  ],
+  "img\\terminus\\concept\\zone-6-t.webp": [
+   640,
+   213,
+   43
+  ],
+  "img\\terminus\\concept\\ui-title.webp": [
+   1536,
+   1024,
+   39
+  ],
+  "img\\terminus\\concept\\ui-title-t.webp": [
+   640,
+   427,
+   11
+  ],
+  "img\\terminus\\concept\\ui-levelup.webp": [
+   1536,
+   1024,
+   56
+  ],
+  "img\\terminus\\concept\\ui-levelup-t.webp": [
+   640,
+   427,
+   18
+  ],
+  "img\\art\\absolute-batman.webp": [
+   2000,
+   2000,
+   203
+  ],
+  "img\\art\\absolute-batman-t.webp": [
+   700,
+   700,
+   53
+  ],
+  "img\\art\\avicii.webp": [
+   1414,
+   2000,
+   35
+  ],
+  "img\\art\\avicii-t.webp": [
+   495,
+   700,
+   9
+  ],
+  "img\\art\\bandit-mahadev.webp": [
+   2000,
+   1414,
+   142
+  ],
+  "img\\art\\bandit-mahadev-t.webp": [
+   700,
+   495,
+   32
+  ],
+  "img\\art\\barbarian-and-t-rex.webp": [
+   2000,
+   1414,
+   82
+  ],
+  "img\\art\\barbarian-and-t-rex-t.webp": [
+   700,
+   495,
+   24
+  ],
+  "img\\art\\daft-punk.webp": [
+   2000,
+   1414,
+   263
+  ],
+  "img\\art\\daft-punk-t.webp": [
+   700,
+   495,
+   57
+  ],
+  "img\\art\\koh-the-soul-eater.webp": [
+   1414,
+   2000,
+   100
+  ],
+  "img\\art\\koh-the-soul-eater-t.webp": [
+   495,
+   700,
+   28
+  ],
+  "img\\art\\miles-morales.webp": [
+   1414,
+   2000,
+   239
+  ],
+  "img\\art\\miles-morales-t.webp": [
+   495,
+   700,
+   45
+  ],
+  "img\\art\\optimus-prime.webp": [
+   1414,
+   2000,
+   155
+  ],
+  "img\\art\\optimus-prime-t.webp": [
+   495,
+   700,
+   36
+  ],
+  "img\\art\\rakshas.webp": [
+   1414,
+   2000,
+   118
+  ],
+  "img\\art\\rakshas-t.webp": [
+   495,
+   700,
+   34
+  ],
+  "img\\art\\skulls.webp": [
+   1080,
+   1080,
+   334
+  ],
+  "img\\art\\skulls-t.webp": [
+   700,
+   700,
+   129
+  ],
+  "img\\art\\the-end-of-evangelion.webp": [
+   1414,
+   2000,
+   87
+  ],
+  "img\\art\\the-end-of-evangelion-t.webp": [
+   495,
+   700,
+   22
+  ],
+  "img\\art\\untitled-portrait.webp": [
+   2000,
+   1414,
+   97
+  ],
+  "img\\art\\untitled-portrait-t.webp": [
+   700,
+   495,
+   25
+  ],
+  "img\\art\\venom.webp": [
+   1414,
+   2000,
+   72
+  ],
+  "img\\art\\venom-t.webp": [
+   495,
+   700,
+   19
+  ],
+  "img\\analyses\\destiny\\crotas-end.webp": [
+   1600,
+   900,
+   76
+  ],
+  "img\\analyses\\destiny\\destiny-2-classes.webp": [
+   1600,
+   965,
+   224
+  ],
+  "img\\analyses\\destiny\\destiny-2-logo.webp": [
+   400,
+   400,
+   14
+  ],
+  "img\\analyses\\destiny\\last-wish.webp": [
+   739,
+   415,
+   39
+  ],
+  "img\\analyses\\destiny\\loot.webp": [
+   2000,
+   1215,
+   147
+  ],
+  "img\\analyses\\destiny\\playtime.webp": [
+   933,
+   133,
+   10
+  ],
+  "img\\analyses\\destiny\\raid-bosses.webp": [
+   1600,
+   900,
+   139
+  ],
+  "img\\analyses\\destiny\\raid-exotics.webp": [
+   1600,
+   1200,
+   101
+  ],
+  "img\\analyses\\destiny\\raid-logo.webp": [
+   400,
+   400,
+   12
+  ],
+  "img\\analyses\\destiny\\vault-of-glass.webp": [
+   738,
+   415,
+   27
+  ],
+  "img\\analyses\\destiny\\world-first-raid-belts.webp": [
+   595,
+   336,
+   61
+  ],
+  "img\\analyses\\poe\\earth-spike-witch-necromancer.webp": [
+   744,
+   412,
+   36
+  ],
+  "img\\analyses\\poe\\gemling-spark-equipment.webp": [
+   702,
+   748,
+   34
+  ],
+  "img\\analyses\\poe\\gemling-twister-equipment.webp": [
+   739,
+   761,
+   40
+  ],
+  "img\\analyses\\poe\\gems-and-supports.webp": [
+   512,
+   599,
+   28
+  ],
+  "img\\analyses\\poe\\logo.webp": [
+   653,
+   367,
+   18
+  ],
+  "img\\analyses\\poe\\martial-artist.webp": [
+   834,
+   470,
+   69
+  ],
+  "img\\analyses\\poe\\mercenary_gemling-legionnaire.webp": [
+   834,
+   470,
+   47
+  ],
+  "img\\analyses\\poe\\path-of-exile-2-0-4-feature.webp": [
+   1600,
+   900,
+   141
+  ],
+  "img\\analyses\\poe\\path-of-exile-2-skill-tree.webp": [
+   1200,
+   900,
+   68
+  ],
+  "img\\analyses\\poe\\playtime.webp": [
+   538,
+   137,
+   13
+  ],
+  "img\\analyses\\poe\\spark-skills.webp": [
+   753,
+   1074,
+   59
+  ],
+  "img\\analyses\\poe\\twister-skill.webp": [
+   766,
+   1110,
+   65
+  ],
+  "img\\analyses\\poe\\witch-leveling-guide-in-path-of-exile-2.webp": [
+   1600,
+   800,
+   287
+  ],
+  "img\\analyses\\archero\\carnival-prototype.webp": [
+   700,
+   460,
+   15
+  ],
+  "img\\dobara\\poster.webp": [
+   1024,
+   1536,
+   239
+  ],
+  "img\\dobara\\poster-t.webp": [
+   480,
+   720,
+   77
+  ],
+  "img\\brand\\logo.webp": [
+   1100,
+   550,
+   178
+  ],
+  "img\\brand\\logo-small.webp": [
+   420,
+   210,
+   36
+  ],
+  "img\\brand\\portrait.webp": [
+   752,
+   1000,
+   294
+  ],
+  "img\\brand\\portrait-t.webp": [
+   361,
+   480,
+   79
+  ],
+  "img/brand/favicon-32.png": [
+   32,
+   32,
+   3
+  ],
+  "img/brand/apple-touch-icon.png": [
+   180,
+   180,
+   53
+  ],
+  "img\\brand\\cat.webp": [
+   512,
+   320,
+   53
+  ],
+  "gdd/terminus-3d.html": 6084,
+  "gdd/bombay-calling.html": 7107,
+  "gdd/kancha-todh.html": 3667,
+  "gdd/beat-runner.html": 772,
+  "gdd/rat-race.html": 233,
+  "gdd/dobara.html": 4732
+ }
+}
