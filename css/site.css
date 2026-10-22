@@ -515,15 +515,20 @@ a { color: inherit; }
 
 /* ---------- reveal ---------- */
 /* ---------- scroll motion (js/motion.js) ----------
-   Reveals use the separate translate / rotate / scale properties, so each element keeps its own
-   transform (the tilted cards, the ransom tiles); motion.js removes these classes once they've arrived. */
-.reveal { opacity: 0; transition: opacity .6s ease var(--rd, 0ms), translate .7s cubic-bezier(.2, .8, .2, 1) var(--rd, 0ms), rotate .7s cubic-bezier(.2, .8, .2, 1) var(--rd, 0ms), scale .7s cubic-bezier(.2, .8, .2, 1) var(--rd, 0ms); }
-.reveal--up { translate: 0 26px; }
-.reveal--card { translate: 0 44px; rotate: -2.5deg; scale: .94; }
-.reveal.is-in { opacity: 1; translate: 0 0; rotate: 0deg; scale: 1; }
+   Reveals replay every time an element comes back on screen: motion.js adds .is-in on the way in and
+   removes it once the element has fully left. They're keyframe animations on the separate translate /
+   rotate / scale properties with only a "from" frame, so each element keeps its own transform (tilted
+   cards, ransom tiles), its own hover transitions, and any parallax offset once the animation ends. */
+.reveal { opacity: 0; }
+.reveal.is-in { opacity: 1; animation: .7s cubic-bezier(.2, .8, .2, 1) var(--rd, 0ms) backwards; }
+.reveal--up.is-in { animation-name: rv-up; }
+.reveal--card.is-in { animation-name: rv-card; }
+@keyframes rv-up { from { opacity: 0; translate: 0 26px; } }
+@keyframes rv-card { from { opacity: 0; translate: 0 44px; rotate: -2.5deg; scale: .94; } }
 
-.rn-wait > span { opacity: 0; translate: 0 -.55em; rotate: -9deg; scale: 1.25; }
-.rn-in > span { opacity: 1; translate: 0 0; rotate: 0deg; scale: 1; transition: opacity .25s ease var(--rd, 0ms), translate .45s cubic-bezier(.3, 1.6, .5, 1) var(--rd, 0ms), rotate .45s cubic-bezier(.3, 1.6, .5, 1) var(--rd, 0ms), scale .45s cubic-bezier(.3, 1.6, .5, 1) var(--rd, 0ms); }
+.rn-wait > span { opacity: 0; }
+.rn-wait.rn-in > span { opacity: 1; animation: rn-drop .45s cubic-bezier(.3, 1.6, .5, 1) var(--rd, 0ms) backwards; }
+@keyframes rn-drop { from { opacity: 0; translate: 0 -.55em; rotate: -9deg; scale: 1.25; } }
 
 .scroll-progress { position: fixed; left: 0; top: 0; z-index: 30; width: 100%; height: 4px; background: var(--red); transform: scaleX(0); transform-origin: 0 50%; pointer-events: none; box-shadow: 0 1px 0 #000; }
 .nav { transition: padding .25s ease, box-shadow .25s ease, background-color .25s ease; }

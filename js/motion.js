@@ -1,5 +1,6 @@
 // Scroll micro-animations for every page: a reading-progress bar, a nav that tightens once you scroll,
-// ransom-note headings whose tiles drop in, staggered reveals for grids and rows, and a little parallax.
+// ransom-note headings whose tiles drop in, staggered reveals for grids and rows (replayed every time
+// they scroll back into view), and a little parallax.
 // Load it last, after the page has rendered its content. Nothing moves with reduced motion.
 (function () {
   "use strict";
@@ -43,23 +44,14 @@
     return;
   }
 
-  // Once an element has arrived, drop the reveal classes so its own hover transitions work again.
-  const settle = (n) => {
-    const done = (e) => {
-      if (e.target !== n) return;
-      n.removeEventListener("transitionend", done);
-      n.classList.remove("reveal", "is-in", "reveal--up", "reveal--card");
-      n.style.removeProperty("--rd");
-    };
-    n.addEventListener("transitionend", done);
-  };
+  // Play on the way in; reset once fully off screen (above or below), so it plays again next time.
   const io = new IntersectionObserver((es) => es.forEach((e) => {
-    if (!e.isIntersecting) return;
-    io.unobserve(e.target);
-    if (e.target.classList.contains("rn")) { e.target.classList.add("rn-in"); return; }
-    settle(e.target);
-    e.target.classList.add("is-in");
+    const cls = e.target.classList.contains("rn") ? "rn-in" : "is-in";
+    if (e.isIntersecting) e.target.classList.add(cls);
+    else if (!isNear(e.boundingClientRect)) e.target.classList.remove(cls);
   }), { rootMargin: "0px 0px -8% 0px" });
+  // Only reset things that are really out of view, so an element sitting in the bottom 8% doesn't flicker.
+  const isNear = (r) => r.bottom > 0 && r.top < innerHeight;
   tagged.forEach((n) => io.observe(n));
   headings.forEach((h) => { h.classList.add("rn-wait"); io.observe(h); });
 
