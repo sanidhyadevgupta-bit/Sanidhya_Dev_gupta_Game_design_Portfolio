@@ -2,7 +2,9 @@
 // Leave a value as "" and its button shows as "coming soon".
 window.SITE_CONFIG = {
   itchProfile: "https://catsarewhat.itch.io",
-  email: "sanidhyadevgupta@gmail.com",
+  // The email is never shown on the page; the "Copy email" button joins these two halves.
+  // Kept split so bots that scan pages for addresses don't pick it up.
+  emailParts: ["sanidhyadevgupta", "gmail.com"],
   linkedin: "https://www.linkedin.com/in/sanidhya-gupta-042012195",
   cv: "",                     // e.g. "cv/sanidhya-dev-gupta-cv.pdf"
 

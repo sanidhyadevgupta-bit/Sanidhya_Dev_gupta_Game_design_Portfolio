@@ -22,13 +22,29 @@
   --shadow: 6px 6px 0 var(--red);
   --shadow-ink: 6px 6px 0 #000;
   --nav-h: 88px;   /* the sticky nav's height; common.js measures the real one */
+  --z: 1;          /* page zoom for big monitors, set below */
   --band: #191515; /* every other home section sits on this, edge to edge */
 
   color-scheme: dark;
 }
 
+/* Big monitors. The layout is drawn for about 1240px of content, which leaves half of a 1440p or 4K
+   screen empty. Two things fill it:
+   1. Wider: past 1600px the content column grows to 80% of the window (and the shelf goes to one row).
+   2. Bigger: the whole page is scaled up a step with CSS zoom, like a poster, so type, images and spacing
+      grow together. A step needs enough window height too, so a section still fits on one screen.
+   Under zoom, viewport units are scaled as well, so anything sized to the window divides by --z. */
+@media (min-width: 1600px) { :root { --maxw: calc(80vw / var(--z)); } }
+@supports (zoom: 1) {
+  @media (min-width: 1700px) and (min-height: 1050px) { :root { --z: 1.1; } }
+  @media (min-width: 2000px) and (min-height: 1200px) { :root { --z: 1.2; } }
+  @media (min-width: 2400px) and (min-height: 1380px) { :root { --z: 1.32; } }
+  @media (min-width: 3200px) and (min-height: 1850px) { :root { --z: 1.75; } }
+  body { zoom: var(--z); }
+}
+
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) * var(--z)); }
 body {
   margin: 0;
   background-color: var(--ink);
@@ -127,7 +143,7 @@ a { color: inherit; }
 .building:hover { background: var(--paper); color: var(--ink); }
 .star { color: var(--red); font-size: 18px; }
 
-.hero__stack { position: relative; aspect-ratio: 1 / 1; min-height: 320px; }
+.hero__stack { position: relative; aspect-ratio: 1 / 1; min-height: 320px; width: 100%; max-width: calc(68svh / var(--z)); justify-self: center; }
 .hero__stack .sticker {
   position: absolute; width: 58%; border: 4px solid var(--paper); box-shadow: var(--shadow-ink);
   transform: rotate(var(--r)); left: var(--x); top: var(--y);
@@ -146,7 +162,7 @@ a { color: inherit; }
    one starts below the fold), short ones sit centred, and every other one gets a full-width band.
    The band is a box-shadow clipped to the section's height, so it reaches the window edges without
    widening the page. */
-.home > section { min-height: calc(100svh - var(--nav-h)); position: relative; }
+.home > section { min-height: calc(100svh / var(--z) - var(--nav-h)); position: relative; }
 .home > section:not(.hero) { display: flex; flex-direction: column; justify-content: center; }
 .home > .hero { align-content: center; padding-top: clamp(24px, 4vh, 56px); padding-bottom: clamp(24px, 4vh, 56px); }
 .home > section:nth-of-type(even) {
@@ -187,6 +203,9 @@ html:has(main.home) { scroll-snap-type: y proximity; }
 
 /* ---------- shelf ---------- */
 .shelf { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px 28px; padding: 8px 6px 0 0; }
+/* On a wide screen the five games and the itch card sit in one row, so the shelf fits on one screen. */
+#shelf { container-type: inline-size; }
+@container (min-width: 1350px) { .shelf { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 28px 24px; } }
 .game-card {
   position: relative; display: flex; flex-direction: column;
   background: var(--g-bg); color: var(--g-ink);
@@ -201,6 +220,17 @@ html:has(main.home) { scroll-snap-type: y proximity; }
 .game-card__art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .35s ease; }
 .game-card__art .alt { opacity: 0; }
 .game-card:hover .game-card__art .alt { opacity: 1; }
+/* Gameplay intro on hover (site.js): the screenshot shows while it loads, then the preview fades in.
+   A portrait game (Kancha Todh) is shown whole on the card's own colour rather than cropped. */
+.game-card__art .preview { opacity: 0; pointer-events: none; }
+.game-card__art .preview.is-ready { opacity: 1; }
+.game-card__art .preview.is-tall { object-fit: contain; background: var(--g-bg); }
+.game-card__art::after {
+  content: "▶ gameplay"; position: absolute; left: 8px; bottom: 8px; z-index: 1;
+  font: 700 10px/1 var(--mono); text-transform: uppercase; letter-spacing: .12em;
+  background: var(--g-accent); color: #000; padding: 5px 7px; opacity: 0; transition: opacity .25s ease;
+}
+.game-card.is-previewing .game-card__art::after { opacity: 1; }
 .game-card__body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .game-card__num { font: 700 12px/1 var(--mono); color: var(--g-label, var(--g-accent)); letter-spacing: .1em; }
 .game-card__title { font: 400 26px/1.05 var(--display); margin: 0; }
@@ -353,7 +383,7 @@ html:has(main.home) { scroll-snap-type: y proximity; }
 .art-row .art:nth-child(odd) { transform: rotate(-.8deg); }
 .art-row .art:nth-child(even) { transform: rotate(.7deg); }
 .art-row .art:hover { transform: rotate(0) translateY(-4px); }
-.art-row .art img { height: clamp(210px, 36vh, 345px); width: auto; max-width: none; }
+.art-row .art img { height: clamp(210px, 36vh / var(--z), 345px); width: auto; max-width: none; }
 .art-row .art span { display: block; font: 700 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; background: var(--paper); color: var(--ink); padding: 8px 10px; text-align: left; }
 .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
 #render-grid:has(> .render:only-child) { grid-template-columns: minmax(0, 1fr); max-width: 980px; }
@@ -376,7 +406,7 @@ html:has(main.home) { scroll-snap-type: y proximity; }
 .sheet {
   position: relative; display: grid; gap: 28px 40px; padding: clamp(22px, 4vw, 44px);
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
-  grid-template-areas: "id lore" "stats skills" "origin origin" "quests quests" "contact contact";
+  grid-template-areas: "id lore" "stats skills" "contact contact";
   background-image: radial-gradient(rgba(18,16,16,.08) 1px, transparent 1.4px); background-size: 6px 6px;
 }
 .sheet__cat { position: absolute; width: 170px; right: 26px; top: -96px; pointer-events: none; }
@@ -401,22 +431,16 @@ html:has(main.home) { scroll-snap-type: y proximity; }
 .chips { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; }
 .chips li { font: 700 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .05em; background: var(--ink); color: var(--paper); padding: 8px 10px; }
 .chips li:nth-child(4n+1) { background: var(--red); color: var(--ink); }
-.sheet__origin { grid-area: origin; }
-.origin { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; position: relative; }
-.origin li { position: relative; display: grid; gap: 3px; align-content: start; border: 2px solid var(--ink); padding: 12px 12px 14px; background: rgba(255,255,255,.35); }
-.origin li:not(:last-child)::after { content: "→"; position: absolute; right: -11px; top: 50%; transform: translateY(-50%); font: 700 14px/1 var(--mono); color: var(--red); background: var(--paper); z-index: 1; }
-.origin__kind { font: 700 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .12em; color: var(--red-deep); }
-.origin b { font: 400 18px/1.15 var(--display); }
-.origin span:last-child { font-size: 14px; }
-.origin li.is-now { background: var(--ink); color: var(--paper); box-shadow: 4px 4px 0 var(--red); }
-.origin li.is-now .origin__kind { color: var(--red); }
-.sheet__quests { grid-area: quests; }
-.quests { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
-.quests li { border-left: 4px solid var(--red); padding: 4px 0 4px 12px; font-size: 15px; }
-.quests b { display: block; font: 700 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .12em; }
-.sheet__contact { grid-area: contact; display: flex; flex-wrap: wrap; gap: 14px; }
-.sheet .btn--paper { color: var(--ink); border-color: var(--ink); }
-.sheet__email { flex-basis: 100%; margin: 4px 0 0; font-size: 14px; user-select: all; }
+/* Party invite: the contact block, an ink slip across the bottom of the sheet */
+.sheet__contact {
+  grid-area: contact; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 28px;
+  background: var(--ink); color: var(--paper); padding: 22px 24px; box-shadow: 6px 6px 0 var(--red); transform: rotate(-.4deg);
+}
+.sheet__contact .label { color: var(--red); margin-bottom: 8px; }
+.invite__text { flex: 1 1 320px; }
+.invite__line { margin: 0; font-size: 17px; max-width: 52ch; }
+.invite__actions { display: flex; flex-wrap: wrap; gap: 14px; }
+.sheet__contact .btn--paper { color: var(--paper); border-color: var(--paper); }
 
 /* ---------- footer ---------- */
 .foot { max-width: var(--maxw); margin: 0 auto; padding: 40px var(--gutter) 56px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; border-top: 2px dashed rgba(242,230,211,.25); font-size: 13px; color: var(--muted); }
@@ -424,11 +448,11 @@ html:has(main.home) { scroll-snap-type: y proximity; }
 .foot p { margin: 0; flex: 1 1 280px; }
 
 /* ---------- lightbox ---------- */
-.lightbox { border: 0; padding: 0; background: transparent; max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh; }
+.lightbox { border: 0; padding: 0; background: transparent; max-width: calc(100vw / var(--z)); max-height: calc(100vh / var(--z)); width: calc(100vw / var(--z)); height: calc(100vh / var(--z)); }
 .lightbox[open] { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 16px; }
 .lightbox::backdrop { background: rgba(10, 8, 8, .92); }
 .lightbox figure { margin: 0; display: grid; justify-items: center; gap: 10px; }
-.lightbox img { max-height: 82vh; width: auto; max-width: 100%; border: 3px solid var(--paper); box-shadow: var(--shadow); background: #000; }
+.lightbox img { max-height: calc(82vh / var(--z)); width: auto; max-width: 100%; border: 3px solid var(--paper); box-shadow: var(--shadow); background: #000; }
 .lightbox figcaption { color: var(--paper); font-size: 13px; text-align: center; }
 .lightbox__close { position: absolute; top: 16px; right: 16px; }
 
@@ -567,8 +591,7 @@ html:has(main.home) { scroll-snap-type: y proximity; }
   .gdd { grid-auto-columns: minmax(260px, 80%); }
   .shots { grid-auto-columns: minmax(240px, 80%); }
   .concept { grid-auto-columns: minmax(200px, 60%); }
-  .sheet { grid-template-columns: 1fr; grid-template-areas: "id" "lore" "stats" "skills" "origin" "quests" "contact"; }
-  .origin li:not(:last-child)::after { content: none; }
+  .sheet { grid-template-columns: 1fr; grid-template-areas: "id" "lore" "stats" "skills" "contact"; }
   .sheet__cat { width: 120px; top: -70px; }
   .dobara { grid-template-columns: 1fr; }
   .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); }

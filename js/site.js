@@ -2,7 +2,7 @@
 // artwork auto-scroll and scroll buttons. Each game's own page is rendered by js/game.js.
 (function () {
   "use strict";
-  const { C, P, reduced, esc, el, img, skinVars, num, page, playBtn, galleries, wire } = window.CAW;
+  const { C, P, reduced, esc, el, img, skinVars, num, page, playBtn, galleries, wire, zoom } = window.CAW;
   const X = window.EXTRAS || { art: [], renders: [], analyses: [] };
 
   // Old links to a game's block on this page (#terminus) now go to its own page.
@@ -26,6 +26,7 @@
       <a class="game-card__art" href="${esc(page(p))}" tabindex="-1" aria-hidden="true">
         <img src="${img(p.slug, "cover")}" alt="" width="630" height="500" loading="lazy">
         <img class="alt" src="${img(p.slug, alt)}" alt="" loading="lazy">
+        <img class="preview" data-src="${img(p.slug, "preview")}" alt="">
       </a>
       <div class="game-card__body">
         <span class="game-card__num">${num(i)} / ${num(P.length - 1)}</span>
@@ -36,6 +37,40 @@
       </div>
     </article>`));
   });
+  // Hovering a card plays its gameplay intro (img/<slug>/preview.webp, made from portfolio/gifs by
+  // build_assets.py). A preview is only downloaded on the first hover, and it restarts from its first
+  // frame every time: each hover gets a fresh object URL, which the browser treats as a new animation.
+  // Not on touch screens (no hover) or with reduced motion; those keep the still screenshot.
+  if (!reduced && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    shelf.querySelectorAll(".game-card").forEach((card) => {
+      const pv = card.querySelector(".preview");
+      let blob = null, loading = null, url = null, active = false;
+      const start = async () => {
+        if (active) return;
+        active = true;
+        card.classList.add("is-previewing");
+        loading = loading || fetch(pv.dataset.src).then((r) => (r.ok ? r.blob() : null)).catch(() => null);
+        blob = blob || await loading;
+        if (!blob || !active) return;
+        if (url) URL.revokeObjectURL(url);
+        url = URL.createObjectURL(blob);
+        pv.onload = () => { pv.classList.toggle("is-tall", pv.naturalHeight > pv.naturalWidth); pv.classList.add("is-ready"); };
+        pv.src = url;
+      };
+      const stop = () => {
+        active = false;
+        card.classList.remove("is-previewing");
+        pv.classList.remove("is-ready");
+        // once it has faded out, drop the image so it stops animating in the background
+        setTimeout(() => { if (!active) { pv.removeAttribute("src"); if (url) { URL.revokeObjectURL(url); url = null; } } }, 350);
+      };
+      card.addEventListener("mouseenter", start);
+      card.addEventListener("mouseleave", stop);
+      card.addEventListener("focusin", start);
+      card.addEventListener("focusout", (e) => { if (!card.contains(e.relatedTarget)) stop(); });
+    });
+  }
+
   shelf.appendChild(el(`<a class="more-card" data-link="itch" href="#" target="_blank" rel="noopener">
     <span class="star" aria-hidden="true">★</span><span class="big">More games<br>on itch.io</span><span class="mono small">Pocket Raja, Akhbaar Wala and more ↗</span></a>`));
 
@@ -109,7 +144,7 @@
     const row = document.getElementById(g.dataset.for);
     g.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
       const card = row.firstElementChild;
-      const step = card ? card.getBoundingClientRect().width + 22 : 300;
+      const step = card ? card.getBoundingClientRect().width / zoom() + 22 : 300;
       if (row._pauseAuto) row._pauseAuto(4000);
       row.scrollBy({ left: step * Number(b.dataset.dir), behavior: reduced ? "auto" : "smooth" });
     }));

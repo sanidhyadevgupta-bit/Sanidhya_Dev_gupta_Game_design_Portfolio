@@ -55,6 +55,44 @@ for slug, (kit, pixel) in GAMES.items():
         names.append(f.stem)
     shots[slug] = names
 
+# ---- hover previews: the shelf cards play these gameplay intros (portfolio/gifs/) ----
+# The source GIFs run 11-21 s at 25 fps and weigh 18-73 MB each, far too heavy for a hover.
+# Each becomes a small animated WebP: the first PREVIEW_SECONDS, every other frame (12.5 fps),
+# scaled to fit the card. Skipped when the WebP is newer than its GIF, since this step is slow.
+PREVIEWS = {'terminus': 'terminus.gif', 'bombay': 'bombay calling.gif', 'kancha': 'kancha todh.gif',
+            'beat': 'beat runner.gif', 'ratrace': 'ratrace.gif'}
+PREVIEW_SECONDS, PREVIEW_STEP, PREVIEW_BOX = 8, 2, (560, 444)   # box = the card's 630:500 shape
+
+
+def gif_preview(src, dest, pixel):
+    if dest.exists() and dest.stat().st_mtime > src.stat().st_mtime:
+        return
+    gif = Image.open(src)
+    k = min(PREVIEW_BOX[0] / gif.width, PREVIEW_BOX[1] / gif.height, 1)
+    size = (round(gif.width * k), round(gif.height * k))
+    frames, durations, elapsed = [], [], 0
+    for i in range(getattr(gif, 'n_frames', 1)):
+        gif.seek(i)
+        d = gif.info.get('duration', 40) or 40
+        if elapsed >= PREVIEW_SECONDS * 1000:
+            break
+        if i % PREVIEW_STEP == 0:
+            frames.append(gif.convert('RGB').resize(size, Image.NEAREST if pixel else Image.LANCZOS))
+            durations.append(0)
+        durations[-1] += d                 # a kept frame lasts as long as the frames it stands in for
+        elapsed += d
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    frames[0].save(dest, 'WEBP', save_all=True, append_images=frames[1:], duration=durations,
+                   loop=0, quality=58, method=4)
+
+
+for slug, name in PREVIEWS.items():
+    src = ROOT / 'gifs' / name
+    if src.exists():
+        dest = IMG / slug / 'preview.webp'
+        gif_preview(src, dest, GAMES[slug][1])
+        report[f'{slug}/preview.webp'] = round(dest.stat().st_size / 1024)
+
 # ---- Terminus 2D art, shown as concept art for Terminus 3D -------------------
 ART = ROOT / 'Terminus' / 'art'
 CONCEPT = [
@@ -215,5 +253,5 @@ for name, src in {'carnival-prototype.html': DM2 / 'Archero_Carnival_Prototype.h
     copy_with_back(src, SITE / 'analyses' / 'archero' / name, '../archero.html', '&larr; Back to the analysis')
 
 (SITE / 'tools' / 'asset_report.json').write_text(json.dumps({'shots': shots, 'art': art, 'files': report}, indent=1))
-total = sum((p.stat().st_size for p in SITE.rglob('*') if p.is_file()), 0)
+total = sum((p.stat().st_size for p in SITE.rglob('*') if p.is_file() and '.git' not in p.parts), 0)   # .git is the repo's history, not the site
 print(f'{len(report)} outputs, site folder now {total / 1024 / 1024:.1f} MB')

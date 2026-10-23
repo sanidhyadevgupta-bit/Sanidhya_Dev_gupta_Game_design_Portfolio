@@ -3,7 +3,7 @@
 A static site. There's no build step: open `index.html`, or upload this whole folder to any static host (GitHub Pages, Netlify, Cloudflare Pages, or itch.io as an HTML project).
 
 ## Links
-Every link lives in `js/config.js`: itch.io pages, email, LinkedIn, and the YouTube video for the 3D renders. An empty value shows as "Soon" or "coming soon". (There's no CV button on the site; `cv` in the config is unused.)
+Every link lives in `js/config.js`: itch.io pages, email (split into `emailParts`; it's never shown, only copied by the "Copy email" button), LinkedIn, and the YouTube video for the 3D renders. An empty value shows as "Soon" or "coming soon". (There's no CV button on the site; `cv` in the config is unused.)
 
 ## Change content
 - **Projects:** all five games (stats, screenshots, the five GDD cards, colours) are in `js/data.js`. Edit the text there; the pages render from it. The home page shows them as a grid (`js/site.js`); each card opens the game's own page, `games/<slug>.html`, rendered by `js/game.js`. Code both pages share is in `js/common.js`.
@@ -12,6 +12,7 @@ Every link lives in `js/config.js`: itch.io pages, email, LinkedIn, and the YouT
   ```
   python site/tools/make_game_pages.py
   ```
+- **Hover previews:** the gameplay GIFs in `portfolio\gifs\` play when you hover a shelf card. `tools/build_assets.py` turns each into a small animated WebP (`img/<slug>/preview.webp`: the first 8 seconds at 12.5 fps, about 1 MB). The file names it expects are listed in `PREVIEWS` in that script; replace a GIF and re-run it.
 - **Artwork:** the originals are in `portfolio\artwork\`. The order and titles are the `art` and `artTitles` lists in `js/data.js`.
 - **Analyses:** the pages are `analyses/*.html`. Their images come from `portfolio\analysis\<game>\`.
 - **Images:** they're web-size copies made by `tools/build_assets.py` from the originals in the portfolio folder:

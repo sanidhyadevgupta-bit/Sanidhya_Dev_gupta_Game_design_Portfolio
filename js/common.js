@@ -30,8 +30,11 @@ window.CAW = (function () {
   const galleries = {};
 
   function copyText(text) {
-    // The clipboard API needs a secure page (https or localhost), so fall back to a hidden textarea.
-    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    // The clipboard API needs a secure page (https or localhost) and can be refused, so fall back to a hidden textarea.
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text).catch(() => copyOld(text));
+    return copyOld(text);
+  }
+  function copyOld(text) {
     return new Promise((resolve, reject) => {
       const t = document.createElement("textarea");
       t.value = text; t.setAttribute("readonly", ""); t.style.position = "absolute"; t.style.left = "-9999px";
@@ -47,6 +50,10 @@ window.CAW = (function () {
   setNavH();
   window.addEventListener("resize", setNavH, { passive: true });
 
+  // Big monitors scale the page with CSS zoom (see --z in site.css). Screen measurements
+  // (getBoundingClientRect) come back zoomed, so divide by this before using them as CSS lengths.
+  const zoom = () => parseFloat(getComputedStyle(document.body).zoom) || 1;
+
   // Call once the page has rendered its content.
   function wire() {
     // links from config
@@ -57,14 +64,15 @@ window.CAW = (function () {
       else { a.classList.add("is-soon"); a.removeAttribute("href"); a.setAttribute("aria-disabled", "true"); a.title = "Coming soon"; }
     });
 
-    document.querySelectorAll("[data-email]").forEach((n) => { n.textContent = C.email || ""; });
+    // Copy email: the address is only put together when the button is pressed, never written into the page.
+    const email = (C.emailParts || []).join("@");
     document.querySelectorAll("[data-copy-email]").forEach((b) => {
-      if (!C.email) { b.classList.add("is-soon"); return; }
+      if (!email) { b.classList.add("is-soon"); return; }
       const label = b.textContent;
       b.addEventListener("click", () => {
-        copyText(C.email)
+        copyText(email)
           .then(() => { b.textContent = "Copied ✓"; })
-          .catch(() => { b.textContent = "Select it below"; })
+          .catch(() => { b.textContent = "Couldn't copy"; })
           .finally(() => { clearTimeout(b._t); b._t = setTimeout(() => { b.textContent = label; }, 2000); });
       });
     });
@@ -116,5 +124,5 @@ window.CAW = (function () {
     // Scroll reveals, the progress bar and parallax live in js/motion.js, loaded after this page's script.
   }
 
-  return { C, P, root, reduced, esc, el, img, skinVars, num, page, gdd, playBtn, galleries, wire };
+  return { C, P, root, reduced, esc, el, img, skinVars, num, page, gdd, playBtn, galleries, wire, zoom };
 })();

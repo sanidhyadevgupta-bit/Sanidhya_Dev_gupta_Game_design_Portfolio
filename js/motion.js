@@ -18,7 +18,7 @@
   // Containers whose children arrive one after another.
   const GROUPS = [
     [".shelf", "card"], ["#analysis-grid", "card"], ["#render-grid", "card"], [".gamenav", "card"],
-    [".stats", "up"], [".statgrid", "up"], [".chips", "up"], [".origin", "up"], [".quests", "up"],
+    [".stats", "up"], [".statgrid", "up"], [".chips", "up"], [".invite__actions", "up"],
     [".dobara__powers", "up"], [".row.gdd", "card"], [".row.shots", "up"], [".row.concept", "up"],
     [".chips-row", "up"], [".article__emblems", "up"],
   ];
@@ -81,10 +81,12 @@
     bar.style.transform = `scaleX(${max > 0 ? Math.min(y / max, 1) : 0})`;
     if (nav) nav.classList.toggle("is-scrolled", y > 8);
     const mid = innerHeight / 2;
+    // On big monitors the page is zoomed (site.css --z): screen distances are divided back into CSS pixels.
+    const z = parseFloat(getComputedStyle(document.body).zoom) || 1;
     parallax.forEach(([n, speed]) => {
       const r = n.getBoundingClientRect();
       if (r.bottom < -200 || r.top > innerHeight + 200) return;
-      n.style.translate = `0 ${((r.top + r.height / 2 - mid) * speed).toFixed(1)}px`;
+      n.style.translate = `0 ${((r.top + r.height / 2 - mid) * speed / z).toFixed(1)}px`;
     });
     if (stickers.length && y < innerHeight * 1.5) {
       stickers.forEach((s, i) => {
