@@ -37,19 +37,22 @@
   <main id="main" class="home">
     <!-- 1. Banner -->
     <section class="hero" aria-labelledby="hero-title">
+      <img class="hero__logo" src="img/brand/logo.webp" alt="catsarewhat" width="1100" height="550">
+      <div class="hero__row">
       <div class="hero__copy">
-        <img class="hero__logo" src="img/brand/logo.webp" alt="" width="1100" height="550">
         <h1 class="hero__name" id="hero-title">
           <span class="rn"><span>Sanidhya</span> <span class="hot">Dev</span> <span>Gupta</span></span>
         </h1>
         <p class="hero__tag">Games for gamers, <em>made by a gamer.</em></p>
         <p class="hero__meta mono">Game designer · Master's in Game Design, NID Bengaluru</p>
-        <div class="hero__cta">
-          <a class="btn btn--stamp" href="#shelf">View games ↓</a>
-        </div>
-        <a class="building" href="#dobara"><span class="star" aria-hidden="true">★</span> Now building: <strong>DOBARA</strong></a>
       </div>
-      <div class="hero__stack" aria-hidden="true" id="hero-stack"></div>
+      <!-- the sticker stack is one big link down to the shelf -->
+      <a class="hero__stack" href="#shelf" id="hero-stack" aria-label="See the games on the shelf"></a>
+      </div>
+      <a class="scroll-cue" href="#shelf" aria-label="Scroll down to the games">
+        <span class="scroll-cue__label">Scroll</span>
+        <span class="scroll-cue__mouse" aria-hidden="true"><i></i></span>
+      </a>
     </section>
 
     <!-- 2. The shelf: a grid of the five games; each card opens that game's page -->
@@ -76,14 +79,12 @@
           <p class="dobara__pitch">Bengaluru, 2038. A con artist walks out of prison with a cracked brass watch that can bend time, and goes after the man who shot his partner.</p>
           <p>A third-person stealth-action game with no gadgets, only a watch. Every special move comes from it, and each of its four powers works on one kind of thing:</p>
           <ul class="dobara__powers" aria-label="The Watch's four powers">
-            <li style="--p:#c9d1d6"><b>Possibility</b>reads the place</li>
-            <li style="--p:#f0a92c"><b>Rewind</b>restores one object</li>
-            <li style="--p:#6f8ff0"><b>Slow</b>acts on the world</li>
-            <li style="--p:#d9804a"><b>Fast Forward</b>acts on him alone</li>
+            <li><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M2 16s5-9 14-9 14 9 14 9-5 9-14 9S2 16 2 16z"/><circle cx="16" cy="16" r="4.5"/></svg><b>Possibility</b><span>reads the place</span></li>
+            <li><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M15 8 4 16l11 8zM28 8l-11 8 11 8z"/></svg><b>Rewind</b><span>restores one object</span></li>
+            <li><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 4h16M8 28h16M10 4c0 7 12 7 12 12s-12 5-12 12M22 4c0 7-12 7-12 12s12 5 12 12"/></svg><b>Slow</b><span>acts on the world</span></li>
+            <li><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 8l11 8-11 8zM17 8l11 8-11 8z"/></svg><b>Fast Forward</b><span>acts on him alone</span></li>
           </ul>
-          <p>Plans have to fit inside the Watch's Charge. The stealth is the plan; the fight is what happens when it breaks. The vertical slice is Mission 12, "The Man Who Shot Her": about 17 minutes of stealth, puzzles, a first fight and a boss in a Peenya tanker yard.</p>
           <a class="btn dobara__gdd" href="gdd/dobara.html?v=1">Read the GDD →</a>
-          <p class="mono small">In development · Unity 6 · built so far: all four powers, stealth AI, cameras, takedowns and freeflow combat.</p>
         </div>
       </article>
     </section>

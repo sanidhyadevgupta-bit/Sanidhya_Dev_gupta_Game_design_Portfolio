@@ -122,28 +122,40 @@ a { color: inherit; }
 .nav__toggle[aria-expanded="true"] { background: var(--paper); color: var(--ink); }
 
 /* ---------- hero / banner ---------- */
+/* The logo sits big and centred on top; under it, one row with the name and tagline on the left and
+   the game stickers on the right, centred as a pair so neither side is left empty. The logo and
+   stickers are also sized by the window's height, so the whole hero fits on one screen. */
 .hero {
   max-width: var(--maxw); margin: 0 auto;
   padding: clamp(32px, 6vw, 72px) var(--gutter) clamp(40px, 7vw, 96px);
-  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: center;
+  display: grid; justify-items: center; align-content: center; gap: clamp(16px, 3vh, 40px);
 }
-.hero__logo { width: min(520px, 100%); height: auto; margin: 0 0 18px -6px; filter: drop-shadow(0 0 0 transparent); }
+.hero__logo { width: min(900px, 100%, calc(58svh / var(--z))); height: auto; }
+.hero__row { display: flex; align-items: center; justify-content: center; gap: clamp(28px, 5vw, 80px); width: 100%; }
+.hero__copy { flex: 0 1 auto; min-width: 0; }
 .hero__name { margin: 0 0 18px; }
-.hero__name .rn { font-size: clamp(34px, 6.4vw, 78px); }
+.hero__name .rn { font-size: clamp(34px, min(6.4vw, 8svh / var(--z)), 78px); }
 .hero__tag { font: 400 clamp(22px, 2.6vw, 32px)/1.2 var(--display); margin: 0 0 10px; }
 .hero__tag em { font-style: normal; color: var(--red); }
-.hero__meta { color: var(--muted); font-size: 14px; margin: 0 0 26px; }
-.hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 26px; }
-.building {
-  display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
-  font: 400 13px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em;
-  border: 2px dashed var(--paper); padding: 10px 14px; transform: rotate(-1deg);
-}
-.building strong { color: var(--red); letter-spacing: .14em; }
-.building:hover { background: var(--paper); color: var(--ink); }
+.hero__meta { color: var(--muted); font-size: 14px; margin: 0; }
 .star { color: var(--red); font-size: 18px; }
 
-.hero__stack { position: relative; aspect-ratio: 1 / 1; min-height: 320px; width: 100%; max-width: calc(68svh / var(--z)); justify-self: center; }
+/* Scroll cue: a small mouse with a dot rolling down, bottom centre of the hero. motion.js fades it out
+   once you start scrolling. */
+.scroll-cue {
+  position: absolute; left: 50%; bottom: clamp(14px, 3vh, 34px); translate: -50% 0; z-index: 2;
+  display: grid; justify-items: center; gap: 8px; text-decoration: none; color: var(--muted);
+  transition: opacity .3s ease, color .2s ease;
+}
+.scroll-cue:hover { color: var(--paper); }
+.scroll-cue__label { font: 700 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .24em; }
+.scroll-cue__mouse { position: relative; width: 26px; height: 40px; border: 2px solid currentColor; border-radius: 14px; }
+.scroll-cue__mouse i { position: absolute; left: 50%; top: 7px; width: 4px; height: 8px; margin-left: -2px; border-radius: 2px; background: var(--red); animation: cue-roll 1.6s ease-in-out infinite; }
+@keyframes cue-roll { 0% { opacity: 0; translate: 0 -2px; } 25% { opacity: 1; } 70% { opacity: 1; translate: 0 12px; } 100% { opacity: 0; translate: 0 14px; } }
+.scroll-cue.is-gone { opacity: 0; pointer-events: none; }
+
+/* The sticker stack is a link to the shelf. */
+.hero__stack { position: relative; display: block; flex: 0 0 auto; aspect-ratio: 1 / 1; width: clamp(260px, 34svh / var(--z), 560px); cursor: pointer; }
 .hero__stack .sticker {
   position: absolute; width: 58%; border: 4px solid var(--paper); box-shadow: var(--shadow-ink);
   transform: rotate(var(--r)); left: var(--x); top: var(--y);
@@ -164,7 +176,7 @@ a { color: inherit; }
    widening the page. */
 .home > section { min-height: calc(100svh / var(--z) - var(--nav-h)); position: relative; }
 .home > section:not(.hero) { display: flex; flex-direction: column; justify-content: center; }
-.home > .hero { align-content: center; padding-top: clamp(24px, 4vh, 56px); padding-bottom: clamp(24px, 4vh, 56px); }
+.home > .hero { align-content: center; padding-top: clamp(24px, 4vh, 56px); padding-bottom: clamp(84px, 11vh / var(--z), 130px); }   /* room for the scroll cue */
 .home > section:nth-of-type(even) {
   background: var(--band);
   box-shadow: 0 0 0 100vmax var(--band);
@@ -335,8 +347,8 @@ html:has(main.home) { scroll-snap-type: y proximity; }
 .dobara {
   --d-night: #0b0a0f; --d-red: #e2402a; --d-orange: #f08a2c; --d-teal: #1f8a96; --d-cream: #f2e6d3;
   position: relative; overflow: hidden;
-  display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 28px; align-items: center;
-  padding: 26px; margin-bottom: 40px; color: var(--d-cream);
+  display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: clamp(24px, 3vw, 44px); align-items: center;
+  padding: clamp(22px, 2.6vw, 36px); margin-bottom: 40px; color: var(--d-cream);
   background:
     radial-gradient(rgba(0,0,0,.55) 1px, transparent 1.5px) 0 0 / 5px 5px,
     radial-gradient(60% 90% at 12% 100%, rgba(240,138,44,.55), transparent 70%),
@@ -365,12 +377,19 @@ html:has(main.home) { scroll-snap-type: y proximity; }
 }
 .dobara p { margin: 10px 0 0; max-width: 60ch; }
 .dobara .small { color: #c9b9a2; }
-.dobara__pitch { font-size: clamp(17px, 1.6vw, 20px); color: #fff; }
-.dobara__powers { list-style: none; margin: 14px 0 4px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
-.dobara__powers li { border: 2px solid var(--p); background: rgba(0,0,0,.55); padding: 8px 10px; font-size: 13px; line-height: 1.35; }
-.dobara__powers b { display: block; font: 700 12px/1.2 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--p); margin-bottom: 3px; }
+/* Text sized as a step down from the 96px title: a lead line, then body copy, then the powers. */
+.dobara__pitch { font-size: clamp(19px, 2vw, 26px); line-height: 1.4; color: #fff; max-width: 34ch; }
+.dobara__pitch + p { font-size: clamp(16px, 1.45vw, 19px); line-height: 1.55; max-width: 52ch; }
+.dobara .tape { font-size: 13px; }
+/* The four Watch powers: a line-drawn symbol each (eye, rewind, hourglass, fast forward) with the
+   name and what it acts on. Plain text, no boxes, so they don't read as buttons. */
+.dobara__powers { list-style: none; margin: 22px 0 8px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); gap: 18px 48px; }
+.dobara__powers li { display: grid; grid-template-columns: 38px minmax(0, 1fr); column-gap: 12px; align-items: center; font-size: 15px; line-height: 1.35; }
+.dobara__powers svg { grid-row: span 2; width: 38px; height: 38px; fill: none; stroke: var(--d-cream); stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; }
+.dobara__powers b { font: 700 14px/1.2 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--d-cream); align-self: end; }
+.dobara__powers span { opacity: .75; align-self: start; }
 @media (max-width: 1100px) { .dobara__powers { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.dobara__gdd { margin-top: 18px; background: var(--d-red); color: #000; border: 2px solid #000; box-shadow: 4px 4px 0 var(--d-cream); }
+.dobara__gdd { margin-top: 24px; padding: 16px 22px; font-size: 15px; background: var(--d-red); color: #000; border: 2px solid #000; box-shadow: 4px 4px 0 var(--d-cream); }
 .dobara__gdd:hover { background: var(--d-orange); }
 
 /* ---------- extras ---------- */
@@ -585,8 +604,8 @@ html:has(main.home) { scroll-snap-type: y proximity; }
 
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; }
-  .hero__stack { max-width: 480px; width: 100%; justify-self: center; }
+  .hero__row { flex-direction: column; align-items: stretch; gap: 28px; }
+  .hero__stack { width: 100%; max-width: 420px; align-self: center; }
   .project__head { grid-template-columns: 1fr; }
   .gdd { grid-auto-columns: minmax(260px, 80%); }
   .shots { grid-auto-columns: minmax(240px, 80%); }

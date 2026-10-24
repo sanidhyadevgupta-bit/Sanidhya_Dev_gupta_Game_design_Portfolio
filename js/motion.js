@@ -61,6 +61,7 @@
   bar.setAttribute("aria-hidden", "true");
   document.body.appendChild(bar);
   const nav = document.querySelector(".nav");
+  const cue = document.querySelector(".scroll-cue");
 
   // [element, speed]: positive drifts up as you scroll past, negative drifts down.
   const parallax = [];
@@ -80,6 +81,7 @@
     const max = doc.scrollHeight - innerHeight;
     bar.style.transform = `scaleX(${max > 0 ? Math.min(y / max, 1) : 0})`;
     if (nav) nav.classList.toggle("is-scrolled", y > 8);
+    if (cue) cue.classList.toggle("is-gone", y > 60);
     const mid = innerHeight / 2;
     // On big monitors the page is zoomed (site.css --z): screen distances are divided back into CSS pixels.
     const z = parseFloat(getComputedStyle(document.body).zoom) || 1;
