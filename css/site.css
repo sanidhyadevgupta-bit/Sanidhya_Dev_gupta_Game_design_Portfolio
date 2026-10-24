@@ -131,6 +131,27 @@ a { color: inherit; }
   display: grid; justify-items: center; align-content: center; gap: clamp(16px, 3vh, 36px); text-align: center;
 }
 .hero__logo { width: min(900px, 100%, calc(60svh / var(--z))); height: auto; }
+
+/* Collage: a strip of the game covers pasted behind the logo, like a row of posters on a wall.
+   The covers are a little taller than the logo and zigzag up and down, so the 1st, 3rd and 5th peek
+   out above it and the 2nd and 4th below it; the rest of each is behind the cat and the lettering.
+   Coordinates are in cqw (percent of the logo's width) from the logo's centre; the logo spans
+   x -50..50 and y -25..25. The padding is room for the peeking edges; the 74vw cap keeps the strip
+   on screen on phones with a margin. */
+.hero__badge { --lw: min(820px, 100%, calc(56svh / var(--z)), calc(74vw / var(--z))); position: relative; width: var(--lw); container-type: inline-size; padding: calc(var(--lw) * .05) 0; margin-bottom: clamp(20px, 5vh / var(--z), 64px); }   /* breathing room before "Hi, I'm" */
+.hero__badge .hero__logo { position: relative; z-index: 10; width: 100%; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .55)); }
+.hero__arc { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }   /* the logo's centre */
+.hero__cover {
+  position: absolute; left: 0; top: 0; width: 42cqw; height: auto; max-width: none; z-index: var(--zi, 1);
+  transform: translate(-50%, -50%) translate(calc(var(--x) * 1cqw), calc(var(--y) * 1cqw)) rotate(var(--r));
+  /* Dimmed and desaturated, with a muted border, so the covers read as a backdrop and the logo leads. */
+  border: 3px solid rgba(242, 230, 211, .35); box-shadow: 5px 5px 0 #000; filter: brightness(.45) saturate(.55) contrast(.95);
+}
+.hero__cover:nth-child(1) { --x: -40; --y: -11; --r: -6deg; --zi: 1; }
+.hero__cover:nth-child(2) { --x: -20; --y: 12;  --r: 4deg;  --zi: 2; }
+.hero__cover:nth-child(3) { --x: 0;   --y: -13; --r: -3deg; --zi: 3; }
+.hero__cover:nth-child(4) { --x: 20;  --y: 12;  --r: 5deg;  --zi: 2; }
+.hero__cover:nth-child(5) { --x: 40;  --y: -11; --r: -5deg; --zi: 1; }
 .hero__copy { display: grid; justify-items: center; gap: clamp(14px, 2.4vh, 26px); }
 .hero__name { margin: 0; display: grid; justify-items: center; gap: 12px; }
 /* "Hi, I'm" sits on the same line as the name tiles, so it reads as one sentence; it wraps above them on narrow screens. */

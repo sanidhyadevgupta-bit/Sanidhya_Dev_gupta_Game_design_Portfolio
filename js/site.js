@@ -9,6 +9,16 @@
   const old = location.hash && P.find((p) => p.slug === location.hash.slice(1));
   if (old) { location.replace(page(old)); return; }
 
+  // ---------- hero collage: the game covers in a strip behind the logo ----------
+  // Positions and tilts are in site.css (.hero__cover:nth-child); remove data-collage from the
+  // badge in index.html to turn it off.
+  const badge = document.querySelector(".hero__badge[data-collage]");
+  if (badge) {
+    const strip = el(`<div class="hero__arc" aria-hidden="true"></div>`);
+    P.forEach((p) => strip.appendChild(el(`<img class="hero__cover ${p.pixel ? "pixel" : ""}" src="${img(p.slug, "cover")}" alt="" width="630" height="500">`)));
+    badge.prepend(strip);
+  }
+
   // ---------- shelf (a grid; each card opens the game's own page) ----------
   const shelf = document.getElementById("shelf-grid");
   P.forEach((p, i) => {

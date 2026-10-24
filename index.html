@@ -37,7 +37,10 @@
   <main id="main" class="home">
     <!-- 1. Banner -->
     <section class="hero" aria-labelledby="hero-title">
-      <img class="hero__logo" src="img/brand/logo.webp" alt="catsarewhat" width="1100" height="550">
+      <!-- data-collage puts a strip of the game covers behind the logo (site.js, site.css). Remove it to show the logo alone. -->
+      <div class="hero__badge" data-collage>
+        <img class="hero__logo" src="img/brand/logo.webp" alt="catsarewhat" width="1100" height="550">
+      </div>
       <div class="hero__copy">
         <h1 class="hero__name" id="hero-title">
           <span class="hero__line"><span class="hero__hi">Hi, I'm</span> <span class="rn"><span>Sanidhya</span> <span class="hot">Dev</span> <span>Gupta</span></span></span>
@@ -54,9 +57,7 @@
     <!-- 2. The shelf: a grid of the five games; each card opens that game's page -->
     <section class="section" id="shelf" aria-labelledby="shelf-title">
       <div class="section__head">
-        <h2 class="rn" id="shelf-title"><span>The</span> <span class="hot">shelf</span></h2>
-        <p class="section__sub">Five games, all playable in your browser. Open one to look under the hood: screenshots, the design in five cards, and the full game design document.</p>
-      </div>
+        <h2 class="rn" id="shelf-title"><span>The</span> <span class="hot">shelf</span></h2>      </div>
       <div class="shelf" id="shelf-grid" aria-label="Featured games"></div>
     </section>
 
@@ -88,9 +89,7 @@
     <!-- 4. Extras -->
     <section class="section" id="extras" aria-labelledby="extras-title">
       <div class="section__head">
-        <h2 class="rn" id="extras-title"><span>Side</span> <span class="hot">quests</span></h2>
-        <p class="section__sub">Teardowns of games I love, plus my art and 3D renders.</p>
-      </div>
+        <h2 class="rn" id="extras-title"><span>Side</span> <span class="hot">quests</span></h2>      </div>
 
       <h3 class="subhead mono" id="analyses">Game analyses</h3>
       <div class="grid3" id="analysis-grid"></div>
