@@ -122,22 +122,24 @@ a { color: inherit; }
 .nav__toggle[aria-expanded="true"] { background: var(--paper); color: var(--ink); }
 
 /* ---------- hero / banner ---------- */
-/* The logo sits big and centred on top; under it, one row with the name and tagline on the left and
-   the game stickers on the right, centred as a pair so neither side is left empty. The logo and
-   stickers are also sized by the window's height, so the whole hero fits on one screen. */
+/* Everything centred in one column: the logo big on top, then "Hi, I'm" + the name in cut-paper
+   tiles + "aka catsarewhat", then a short line on the games, then the scroll cue. The logo and the
+   name are also sized by the window's height, so the hero fits on one screen. */
 .hero {
   max-width: var(--maxw); margin: 0 auto;
   padding: clamp(32px, 6vw, 72px) var(--gutter) clamp(40px, 7vw, 96px);
-  display: grid; justify-items: center; align-content: center; gap: clamp(16px, 3vh, 40px);
+  display: grid; justify-items: center; align-content: center; gap: clamp(16px, 3vh, 36px); text-align: center;
 }
-.hero__logo { width: min(900px, 100%, calc(58svh / var(--z))); height: auto; }
-.hero__row { display: flex; align-items: center; justify-content: center; gap: clamp(28px, 5vw, 80px); width: 100%; }
-.hero__copy { flex: 0 1 auto; min-width: 0; }
-.hero__name { margin: 0 0 18px; }
-.hero__name .rn { font-size: clamp(34px, min(6.4vw, 8svh / var(--z)), 78px); }
-.hero__tag { font: 400 clamp(22px, 2.6vw, 32px)/1.2 var(--display); margin: 0 0 10px; }
-.hero__tag em { font-style: normal; color: var(--red); }
-.hero__meta { color: var(--muted); font-size: 14px; margin: 0; }
+.hero__logo { width: min(900px, 100%, calc(60svh / var(--z))); height: auto; }
+.hero__copy { display: grid; justify-items: center; gap: clamp(14px, 2.4vh, 26px); }
+.hero__name { margin: 0; display: grid; justify-items: center; gap: 12px; }
+/* "Hi, I'm" sits on the same line as the name tiles, so it reads as one sentence; it wraps above them on narrow screens. */
+.hero__line { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 16px; }
+.hero__hi { font: 400 clamp(22px, min(3vw, 4.2svh / var(--z)), 40px)/1 var(--display); }
+.hero__name .rn { justify-content: center; font-size: clamp(28px, min(4.4vw, 5.6svh / var(--z)), 54px); }
+.hero__aka { font: 700 clamp(13px, 1.2vw, 16px)/1 var(--mono); text-transform: uppercase; letter-spacing: .2em; color: var(--muted); }
+.hero__aka b { color: var(--red); }
+.hero__desc { margin: 0; max-width: 54ch; font-size: clamp(17px, min(1.5vw, 2.3svh / var(--z)), 21px); line-height: 1.55; color: var(--paper); }
 .star { color: var(--red); font-size: 18px; }
 
 /* Scroll cue: a small mouse with a dot rolling down, bottom centre of the hero. motion.js fades it out
@@ -154,18 +156,6 @@ a { color: inherit; }
 @keyframes cue-roll { 0% { opacity: 0; translate: 0 -2px; } 25% { opacity: 1; } 70% { opacity: 1; translate: 0 12px; } 100% { opacity: 0; translate: 0 14px; } }
 .scroll-cue.is-gone { opacity: 0; pointer-events: none; }
 
-/* The sticker stack is a link to the shelf. */
-.hero__stack { position: relative; display: block; flex: 0 0 auto; aspect-ratio: 1 / 1; width: clamp(260px, 34svh / var(--z), 560px); cursor: pointer; }
-.hero__stack .sticker {
-  position: absolute; width: 58%; border: 4px solid var(--paper); box-shadow: var(--shadow-ink);
-  transform: rotate(var(--r)); left: var(--x); top: var(--y);
-  transition: transform .3s ease;
-}
-.hero__stack .sticker:hover { transform: rotate(0deg) scale(1.04); z-index: 5; }
-.hero__stack .tape-strip {
-  position: absolute; width: 90px; height: 24px; background: rgba(242, 230, 211, .75);
-  top: -12px; left: 50%; transform: translateX(-50%) rotate(-4deg);
-}
 
 /* ---------- sections ---------- */
 .section { max-width: var(--maxw); margin: 0 auto; padding: clamp(40px, 6vw, 80px) var(--gutter); }
@@ -600,12 +590,9 @@ html:has(main.home) { scroll-snap-type: y proximity; }
 /* The nav keeps its height when scrolled, so each home section lines up exactly under it. */
 .nav { transition: box-shadow .25s ease, background-color .25s ease; }
 .nav.is-scrolled { background: rgba(18, 16, 16, .97); box-shadow: 0 6px 0 rgba(0, 0, 0, .35); }
-.hero__stack .sticker { transition: transform .3s ease, translate .12s linear; }
 
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
-  .hero__row { flex-direction: column; align-items: stretch; gap: 28px; }
-  .hero__stack { width: 100%; max-width: 420px; align-self: center; }
   .project__head { grid-template-columns: 1fr; }
   .gdd { grid-auto-columns: minmax(260px, 80%); }
   .shots { grid-auto-columns: minmax(240px, 80%); }

@@ -71,8 +71,6 @@
   add(".dobara__poster", 0.06);
   add(".project__banner img", -0.1);
   add(".figure--hero img", -0.06);
-  // The hero stickers fan apart a little as the page scrolls away from them.
-  const stickers = [...document.querySelectorAll(".hero__stack .sticker")];
 
   let ticking = false;
   function frame() {
@@ -90,12 +88,6 @@
       if (r.bottom < -200 || r.top > innerHeight + 200) return;
       n.style.translate = `0 ${((r.top + r.height / 2 - mid) * speed / z).toFixed(1)}px`;
     });
-    if (stickers.length && y < innerHeight * 1.5) {
-      stickers.forEach((s, i) => {
-        const dir = i % 2 ? 1 : -1;
-        s.style.translate = `${(dir * y * 0.04 * (i + 1) / stickers.length).toFixed(1)}px ${(-y * 0.05 * (1 + i * 0.35)).toFixed(1)}px`;
-      });
-    }
   }
   const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
   window.addEventListener("scroll", onScroll, { passive: true });

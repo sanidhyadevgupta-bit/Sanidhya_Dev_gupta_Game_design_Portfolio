@@ -1,4 +1,4 @@
-// Home page: renders the hero stack, the shelf and the extras from js/data.js, and runs the
+// Home page: renders the shelf and the extras from js/data.js, and runs the
 // artwork auto-scroll and scroll buttons. Each game's own page is rendered by js/game.js.
 (function () {
   "use strict";
@@ -8,15 +8,6 @@
   // Old links to a game's block on this page (#terminus) now go to its own page.
   const old = location.hash && P.find((p) => p.slug === location.hash.slice(1));
   if (old) { location.replace(page(old)); return; }
-
-  // ---------- hero sticker stack ----------
-  const stack = document.getElementById("hero-stack");
-  const spots = [["-7deg", "0%", "4%"], ["6deg", "40%", "0%"], ["-3deg", "18%", "30%"], ["8deg", "44%", "44%"], ["-9deg", "2%", "56%"]];
-  P.forEach((p, i) => {
-    const [r, x, y] = spots[i % spots.length];
-    stack.appendChild(el(`<div class="sticker ${p.pixel ? "pixel" : ""}" style="--r:${r};--x:${x};--y:${y};z-index:${i + 1}">
-      <span class="tape-strip"></span><img src="${img(p.slug, "cover")}" alt="" width="630" height="500"></div>`));
-  });
 
   // ---------- shelf (a grid; each card opens the game's own page) ----------
   const shelf = document.getElementById("shelf-grid");
