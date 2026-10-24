@@ -18,6 +18,8 @@
     P.forEach((p) => strip.appendChild(el(`<img class="hero__cover ${p.pixel ? "pixel" : ""}" src="${img(p.slug, "cover")}" alt="" width="630" height="500">`)));
     badge.prepend(strip);
   }
+  // The hero's intro (covers, then logo, then text; site.css) plays once on load; after that, drop its delays.
+  setTimeout(() => document.body.classList.add("intro-done"), 2200);
 
   // ---------- shelf (a grid; each card opens the game's own page) ----------
   const shelf = document.getElementById("shelf-grid");

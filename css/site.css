@@ -152,6 +152,22 @@ a { color: inherit; }
 .hero__cover:nth-child(3) { --x: 0;   --y: -13; --r: -3deg; --zi: 3; }
 .hero__cover:nth-child(4) { --x: 20;  --y: 12;  --r: 5deg;  --zi: 2; }
 .hero__cover:nth-child(5) { --x: 40;  --y: -11; --r: -5deg; --zi: 1; }
+
+/* Intro on page load: the covers drop in one after another, then the logo pops up over them, then the
+   text and the scroll cue follow. Keyframes only set a "from" frame on the separate translate / rotate /
+   scale properties, so each element ends exactly where its own styles put it (and the logo's parallax
+   still applies afterwards). Reduced motion switches all of it off. */
+.hero__cover { animation: cover-in .55s cubic-bezier(.2, .9, .3, 1.15) backwards; animation-delay: calc(var(--n, 0) * 90ms + 100ms); }
+.hero__cover:nth-child(1) { --n: 0; } .hero__cover:nth-child(2) { --n: 1; } .hero__cover:nth-child(3) { --n: 2; }
+.hero__cover:nth-child(4) { --n: 3; } .hero__cover:nth-child(5) { --n: 4; }
+@keyframes cover-in { from { opacity: 0; translate: 0 -40px; rotate: -12deg; scale: .85; } }
+.hero__badge .hero__logo { animation: logo-pop .6s cubic-bezier(.3, 1.7, .5, 1) .7s backwards; }
+@keyframes logo-pop { from { opacity: 0; scale: .35; } 60% { opacity: 1; } }
+.hero__copy > * { --rd: 1150ms; }
+.hero__copy > * + * { --rd: 1300ms; }
+.intro-done .hero__copy > * { --rd: 0ms; }   /* site.js sets this once the intro has played, so scrolling back up doesn't wait again */
+.scroll-cue { animation: cue-in .5s ease 1.6s backwards; }
+@keyframes cue-in { from { opacity: 0; } }
 .hero__copy { display: grid; justify-items: center; gap: clamp(14px, 2.4vh, 26px); }
 .hero__name { margin: 0; display: grid; justify-items: center; gap: 12px; }
 /* "Hi, I'm" sits on the same line as the name tiles, so it reads as one sentence; it wraps above them on narrow screens. */
