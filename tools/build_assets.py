@@ -163,7 +163,7 @@ for name, out in ANALYSIS_DIRS.items():
             save(Image.open(f), IMG / 'analyses' / out / f'{slug(f.stem)}.webp', big, quality=86 if 'loot' in f.stem else 82)
 
 # ---- Dobara teaser -------------------------------------------------------------
-poster = ROOT / 'dobara' / 'imgs' / 'dobara_poster.webp'
+poster = ROOT / 'dobara' / 'art' / 'dobara art' / 'dobara_poster.webp'
 if poster.exists():
     pair(poster, 'dobara', 'poster', full=1536, thumb=720)
 
