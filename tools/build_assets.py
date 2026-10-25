@@ -207,6 +207,22 @@ for px, name in ((32, 'favicon-32.png'), (180, 'apple-touch-icon.png')):
         bg = Image.new('RGBA', out.size, (18, 16, 16, 255)); bg.alpha_composite(out); out = bg
     out.save(IMG / 'brand' / name)
     report['img/brand/' + name] = [px, px, round((IMG / 'brand' / name).stat().st_size / 1024)]
+# link preview (og:image) for LinkedIn, WhatsApp, Discord: 1200x630 on the site's ink, the game covers dimmed in
+# a strip behind the logo like the hero. JPEG, since some apps don't show WebP previews.
+from PIL import ImageEnhance
+og = Image.new('RGB', (1200, 630), (18, 16, 16))
+covers = [Image.open(KITS / kit / 'cover-630x500.png').convert('RGB') for kit in (
+    'Terminus3D/page-kit', 'Bombay Calling/bombay-calling-page-kit', 'KanchaTodh/page-kit',
+    'Beat Runner/beat-runner-page-kit', 'RatRace/page-kit')]
+for i, (c, dx, dy, rot) in enumerate(zip(covers, (-400, -200, 0, 200, 400), (-40, 40, -55, 40, -40), (-6, 4, -3, 5, -5))):
+    c = ImageEnhance.Brightness(ImageEnhance.Color(c.resize((300, 238), Image.LANCZOS)).enhance(.55)).enhance(.45)
+    framed = Image.new('RGBA', (306, 244), (242, 230, 211, 90)); framed.paste(c, (3, 3))
+    framed = framed.rotate(rot, resample=Image.BICUBIC, expand=True)
+    og.paste(framed, (600 + dx - framed.width // 2, 315 + dy - framed.height // 2), framed)
+mark = logo.copy(); mark.thumbnail((860, 430), Image.LANCZOS)
+og.paste(mark, ((1200 - mark.width) // 2, (630 - mark.height) // 2), mark)
+og.save(IMG / 'brand' / 'og.jpg', quality=88)
+report['img/brand/og.jpg'] = [1200, 630, round((IMG / 'brand' / 'og.jpg').stat().st_size / 1024)]
 # wide cat crop used as decoration on the character sheet (upper-centre of the logo)
 head = logo.crop((int(w * 0.18), 0, int(w * 0.62), int(h * 0.55)))
 save(head, IMG / 'brand' / 'cat.webp', 512, quality=90)

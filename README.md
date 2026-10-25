@@ -3,7 +3,7 @@
 A static site. There's no build step: open `index.html`, or upload this whole folder to any static host (GitHub Pages, Netlify, Cloudflare Pages, or itch.io as an HTML project).
 
 ## Links
-Every link lives in `js/config.js`: itch.io pages, email (split into `emailParts`; it's never shown, only copied by the "Copy email" button), LinkedIn, and the YouTube video for the 3D renders. An empty value shows as "Soon" or "coming soon". (There's no CV button on the site; `cv` in the config is unused.)
+Every link lives in `js/config.js`: itch.io pages, email (split into `emailParts`; it's never shown, only copied by the "Copy email" button), LinkedIn, and the YouTube video for the 3D renders. An empty value shows as "Soon" or "coming soon". The "Resume" button in Party invite opens `cv/sanidhya-dev-gupta-resume.pdf` (set as `cv` in the config). It's a copy of `portfolio\Sanidhya_Dev_Gupta_Resume.pdf`; replace it with the new PDF to update it.
 
 ## Change content
 - **Projects:** all five games (stats, screenshots, the five GDD cards, colours) are in `js/data.js`. Edit the text there; the pages render from it. The home page shows them as a grid (`js/site.js`); each card opens the game's own page, `games/<slug>.html`, rendered by `js/game.js`. Code both pages share is in `js/common.js`.

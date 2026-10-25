@@ -6,7 +6,7 @@ window.SITE_CONFIG = {
   // Kept split so bots that scan pages for addresses don't pick it up.
   emailParts: ["sanidhyadevgupta", "gmail.com"],
   linkedin: "https://www.linkedin.com/in/sanidhya-gupta-042012195",
-  cv: "",                     // e.g. "cv/sanidhya-dev-gupta-cv.pdf"
+  cv: "cv/sanidhya-dev-gupta-resume.pdf",   // the "Resume" button in Party invite; exported from the resume doc
 
   // itch.io page of each featured game
   play: {

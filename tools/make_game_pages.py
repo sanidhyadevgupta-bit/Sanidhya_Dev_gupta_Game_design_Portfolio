@@ -8,6 +8,8 @@ import html, re
 from pathlib import Path
 
 SITE = Path(__file__).resolve().parent.parent
+# The live address, for link previews (they need full URLs). Change it if the site moves.
+LIVE = 'https://sanidhyadevgupta-bit.github.io/Sanidhya_Dev_gupta_Game_design_Portfolio/'
 data = (SITE / 'js' / 'data.js').read_text(encoding='utf-8')
 projects = data.split('window.EXTRAS')[0]
 games = re.findall(r'slug: "([^"]+)",\s*title: "([^"]+)",.*?hook: "([^"]+)"', projects, re.S)
@@ -25,6 +27,13 @@ PAGE = """<!doctype html>
   <link rel="apple-touch-icon" href="../img/brand/apple-touch-icon.png">
   <meta property="og:title" content="{title} · catsarewhat">
   <meta property="og:description" content="{hook}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{site}games/{slug}.html">
+  <meta property="og:image" content="{site}img/brand/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="{site}games/{slug}.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Rubik+Dirt&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600&family=Rozha+One&display=swap">
@@ -80,5 +89,5 @@ PAGE = """<!doctype html>
 out = SITE / 'games'
 out.mkdir(exist_ok=True)
 for slug, title, hook in games:
-    (out / f'{slug}.html').write_text(PAGE.format(slug=slug, title=html.escape(title), hook=html.escape(hook)), encoding='utf-8')
+    (out / f'{slug}.html').write_text(PAGE.format(slug=slug, title=html.escape(title), hook=html.escape(hook), site=LIVE), encoding='utf-8')
     print(f'games/{slug}.html  {title}')
